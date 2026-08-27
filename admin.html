@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TalkRoom — Admin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: #080b12;
+    color: #f4f6fb;
+    font-family: Arial, sans-serif;
+}
+
+
+/* HEADER */
+
+.header {
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+
+    background: #0f141e;
+
+    border-bottom: 1px solid #252d3b;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #6c63ff;
+}
+
+.admin-badge {
+    color: #ffbf55;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+/* CONTAINER */
+
+.container {
+    max-width: 1250px;
+
+    margin: auto;
+
+    padding: 30px 20px;
+}
+
+
+/* TITLE */
+
+.title {
+    margin-bottom: 25px;
+}
+
+.title h1 {
+    font-size: 26px;
+}
+
+.title p {
+    margin-top: 7px;
+
+    color: #8992a4;
+
+    font-size: 12px;
+}
+
+
+/* STATS */
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+.stat {
+    padding: 20px;
+
+    background: #0f141e;
+
+    border: 1px solid #252d3b;
+
+    border-radius: 12px;
+}
+
+.stat-label {
+    color: #8992a4;
+
+    font-size: 10px;
+}
+
+.stat-value {
+    margin-top: 8px;
+
+    font-size: 25px;
+
+    font-weight: bold;
+}
+
+
+/* NAV */
+
+.nav {
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.nav button {
+    padding: 10px 15px;
+
+    border: 1px solid #252d3b;
+
+    border-radius: 8px;
+
+    background: #0f141e;
+
+    color: #8992a4;
+
+    cursor: pointer;
+}
+
+.nav button.active {
+    background: #6c63ff;
+
+    border-color: #6c63ff;
+
+    color: white;
+}
+
+
+/* PANEL */
+
+.panel {
+    background: #0f141e;
+
+    border: 1px solid #252d3b;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 18px;
+
+    border-bottom: 1px solid #252d3b;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+/* USER */
+
+.user {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #202734;
+}
+
+.user:last-child {
+    border-bottom: none;
+}
+
+.user-info {
+    min-width: 0;
+}
+
+.username {
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.user-id {
+    margin-top: 5px;
+
+    color: #596375;
+
+    font-size: 8px;
+}
+
+.role {
+    display: inline-block;
+
+    margin-top: 6px;
+
+    padding: 3px 6px;
+
+    border-radius: 4px;
+
+    background: #202838;
+
+    color: #9ea8ba;
+
+    font-size: 8px;
+}
+
+.role.admin {
+    color: #ffc65c;
+}
+
+.role.moderator {
+    color: #8ea4ff;
+}
+
+.status {
+    display: inline-block;
+
+    margin-left: 5px;
+
+    font-size: 8px;
+}
+
+.status.active {
+    color: #45d98b;
+}
+
+.status.banned {
+    color: #ff6877;
+}
+
+
+/* ACTIONS */
+
+.actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.action {
+    padding: 7px 10px;
+
+    border: 1px solid #303848;
+
+    border-radius: 6px;
+
+    background: #151b26;
+
+    color: #dce1eb;
+
+    font-size: 9px;
+
+    cursor: pointer;
+}
+
+.action:hover {
+    background: #222b3a;
+}
+
+.ban {
+    color: #ff7885;
+}
+
+.unban {
+    color: #4bdd91;
+}
+
+.mod {
+    color: #9ca8ff;
+}
+
+
+/* REPORT */
+
+.report {
+    padding: 18px;
+
+    border-bottom: 1px solid #202734;
+}
+
+.report:last-child {
+    border-bottom: none;
+}
+
+.report-user {
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.report-room {
+    margin-top: 5px;
+
+    color: #8992a4;
+
+    font-size: 10px;
+}
+
+.report-reason {
+    margin-top: 10px;
+
+    color: #dce0e8;
+
+    font-size: 11px;
+}
+
+.report-date {
+    margin-top: 8px;
+
+    color: #596375;
+
+    font-size: 9px;
+}
+
+.empty {
+    padding: 50px;
+
+    text-align: center;
+
+    color: #687284;
+
+    font-size: 12px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:800px) {
+
+    .stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .user {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+@media(max-width:500px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo">
+        Talk<span>Room</span>
+    </div>
+
+    <div class="admin-badge">
+        🛡 ADMIN PANEL
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+<div class="title">
+
+    <h1>
+        Admin Dashboard
+    </h1>
+
+    <p>
+        Manage TalkRoom users and reports.
+    </p>
+
+</div>
+
+
+<section class="stats">
+
+
+<div class="stat">
+
+    <div class="stat-label">
+        TOTAL USERS
+    </div>
+
+    <div
+        class="stat-value"
+        id="totalUsers"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="stat">
+
+    <div class="stat-label">
+        ACTIVE
+    </div>
+
+    <div
+        class="stat-value"
+        id="activeUsers"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="stat">
+
+    <div class="stat-label">
+        BANNED
+    </div>
+
+    <div
+        class="stat-value"
+        id="bannedUsers"
+    >
+        0
+    </div>
+
+</div>
+
+
+<div class="stat">
+
+    <div class="stat-label">
+        REPORTS
+    </div>
+
+    <div
+        class="stat-value"
+        id="totalReports"
+    >
+        0
+    </div>
+
+</div>
+
+
+</section>
+
+
+<div class="nav">
+
+    <button
+        id="usersTab"
+        class="active"
+        onclick="showUsers()"
+    >
+        👥 Users
+    </button>
+
+    <button
+        id="reportsTab"
+        onclick="showReports()"
+    >
+        ⚠ Reports
+    </button>
+
+</div>
+
+
+<section
+    class="panel"
+    id="usersPanel"
+>
+
+    <div class="panel-header">
+        User Management
+    </div>
+
+    <div id="usersList">
+
+        <div class="empty">
+            Loading users...
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    class="panel"
+    id="reportsPanel"
+    style="display:none;"
+>
+
+    <div class="panel-header">
+        User Reports
+    </div>
+
+    <div id="reportsList">
+
+        <div class="empty">
+            Loading reports...
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<script>
+
+
+let currentUser = null;
+
+let currentProfile = null;
+
+let users = [];
+
+let reports = [];
+
+
+/* =========================
+   START
+========================= */
+
+async function startAdmin() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (
+        error ||
+        !data.user
+    ) {
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    currentUser =
+        data.user;
+
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id,username,role,status"
+            )
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .single();
+
+
+    if (
+        profileError ||
+        !profile
+    ) {
+
+        alert(
+            "Could not load profile."
+        );
+
+        return;
+
+    }
+
+
+    currentProfile =
+        profile;
+
+
+    if (
+        profile.role !==
+        "admin" &&
+        profile.role !==
+        "moderator"
+    ) {
+
+        alert(
+            "Access denied."
+        );
+
+        window.location.href =
+            "rooms.html";
+
+        return;
+
+    }
+
+
+    await loadUsers();
+
+    await loadReports();
+
+}
+
+
+/* =========================
+   USERS
+========================= */
+
+async function loadUsers() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id,username,role,status"
+            )
+            .order(
+                "username",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        return;
+
+    }
+
+
+    users =
+        data || [];
+
+
+    updateStats();
+
+    displayUsers();
+
+}
+
+
+/* =========================
+   REPORTS
+========================= */
+
+async function loadReports() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("reports")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        return;
+
+    }
+
+
+    reports =
+        data || [];
+
+
+    updateStats();
+
+    displayReports();
+
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats() {
+
+    document.getElementById(
+        "totalUsers"
+    ).textContent =
+        users.length;
+
+
+    document.getElementById(
+        "activeUsers"
+    ).textContent =
+        users.filter(
+            user =>
+                user.status !==
+                "banned"
+        ).length;
+
+
+    document.getElementById(
+        "bannedUsers"
+    ).textContent =
+        users.filter(
+            user =>
+                user.status ===
+                "banned"
+        ).length;
+
+
+    document.getElementById(
+        "totalReports"
+    ).textContent =
+        reports.length;
+
+}
+
+
+/* =========================
+   DISPLAY USERS
+========================= */
+
+function displayUsers() {
+
+    const list =
+        document.getElementById(
+            "usersList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (
+        users.length === 0
+    ) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No users found.
+            </div>`;
+
+        return;
+
+    }
+
+
+    users.forEach(
+        function(user) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "user";
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+            info.className =
+                "user-info";
+
+
+            const username =
+                document.createElement(
+                    "div"
+                );
+
+            username.className =
+                "username";
+
+            username.textContent =
+                "@" +
+                (
+                    user.username ||
+                    "unknown"
+                );
+
+
+            const id =
+                document.createElement(
+                    "div"
+                );
+
+            id.className =
+                "user-id";
+
+            id.textContent =
+                user.id;
+
+
+            const role =
+                document.createElement(
+                    "span"
+                );
+
+            role.className =
+                "role " +
+                (
+                    user.role || "user"
+                );
+
+            role.textContent =
+                user.role ||
+                "user";
+
+
+            const status =
+                document.createElement(
+                    "span"
+                );
+
+            status.className =
+                "status " +
+                (
+                    user.status ===
+                    "banned"
+                    ? "banned"
+                    : "active"
+                );
+
+            status.textContent =
+                user.status ===
+                "banned"
+                ? "● Banned"
+                : "● Active";
+
+
+            info.appendChild(
+                username
+            );
+
+            info.appendChild(
+                id
+            );
+
+            info.appendChild(
+                role
+            );
+
+            info.appendChild(
+                status
+            );
+
+
+            const actions =
+                document.createElement(
+                    "div"
+                );
+
+            actions.className =
+                "actions";
+
+
+            /* NEVER MODIFY YOUR OWN ADMIN */
+
+            if (
+                user.id ===
+                currentUser.id
+            ) {
+
+                const protectedText =
+                    document.createElement(
+                        "span"
+                    );
+
+                protectedText.style.color =
+                    "#ffc65c";
+
+                protectedText.style.fontSize =
+                    "9px";
+
+                protectedText.textContent =
+                    "👑 Protected";
+
+
+                actions.appendChild(
+                    protectedText
+                );
+
+            }
+
+
+            /* OTHER USERS */
+
+            else {
+
+                if (
+                    user.status ===
+                    "banned"
+                ) {
+
+                    const unban =
+                        document.createElement(
+                            "button"
+                        );
+
+                    unban.className =
+                        "action unban";
+
+                    unban.textContent =
+                        "Unban";
+
+                    unban.onclick =
+                        function() {
+
+                            changeStatus(
+                                user.id,
+                                "active"
+                            );
+
+                        };
+
+                    actions.appendChild(
+                        unban
+                    );
+
+                }
+
+                else {
+
+                    const ban =
+                        document.createElement(
+                            "button"
+                        );
+
+                    ban.className =
+                        "action ban";
+
+                    ban.textContent =
+                        "Ban";
+
+                    ban.onclick =
+                        function() {
+
+                            changeStatus(
+                                user.id,
+                                "banned"
+                            );
+
+                        };
+
+                    actions.appendChild(
+                        ban
+                    );
+
+                }
+
+
+                if (
+                    currentProfile.role ===
+                    "admin"
+                ) {
+
+                    if (
+                        user.role ===
+                        "moderator"
+                    ) {
+
+                        const removeMod =
+                            document.createElement(
+                                "button"
+                            );
+
+                        removeMod.className =
+                            "action mod";
+
+                        removeMod.textContent =
+                            "Remove Mod";
+
+                        removeMod.onclick =
+                            function() {
+
+                                changeRole(
+                                    user.id,
+                                    "user"
+                                );
+
+                            };
+
+                        actions.appendChild(
+                            removeMod
+                        );
+
+                    }
+
+                    else if (
+                        user.role !==
+                        "admin"
+                    ) {
+
+                        const makeMod =
+                            document.createElement(
+                                "button"
+                            );
+
+                        makeMod.className =
+                            "action mod";
+
+                        makeMod.textContent =
+                            "Make Moderator";
+
+                        makeMod.onclick =
+                            function() {
+
+                                changeRole(
+                                    user.id,
+                                    "moderator"
+                                );
+
+                            };
+
+                        actions.appendChild(
+                            makeMod
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            row.appendChild(
+                info
+            );
+
+            row.appendChild(
+                actions
+            );
+
+
+            list.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   CHANGE STATUS
+========================= */
+
+async function changeStatus(
+    userId,
+    status
+) {
+
+    const user =
+        users.find(
+            u =>
+                u.id === userId
+        );
+
+
+    if (!user) {
+        return;
+    }
+
+
+    const action =
+        status === "banned"
+            ? "Ban"
+            : "Unban";
+
+
+    const confirmed =
+        confirm(
+            action +
+            " @" +
+            user.username +
+            "?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                status:
+                    status
+            })
+            .eq(
+                "id",
+                userId
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    await loadUsers();
+
+}
+
+
+/* =========================
+   CHANGE ROLE
+========================= */
+
+async function changeRole(
+    userId,
+    role
+) {
+
+    const user =
+        users.find(
+            u =>
+                u.id === userId
+        );
+
+
+    if (!user) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "Change @" +
+            user.username +
+            " role to " +
+            role +
+            "?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                role:
+                    role
+            })
+            .eq(
+                "id",
+                userId
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    await loadUsers();
+
+}
+
+
+/* =========================
+   REPORTS
+========================= */
+
+function displayReports() {
+
+    const list =
+        document.getElementById(
+            "reportsList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    if (
+        reports.length === 0
+    ) {
+
+        list.innerHTML =
+            `<div class="empty">
+                🎉 No reports.
+            </div>`;
+
+        return;
+
+    }
+
+
+    reports.forEach(
+        function(report) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "report";
+
+
+            const user =
+                document.createElement(
+                    "div"
+                );
+
+            user.className =
+                "report-user";
+
+            user.textContent =
+                "Reported user: " +
+                report.reported_id;
+
+
+            const room =
+                document.createElement(
+                    "div"
+                );
+
+            room.className =
+                "report-room";
+
+            room.textContent =
+                "Room: " +
+                report.room_name;
+
+
+            const reason =
+                document.createElement(
+                    "div"
+                );
+
+            reason.className =
+                "report-reason";
+
+            reason.textContent =
+                "Reason: " +
+                report.reason;
+
+
+            const date =
+                document.createElement(
+                    "div"
+                );
+
+            date.className =
+                "report-date";
+
+            date.textContent =
+                new Date(
+                    report.created_at
+                ).toLocaleString();
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.className =
+                "action";
+
+            button.style.marginTop =
+                "12px";
+
+            button.textContent =
+                "✓ Resolve";
+
+
+            button.onclick =
+                function() {
+
+                    resolveReport(
+                        report.id
+                    );
+
+                };
+
+
+            card.appendChild(
+                user
+            );
+
+            card.appendChild(
+                room
+            );
+
+            card.appendChild(
+                reason
+            );
+
+            card.appendChild(
+                date
+            );
+
+            card.appendChild(
+                button
+            );
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   RESOLVE REPORT
+========================= */
+
+async function resolveReport(
+    reportId
+) {
+
+    const confirmed =
+        confirm(
+            "Resolve this report?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("reports")
+            .delete()
+            .eq(
+                "id",
+                reportId
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    await loadReports();
+
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+function showUsers() {
+
+    document.getElementById(
+        "usersPanel"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "reportsPanel"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "usersTab"
+    ).classList.add(
+        "active"
+    );
+
+
+    document.getElementById(
+        "reportsTab"
+    ).classList.remove(
+        "active"
+    );
+
+}
+
+
+function showReports() {
+
+    document.getElementById(
+        "usersPanel"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "reportsPanel"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "usersTab"
+    ).classList.remove(
+        "active"
+    );
+
+
+    document.getElementById(
+        "reportsTab"
+    ).classList.add(
+        "active"
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+startAdmin();
+
+</script>
+
+</body>
+
+</html>

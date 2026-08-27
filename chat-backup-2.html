@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TalkRoom</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #080b12;
+    --panel: #0f141e;
+    --panel2: #141a26;
+    --border: #252d3b;
+    --text: #f4f6fb;
+    --muted: #8992a4;
+    --accent: #6c63ff;
+    --green: #35d982;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+.app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+
+.header {
+    height: 68px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.back {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--panel2);
+    color: var(--muted);
+
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.back:hover {
+    color: white;
+}
+
+.room-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.room-name {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.room-status {
+    color: var(--green);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-avatar {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #28235c;
+    color: #b8b3ff;
+
+    font-weight: bold;
+}
+
+.account-name {
+    font-size: 13px;
+}
+
+/* MAIN */
+
+.main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+}
+
+/* CHAT */
+
+.chat-area {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.message {
+    max-width: 650px;
+
+    display: flex;
+    gap: 10px;
+}
+
+.message.mine {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #28235c;
+    color: #aaa5ff;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.message-body {
+    min-width: 0;
+}
+
+.message-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 4px;
+}
+
+.message.mine .message-top {
+    justify-content: flex-end;
+}
+
+.message-user {
+    color: #928aff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.message-time {
+    color: #606a7d;
+    font-size: 10px;
+}
+
+.message-content {
+    display: inline-block;
+
+    padding: 10px 13px;
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+
+    border-radius: 5px 14px 14px 14px;
+
+    color: #edf0f5;
+    font-size: 14px;
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+.message.mine .message-content {
+    background: #28245b;
+    border-color: #3a3577;
+
+    border-radius: 14px 5px 14px 14px;
+}
+
+/* INPUT */
+
+.composer {
+    padding: 14px 20px;
+
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+}
+
+.form {
+    display: flex;
+    gap: 10px;
+}
+
+#messageInput {
+    flex: 1;
+
+    height: 46px;
+
+    padding: 0 15px;
+
+    background: #0a0e16;
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    outline: none;
+
+    color: white;
+    font-size: 14px;
+}
+
+#messageInput:focus {
+    border-color: var(--accent);
+}
+
+#messageInput::placeholder {
+    color: #606a7d;
+}
+
+#sendButton {
+    height: 46px;
+
+    padding: 0 22px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: var(--accent);
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#sendButton:hover {
+    filter: brightness(1.1);
+}
+
+#sendButton:disabled {
+    opacity: .5;
+}
+
+/* PEOPLE */
+
+.sidebar {
+    width: 270px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--panel);
+
+    border-left: 1px solid var(--border);
+}
+
+.sidebar-header {
+    padding: 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.sidebar-count {
+    margin-top: 5px;
+
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.people {
+    flex: 1;
+    overflow-y: auto;
+
+    padding: 10px;
+}
+
+.person {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+}
+
+.person:hover {
+    background: var(--panel2);
+}
+
+.person-avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #28235c;
+    color: #aaa5ff;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.person-details {
+    min-width: 0;
+}
+
+.person-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.person-status {
+    margin-top: 3px;
+
+    color: var(--green);
+    font-size: 10px;
+}
+
+/* ERROR */
+
+#error {
+    display: none;
+
+    padding: 8px;
+
+    background: #351b21;
+    color: #ff8a8a;
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a3344;
+    border-radius: 20px;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .messages {
+        padding: 16px;
+    }
+
+    .account-name {
+        display: none;
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .header {
+        padding: 0 13px;
+    }
+
+    .messages {
+        padding: 12px;
+    }
+
+    .composer {
+        padding: 10px;
+    }
+
+    #sendButton {
+        padding: 0 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <div class="brand">
+
+        <a href="rooms.html" class="back">←</a>
+
+        <div class="room-info">
+
+            <div
+                class="room-name"
+                id="roomName"
+            >
+                Loading...
+            </div>
+
+            <div class="room-status">
+                ● LIVE
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="account">
+
+        <div
+            class="account-avatar"
+            id="accountAvatar"
+        >
+            ?
+        </div>
+
+        <div
+            class="account-name"
+            id="accountName"
+        >
+            Loading...
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="main">
+
+<section class="chat-area">
+
+    <div
+        class="messages"
+        id="messages"
+    ></div>
+
+    <div
+        id="error"
+    ></div>
+
+    <div class="composer">
+
+        <form
+            class="form"
+            id="messageForm"
+        >
+
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="Write a message..."
+                maxlength="500"
+                autocomplete="off"
+                required
+            >
+
+            <button
+                id="sendButton"
+                type="submit"
+            >
+                Send
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-title">
+            👥 People
+        </div>
+
+        <div
+            class="sidebar-count"
+            id="peopleCount"
+        >
+            0 people
+        </div>
+
+    </div>
+
+    <div
+        class="people"
+        id="peopleList"
+    ></div>
+
+</aside>
+
+</main>
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let currentUser = null;
+let currentUsername = null;
+let currentRoom = null;
+
+let presenceChannel = null;
+let messageChannel = null;
+
+
+/* =========================
+   ROOM
+========================= */
+
+currentRoom =
+    localStorage.getItem(
+        "talkroom_current_room"
+    );
+
+if (!currentRoom) {
+    window.location.href = "rooms.html";
+}
+
+document
+    .getElementById("roomName")
+    .textContent = currentRoom;
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(message) {
+
+    const error =
+        document.getElementById("error");
+
+    error.textContent = message;
+
+    error.style.display = "block";
+}
+
+
+/* =========================
+   LOAD USER
+========================= */
+
+async function loadUser() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+    if (error || !data.user) {
+
+        window.location.href =
+            "login.html";
+
+        return false;
+    }
+
+    currentUser = data.user;
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("username")
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .single();
+
+    if (
+        profileError ||
+        !profile ||
+        !profile.username
+    ) {
+
+        showError(
+            "Could not load your profile."
+        );
+
+        return false;
+    }
+
+    currentUsername =
+        profile.username;
+
+    document
+        .getElementById("accountName")
+        .textContent =
+        currentUsername;
+
+    document
+        .getElementById("accountAvatar")
+        .textContent =
+        currentUsername
+            .charAt(0)
+            .toUpperCase();
+
+    return true;
+}
+
+
+/* =========================
+   PRESENCE
+========================= */
+
+function startPresence() {
+
+    presenceChannel =
+        supabaseClient.channel(
+            "talkroom-" +
+            currentRoom
+        );
+
+    presenceChannel
+        .on(
+            "presence",
+            {
+                event: "sync"
+            },
+            updatePeople
+        )
+        .on(
+            "presence",
+            {
+                event: "join"
+            },
+            updatePeople
+        )
+        .on(
+            "presence",
+            {
+                event: "leave"
+            },
+            updatePeople
+        )
+        .subscribe(
+            async function(status) {
+
+                if (
+                    status ===
+                    "SUBSCRIBED"
+                ) {
+
+                    await presenceChannel
+                        .track({
+                            user_id:
+                                currentUser.id,
+
+                            username:
+                                currentUsername
+                        });
+
+                }
+            }
+        );
+}
+
+
+/* =========================
+   PEOPLE
+========================= */
+
+function updatePeople() {
+
+    if (!presenceChannel) {
+        return;
+    }
+
+    const state =
+        presenceChannel
+            .presenceState();
+
+    const users = {};
+
+    Object
+        .values(state)
+        .flat()
+        .forEach(
+            function(user) {
+
+                if (
+                    user.user_id &&
+                    user.username
+                ) {
+
+                    users[user.user_id] =
+                        user;
+                }
+            }
+        );
+
+    renderPeople(
+        Object.values(users)
+    );
+}
+
+
+function renderPeople(users) {
+
+    const list =
+        document.getElementById(
+            "peopleList"
+        );
+
+    const count =
+        document.getElementById(
+            "peopleCount"
+        );
+
+    list.innerHTML = "";
+
+    count.textContent =
+        users.length +
+        (
+            users.length === 1
+                ? " person"
+                : " people"
+        );
+
+    users.sort(
+        function(a, b) {
+
+            if (
+                a.user_id ===
+                currentUser.id
+            ) {
+                return -1;
+            }
+
+            if (
+                b.user_id ===
+                currentUser.id
+            ) {
+                return 1;
+            }
+
+            return a.username
+                .localeCompare(
+                    b.username
+                );
+        }
+    );
+
+    users.forEach(
+        function(user) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className = "person";
+
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "person-avatar";
+
+            avatar.textContent =
+                user.username
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            const details =
+                document.createElement(
+                    "div"
+                );
+
+            details.className =
+                "person-details";
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+            name.className =
+                "person-name";
+
+            name.textContent =
+                user.username;
+
+
+            const status =
+                document.createElement(
+                    "div"
+                );
+
+            status.className =
+                "person-status";
+
+            status.textContent =
+                "● Online";
+
+
+            details.appendChild(name);
+            details.appendChild(status);
+
+            row.appendChild(avatar);
+            row.appendChild(details);
+
+            list.appendChild(row);
+        }
+    );
+}
+
+
+/* =========================
+   LOAD MESSAGES
+========================= */
+
+async function loadMessages() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("messages")
+            .select("*")
+            .eq(
+                "room_name",
+                currentRoom
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            )
+            .limit(100);
+
+    if (error) {
+
+        console.error(error);
+
+        showError(
+            "Could not load messages."
+        );
+
+        return;
+    }
+
+    data.forEach(
+        displayMessage
+    );
+
+    scrollBottom();
+}
+
+
+/* =========================
+   DISPLAY MESSAGE
+========================= */
+
+function displayMessage(message) {
+
+    if (
+        document.querySelector(
+            `[data-message-id="${message.id}"]`
+        )
+    ) {
+        return;
+    }
+
+    const container =
+        document.getElementById(
+            "messages"
+        );
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "message";
+
+    wrapper.dataset.messageId =
+        message.id;
+
+    if (
+        currentUser &&
+        message.user_id ===
+        currentUser.id
+    ) {
+
+        wrapper.classList.add(
+            "mine"
+        );
+    }
+
+
+    const avatar =
+        document.createElement(
+            "div"
+        );
+
+    avatar.className =
+        "message-avatar";
+
+    avatar.textContent =
+        message.username
+            .charAt(0)
+            .toUpperCase();
+
+
+    const body =
+        document.createElement(
+            "div"
+        );
+
+    body.className =
+        "message-body";
+
+
+    const top =
+        document.createElement(
+            "div"
+        );
+
+    top.className =
+        "message-top";
+
+
+    const username =
+        document.createElement(
+            "span"
+        );
+
+    username.className =
+        "message-user";
+
+    username.textContent =
+        message.username;
+
+
+    const time =
+        document.createElement(
+            "span"
+        );
+
+    time.className =
+        "message-time";
+
+    time.textContent =
+        new Date(
+            message.created_at
+        ).toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+
+    const content =
+        document.createElement(
+            "div"
+        );
+
+    content.className =
+        "message-content";
+
+    content.textContent =
+        message.content;
+
+
+    top.appendChild(username);
+    top.appendChild(time);
+
+    body.appendChild(top);
+    body.appendChild(content);
+
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(body);
+
+    container.appendChild(wrapper);
+}
+
+
+/* =========================
+   REALTIME MESSAGES
+========================= */
+
+function startMessages() {
+
+    messageChannel =
+        supabaseClient
+            .channel(
+                "messages-" +
+                currentRoom
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "messages",
+                    filter:
+                        "room_name=eq." +
+                        currentRoom
+                },
+                function(payload) {
+
+                    displayMessage(
+                        payload.new
+                    );
+
+                    scrollBottom();
+                }
+            )
+            .subscribe();
+}
+
+
+/* =========================
+   SEND MESSAGE
+========================= */
+
+async function sendMessage() {
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+    const button =
+        document.getElementById(
+            "sendButton"
+        );
+
+    const content =
+        input.value.trim();
+
+    if (!content) {
+        return;
+    }
+
+    button.disabled = true;
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("messages")
+            .insert({
+                room_name:
+                    currentRoom,
+
+                user_id:
+                    currentUser.id,
+
+                username:
+                    currentUsername,
+
+                content:
+                    content
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showError(
+            error.message
+        );
+
+    } else {
+
+        input.value = "";
+    }
+
+    button.disabled = false;
+
+    input.focus();
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+document
+    .getElementById("messageForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+    );
+
+
+/* =========================
+   SCROLL
+========================= */
+
+function scrollBottom() {
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+    messages.scrollTop =
+        messages.scrollHeight;
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function start() {
+
+    const loggedIn =
+        await loadUser();
+
+    if (!loggedIn) {
+        return;
+    }
+
+    startPresence();
+
+    await loadMessages();
+
+    startMessages();
+
+    document
+        .getElementById(
+            "messageInput"
+        )
+        .focus();
+}
+
+start();
+
+</script>
+
+</body>
+</html>

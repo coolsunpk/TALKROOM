@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TalkRoom — Sign Up</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0b0f19;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-box {
+            width: 100%;
+            max-width: 420px;
+            background: #111725;
+            border: 1px solid #252d3d;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: #6c63ff;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #858d9e;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 18px;
+            background: #0b0f19;
+            border: 1px solid #303747;
+            border-radius: 9px;
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #6c63ff;
+        }
+
+        .hint {
+            color: #697285;
+            font-size: 11px;
+            margin-top: -12px;
+            margin-bottom: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #6c63ff;
+            border: none;
+            border-radius: 9px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5b52e8;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        .login {
+            text-align: center;
+            margin-top: 25px;
+            color: #858d9e;
+            font-size: 14px;
+        }
+
+        .login a {
+            color: #8d87ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #858d9e;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="signup-box">
+
+        <div class="logo">
+            Talk<span>Room</span>
+        </div>
+
+        <p class="subtitle">
+            Create your TalkRoom account
+        </p>
+
+        <form id="signupForm">
+
+            <label for="username">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Choose your username"
+                minlength="3"
+                maxlength="20"
+                pattern="[A-Za-z0-9_]+"
+                required
+            >
+
+            <div class="hint">
+                3–20 characters. Letters, numbers and _ only.
+            </div>
+
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Create a password"
+                minlength="6"
+                required
+            >
+
+
+            <button
+                type="submit"
+                id="signupButton"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <div id="message"></div>
+
+
+        <div class="login">
+            Already have an account?
+            <a href="login.html">
+                Login
+            </a>
+        </div>
+
+
+        <a href="index.html" class="back">
+            ← Back to TalkRoom
+        </a>
+
+    </div>
+
+
+    <script>
+
+        const signupForm =
+            document.getElementById("signupForm");
+
+        const signupButton =
+            document.getElementById("signupButton");
+
+        const message =
+            document.getElementById("message");
+
+
+        signupForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim()
+                        .toLowerCase();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                message.textContent = "";
+
+
+                /*
+                    Make username consistent
+                */
+
+                const cleanUsername =
+                    username.toLowerCase();
+
+
+                signupButton.disabled = true;
+
+                signupButton.textContent =
+                    "Creating account...";
+
+
+                try {
+
+                    /*
+                        Check if username already exists
+                    */
+
+                    const {
+                        data: existingProfile,
+                        error: usernameCheckError
+                    } =
+                        await supabaseClient
+                            .from("profiles")
+                            .select("id")
+                            .eq(
+                                "username",
+                                cleanUsername
+                            )
+                            .maybeSingle();
+
+
+                    if (usernameCheckError) {
+
+                        throw usernameCheckError;
+
+                    }
+
+
+                    if (existingProfile) {
+
+                        throw new Error(
+                            "That username is already taken."
+                        );
+
+                    }
+
+
+                    /*
+                        Create Supabase Auth account
+
+                        IMPORTANT:
+                        username is stored in
+                        user_metadata.
+                    */
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient.auth.signUp({
+
+                            email: email,
+
+                            password: password,
+
+                            options: {
+
+                                data: {
+                                    username:
+                                        cleanUsername
+                                }
+
+                            }
+
+                        });
+
+
+                    if (error) {
+
+                        throw error;
+
+                    }
+
+
+                    if (!data.user) {
+
+                        throw new Error(
+                            "Account could not be created."
+                        );
+
+                    }
+
+
+                    /*
+                        Create/update profile
+                    */
+
+                    const {
+                        error: profileError
+                    } =
+                        await supabaseClient
+                            .from("profiles")
+                            .upsert(
+                                {
+                                    id: data.user.id,
+
+                                    username:
+                                        cleanUsername
+                                },
+                                {
+                                    onConflict: "id"
+                                }
+                            );
+
+
+                    if (profileError) {
+
+                        throw profileError;
+
+                    }
+
+
+                    message.style.color =
+                        "#55d98a";
+
+
+                    /*
+                        Email confirmation may be enabled
+                    */
+
+                    if (!data.session) {
+
+                        message.textContent =
+                            "Account created! Check your email to confirm your account.";
+
+                    } else {
+
+                        message.textContent =
+                            "Account created successfully! 🚀";
+
+                    }
+
+
+                    signupForm.reset();
+
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "login.html";
+
+                        },
+                        1500
+                    );
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    message.style.color =
+                        "#ff8585";
+
+
+                    message.textContent =
+                        error.message ||
+                        "Could not create account.";
+
+
+                } finally {
+
+                    signupButton.disabled =
+                        false;
+
+                    signupButton.textContent =
+                        "Create Account";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

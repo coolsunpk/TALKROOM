@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TalkRoom — Create Room</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #080b12;
+
+    color: #f5f7fb;
+
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+
+    padding: 20px;
+}
+
+.card {
+    background: #0f141e;
+
+    border: 1px solid #252d3b;
+
+    border-radius: 16px;
+
+    padding: 30px;
+}
+
+.logo {
+    text-align: center;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+.logo span {
+    color: #6c63ff;
+}
+
+.subtitle {
+    text-align: center;
+
+    color: #8992a4;
+
+    font-size: 12px;
+
+    margin-bottom: 30px;
+}
+
+.premium-box {
+    padding: 20px;
+
+    background: #151b26;
+
+    border: 1px solid #303848;
+
+    border-radius: 12px;
+
+    margin-bottom: 20px;
+}
+
+.premium-title {
+    font-size: 16px;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+.premium-text {
+    color: #8992a4;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+.badge {
+    display: inline-block;
+
+    margin-top: 12px;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    background: #27223b;
+
+    color: #c0b7ff;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #aab2c1;
+
+    font-size: 11px;
+}
+
+input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #303848;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #080b12;
+
+    color: white;
+
+    font-size: 13px;
+}
+
+input:focus {
+    border-color: #6c63ff;
+}
+
+button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #6c63ff;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: .9;
+}
+
+button:disabled {
+    opacity: .5;
+
+    cursor: not-allowed;
+}
+
+.premium-button {
+    background: #242035;
+
+    color: #c7c0ff;
+
+    border: 1px solid #40376b;
+}
+
+.message {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.success {
+    display: block;
+
+    background: #10271c;
+
+    color: #58db93;
+}
+
+.error {
+    display: block;
+
+    background: #2a1115;
+
+    color: #ff7583;
+}
+
+.room-link {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background: #121a26;
+
+    color: #8ea4ff;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    text-decoration: none;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+<div class="card">
+
+
+<div class="logo">
+    Talk<span>Room</span>
+</div>
+
+
+<div class="subtitle">
+    Create your own TalkRoom
+</div>
+
+
+<div class="premium-box">
+
+<div class="premium-title">
+    ⭐ Premium Rooms
+</div>
+
+<div class="premium-text">
+    Premium members can create their own
+    public chat room and automatically become
+    the administrator of that room.
+</div>
+
+<div
+    id="premiumBadge"
+    class="badge"
+>
+    Checking membership...
+</div>
+
+</div>
+
+
+<div id="createArea">
+
+
+<label for="roomName">
+    Room name
+</label>
+
+<input
+    id="roomName"
+    type="text"
+    maxlength="40"
+    placeholder="e.g. Gaming"
+>
+
+
+<button
+    id="createButton"
+    onclick="createRoom()"
+>
+    Create Room
+</button>
+
+
+</div>
+
+
+<button
+    id="premiumButton"
+    class="premium-button"
+    onclick="buyPremium()"
+>
+    ⭐ Get Premium
+</button>
+
+
+<div
+    id="message"
+    class="message"
+></div>
+
+
+<a
+    id="roomLink"
+    class="room-link"
+    href="#"
+>
+    Open your new room →
+</a>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+
+let currentUser = null;
+
+let profile = null;
+
+
+/* =========================
+   SHOW MESSAGE
+========================= */
+
+function showMessage(
+    text,
+    type
+) {
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+    box.textContent =
+        text;
+
+    box.className =
+        "message " +
+        type;
+
+}
+
+
+/* =========================
+   CHECK LOGIN
+========================= */
+
+async function loadUser() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (
+        error ||
+        !data.user
+    ) {
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    currentUser =
+        data.user;
+
+
+    const {
+        data: userProfile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id,username,role,is_premium,premium_until,status"
+            )
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .single();
+
+
+    if (profileError) {
+
+        console.error(
+            profileError
+        );
+
+        showMessage(
+            "Could not load your profile.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    profile =
+        userProfile;
+
+
+    updatePremiumUI();
+
+}
+
+
+/* =========================
+   PREMIUM STATUS
+========================= */
+
+function updatePremiumUI() {
+
+    const badge =
+        document.getElementById(
+            "premiumBadge"
+        );
+
+    const createArea =
+        document.getElementById(
+            "createArea"
+        );
+
+    const premiumButton =
+        document.getElementById(
+            "premiumButton"
+        );
+
+
+    const isAdmin =
+        profile.role === "admin";
+
+
+    const premiumActive =
+        profile.is_premium === true
+        &&
+        (
+            !profile.premium_until
+            ||
+            new Date(
+                profile.premium_until
+            ) > new Date()
+        );
+
+
+    if (
+        isAdmin ||
+        premiumActive
+    ) {
+
+        badge.textContent =
+            isAdmin
+            ? "👑 PLATFORM ADMIN"
+            : "⭐ PREMIUM ACTIVE";
+
+
+        createArea.style.display =
+            "block";
+
+
+        premiumButton.style.display =
+            "none";
+
+    }
+
+    else {
+
+        badge.textContent =
+            "FREE ACCOUNT";
+
+
+        createArea.style.display =
+            "none";
+
+
+        premiumButton.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =========================
+   CREATE ROOM
+========================= */
+
+async function createRoom() {
+
+    const input =
+        document.getElementById(
+            "roomName"
+        );
+
+    const button =
+        document.getElementById(
+            "createButton"
+        );
+
+
+    const roomName =
+        input.value.trim();
+
+
+    if (
+        roomName.length < 3
+    ) {
+
+        showMessage(
+            "Room name must contain at least 3 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        roomName.length > 40
+    ) {
+
+        showMessage(
+            "Room name is too long.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "Creating...";
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .rpc(
+                "create_room",
+                {
+                    p_room_name:
+                        roomName
+                }
+            );
+
+
+    button.disabled =
+        false;
+
+    button.textContent =
+        "Create Room";
+
+
+    if (error) {
+
+        console.error(
+            "Create room error:",
+            error
+        );
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    showMessage(
+        "Room created successfully! You are now the room owner.",
+        "success"
+    );
+
+
+    const link =
+        document.getElementById(
+            "roomLink"
+        );
+
+
+    link.href =
+        "chat.html?room=" +
+        encodeURIComponent(
+            roomName
+        );
+
+
+    link.style.display =
+        "block";
+
+
+    input.value =
+        "";
+
+}
+
+
+/* =========================
+   PREMIUM
+========================= */
+
+function buyPremium() {
+
+    showMessage(
+        "Premium payment is not connected yet. We'll connect the payment system next.",
+        "error"
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadUser();
+
+</script>
+
+</body>
+
+</html>

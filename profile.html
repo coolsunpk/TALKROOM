@@ -1,0 +1,1458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>TalkRoom — Profile</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+
+    min-height: 100vh;
+
+    background: #080b12;
+
+    color: white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    padding: 25px 15px;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 550px;
+
+    margin: auto;
+
+}
+
+
+/* =========================
+   NAV
+========================= */
+
+.nav {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.logo {
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
+
+.logo span {
+
+    color: #6c63ff;
+}
+
+.back {
+
+    color: #8992a4;
+
+    text-decoration: none;
+
+    font-size: 11px;
+}
+
+.back:hover {
+
+    color: white;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+
+    background: #0f141e;
+
+    border: 1px solid #292f3c;
+
+    border-radius: 18px;
+
+    padding: 30px;
+}
+
+
+/* =========================
+   PROFILE HEADER
+========================= */
+
+.profile-header {
+
+    text-align: center;
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+
+.avatar-wrapper {
+
+    position: relative;
+
+    width: 125px;
+
+    height: 125px;
+
+    margin: 0 auto 18px;
+}
+
+.avatar {
+
+    width: 125px;
+
+    height: 125px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    background: #171d29;
+
+    border: 3px solid #303848;
+}
+
+.avatar.premium-avatar {
+
+    border-color: #6c63ff;
+}
+
+
+/* =========================
+   UPLOAD BUTTON
+========================= */
+
+.upload-button {
+
+    display: none;
+
+    position: absolute;
+
+    right: 0;
+
+    bottom: 2px;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: 3px solid #0f141e;
+
+    background: #6c63ff;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 16px;
+}
+
+.upload-button.show {
+
+    display: block;
+}
+
+.upload-button:hover {
+
+    opacity: .9;
+}
+
+.upload-button:disabled {
+
+    opacity: .5;
+
+    cursor: not-allowed;
+}
+
+#avatarInput {
+
+    display: none;
+}
+
+
+/* =========================
+   USERNAME
+========================= */
+
+.username {
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   PREMIUM BADGE
+========================= */
+
+.premium-badge {
+
+    display: none;
+
+    width: fit-content;
+
+    margin: 8px auto 0;
+
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    background: #1b1730;
+
+    border: 1px solid #514a88;
+
+    color: #c9c3ff;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+.premium-badge.show {
+
+    display: block;
+}
+
+
+/* =========================
+   FREE NOTICE
+========================= */
+
+.free-notice {
+
+    display: none;
+
+    margin-top: 18px;
+
+    padding: 12px;
+
+    border-radius: 9px;
+
+    background: #151b26;
+
+    border: 1px solid #292f3c;
+
+    color: #8992a4;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+.free-notice.show {
+
+    display: block;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.info {
+
+    margin-top: 28px;
+
+    border-top: 1px solid #252c39;
+}
+
+.info-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #252c39;
+}
+
+.info-label {
+
+    color: #8992a4;
+
+    font-size: 11px;
+}
+
+.info-value {
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.premium-active {
+
+    color: #55db91;
+}
+
+.free-user {
+
+    color: #8992a4;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions {
+
+    margin-top: 25px;
+}
+
+.save-button {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #303747;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.save-button:hover {
+
+    opacity: .9;
+}
+
+
+/* =========================
+   PREMIUM LINK
+========================= */
+
+.premium-link {
+
+    display: none;
+
+    margin-top: 12px;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    background: #18152c;
+
+    border: 1px solid #514a88;
+
+    color: #c9c3ff;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+.premium-link.show {
+
+    display: block;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.success {
+
+    display: block;
+
+    background: #10271c;
+
+    color: #55db91;
+
+    border: 1px solid #1c4a31;
+}
+
+.error {
+
+    display: block;
+
+    background: #2b1217;
+
+    color: #ff7b88;
+
+    border: 1px solid #4b2028;
+}
+
+.info-message {
+
+    display: block;
+
+    background: #151b2b;
+
+    color: #aaa6ff;
+
+    border: 1px solid #293149;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .card {
+
+        padding: 25px 18px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- NAV -->
+
+<div class="nav">
+
+    <div class="logo">
+        Talk<span>Room</span>
+    </div>
+
+    <a
+        href="index.html"
+        class="back"
+    >
+        ← Home
+    </a>
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="card">
+
+
+<div class="profile-header">
+
+
+<!-- AVATAR -->
+
+<div class="avatar-wrapper">
+
+    <img
+        id="avatar"
+        class="avatar"
+        src=""
+        alt="Profile photo"
+    >
+
+    <button
+        id="uploadButton"
+        class="upload-button"
+        onclick="openAvatarPicker()"
+        title="Change profile photo"
+    >
+        📷
+    </button>
+
+</div>
+
+
+<input
+    id="avatarInput"
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+    onchange="uploadAvatar(event)"
+>
+
+
+<!-- USERNAME -->
+
+<div
+    id="username"
+    class="username"
+>
+    Loading...
+</div>
+
+
+<!-- PREMIUM BADGE -->
+
+<div
+    id="premiumBadge"
+    class="premium-badge"
+>
+    ⭐ PREMIUM MEMBER
+</div>
+
+
+<!-- FREE NOTICE -->
+
+<div
+    id="freeNotice"
+    class="free-notice"
+>
+    Profile photos are available to Premium members.
+    Upgrade to Premium to add your photo.
+</div>
+
+
+</div>
+
+
+<!-- INFORMATION -->
+
+<div class="info">
+
+
+<div class="info-row">
+
+    <div class="info-label">
+        Username
+    </div>
+
+    <div
+        id="usernameInfo"
+        class="info-value"
+    >
+        —
+    </div>
+
+</div>
+
+
+<div class="info-row">
+
+    <div class="info-label">
+        Account
+    </div>
+
+    <div
+        id="accountStatus"
+        class="info-value"
+    >
+        —
+    </div>
+
+</div>
+
+
+<div class="info-row">
+
+    <div class="info-label">
+        Premium
+    </div>
+
+    <div
+        id="premiumStatus"
+        class="info-value"
+    >
+        —
+    </div>
+
+</div>
+
+
+<div
+    id="expiryRow"
+    class="info-row"
+    style="display:none;"
+>
+
+    <div class="info-label">
+        Premium expires
+    </div>
+
+    <div
+        id="premiumExpiry"
+        class="info-value"
+    >
+        —
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- ACTIONS -->
+
+<div class="actions">
+
+    <button
+        id="saveButton"
+        class="save-button"
+        onclick="saveProfile()"
+    >
+        Save Profile
+    </button>
+
+
+    <a
+        id="premiumLink"
+        href="premium.html"
+        class="premium-link"
+    >
+        ⭐ Upgrade to Premium
+    </a>
+
+</div>
+
+
+<!-- MESSAGE -->
+
+<div
+    id="message"
+    class="message"
+></div>
+
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+let currentUser = null;
+
+let currentProfile = null;
+
+
+/* ==========================================
+   DEFAULT AVATAR
+========================================== */
+
+function defaultAvatar() {
+
+    return (
+        "data:image/svg+xml," +
+        encodeURIComponent(`
+
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="250"
+            height="250"
+            viewBox="0 0 250 250"
+        >
+
+            <rect
+                width="250"
+                height="250"
+                fill="#171d29"
+            />
+
+            <circle
+                cx="125"
+                cy="95"
+                r="45"
+                fill="#555f73"
+            />
+
+            <path
+                d="
+                    M45 225
+                    C50 170
+                    90 145
+                    125 145
+                    C160 145
+                    200 170
+                    205 225
+                "
+                fill="#555f73"
+            />
+
+        </svg>
+
+        `)
+    );
+
+}
+
+
+/* ==========================================
+   MESSAGE
+========================================== */
+
+function showMessage(
+    text,
+    type
+) {
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    message.textContent =
+        text;
+
+    message.className =
+        "message " +
+        type;
+
+}
+
+
+/* ==========================================
+   LOAD USER
+========================================== */
+
+async function loadProfile() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (
+        error ||
+        !data.user
+    ) {
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    currentUser =
+        data.user;
+
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id,username,avatar_url,is_premium,premium_until,status"
+            )
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .single();
+
+
+    if (profileError) {
+
+        console.error(
+            profileError
+        );
+
+        showMessage(
+            "Could not load your profile.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    currentProfile =
+        profile;
+
+
+    renderProfile();
+
+}
+
+
+/* ==========================================
+   PREMIUM CHECK
+========================================== */
+
+function isPremiumActive() {
+
+    if (
+        currentProfile.is_premium !== true
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !currentProfile.premium_until
+    ) {
+
+        return true;
+
+    }
+
+
+    return (
+        new Date(
+            currentProfile.premium_until
+        ) > new Date()
+    );
+
+}
+
+
+/* ==========================================
+   RENDER
+========================================== */
+
+function renderProfile() {
+
+    const username =
+        currentProfile.username ||
+        "User";
+
+
+    document.getElementById(
+        "username"
+    ).textContent =
+        username;
+
+
+    document.getElementById(
+        "usernameInfo"
+    ).textContent =
+        username;
+
+
+    document.getElementById(
+        "accountStatus"
+    ).textContent =
+        currentProfile.status ||
+        "Active";
+
+
+    const avatar =
+        document.getElementById(
+            "avatar"
+        );
+
+
+    const premium =
+        isPremiumActive();
+
+
+    /* =========================
+       AVATAR
+    ========================= */
+
+    if (
+        premium &&
+        currentProfile.avatar_url
+    ) {
+
+        avatar.src =
+            currentProfile.avatar_url;
+
+    }
+
+    else {
+
+        avatar.src =
+            defaultAvatar();
+
+    }
+
+
+    /* =========================
+       ELEMENTS
+    ========================= */
+
+    const uploadButton =
+        document.getElementById(
+            "uploadButton"
+        );
+
+    const badge =
+        document.getElementById(
+            "premiumBadge"
+        );
+
+    const freeNotice =
+        document.getElementById(
+            "freeNotice"
+        );
+
+    const premiumStatus =
+        document.getElementById(
+            "premiumStatus"
+        );
+
+    const expiryRow =
+        document.getElementById(
+            "expiryRow"
+        );
+
+    const premiumLink =
+        document.getElementById(
+            "premiumLink"
+        );
+
+
+    /* =========================
+       PREMIUM USER
+    ========================= */
+
+    if (premium) {
+
+        uploadButton.classList.add(
+            "show"
+        );
+
+        badge.classList.add(
+            "show"
+        );
+
+        freeNotice.classList.remove(
+            "show"
+        );
+
+        avatar.classList.add(
+            "premium-avatar"
+        );
+
+        premiumStatus.textContent =
+            "⭐ Active";
+
+        premiumStatus.className =
+            "info-value premium-active";
+
+
+        if (
+            currentProfile.premium_until
+        ) {
+
+            expiryRow.style.display =
+                "flex";
+
+            document.getElementById(
+                "premiumExpiry"
+            ).textContent =
+                formatDate(
+                    currentProfile.premium_until
+                );
+
+        }
+
+
+        premiumLink.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    /* =========================
+       FREE USER
+    ========================= */
+
+    else {
+
+        uploadButton.classList.remove(
+            "show"
+        );
+
+        badge.classList.remove(
+            "show"
+        );
+
+        freeNotice.classList.add(
+            "show"
+        );
+
+        avatar.classList.remove(
+            "premium-avatar"
+        );
+
+        premiumStatus.textContent =
+            "Free";
+
+        premiumStatus.className =
+            "info-value free-user";
+
+        expiryRow.style.display =
+            "none";
+
+        premiumLink.classList.add(
+            "show"
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   DATE
+========================================== */
+
+function formatDate(
+    date
+) {
+
+    return new Date(
+        date
+    ).toLocaleDateString(
+        undefined,
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+}
+
+
+/* ==========================================
+   FILE PICKER
+========================================== */
+
+function openAvatarPicker() {
+
+    if (
+        !isPremiumActive()
+    ) {
+
+        showMessage(
+            "Only Premium members can use profile photos.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "avatarInput"
+        )
+        .click();
+
+}
+
+
+/* ==========================================
+   UPLOAD AVATAR
+========================================== */
+
+async function uploadAvatar(
+    event
+) {
+
+    /* SECURITY CHECK */
+
+    if (
+        !isPremiumActive()
+    ) {
+
+        showMessage(
+            "Premium membership is required for profile photos.",
+            "error"
+        );
+
+        event.target.value =
+            "";
+
+        return;
+
+    }
+
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    /* SIZE */
+
+    if (
+        file.size >
+        2 * 1024 * 1024
+    ) {
+
+        showMessage(
+            "Photo must be smaller than 2 MB.",
+            "error"
+        );
+
+        event.target.value =
+            "";
+
+        return;
+
+    }
+
+
+    /* TYPE */
+
+    const allowedTypes = [
+
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
+
+        showMessage(
+            "Only JPG, PNG or WebP images are allowed.",
+            "error"
+        );
+
+        event.target.value =
+            "";
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "uploadButton"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    showMessage(
+        "Uploading profile photo...",
+        "info-message"
+    );
+
+
+    /*
+       Use a unique file name.
+
+       This avoids browser/cache problems
+       when replacing a previous photo.
+    */
+
+    const extension =
+        file.type === "image/png"
+        ? "png"
+        : file.type === "image/webp"
+        ? "webp"
+        : "jpg";
+
+
+    const filePath =
+        currentUser.id +
+        "/avatar-" +
+        Date.now() +
+        "." +
+        extension;
+
+
+    /* =========================
+       UPLOAD
+    ========================= */
+
+    const {
+        error: uploadError
+    } =
+        await supabaseClient
+            .storage
+            .from("avatars")
+            .upload(
+                filePath,
+                file,
+                {
+                    contentType:
+                        file.type,
+
+                    upsert:
+                        false
+                }
+            );
+
+
+    if (uploadError) {
+
+        console.error(
+            uploadError
+        );
+
+        button.disabled =
+            false;
+
+        showMessage(
+            "Upload failed: " +
+            uploadError.message,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       PUBLIC URL
+    ========================= */
+
+    const {
+        data: publicData
+    } =
+        supabaseClient
+            .storage
+            .from("avatars")
+            .getPublicUrl(
+                filePath
+            );
+
+
+    const avatarUrl =
+        publicData.publicUrl;
+
+
+    /* =========================
+       SAVE PROFILE URL
+    ========================= */
+
+    const {
+        error: updateError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                avatar_url:
+                    avatarUrl
+            })
+            .eq(
+                "id",
+                currentUser.id
+            );
+
+
+    button.disabled =
+        false;
+
+
+    if (updateError) {
+
+        console.error(
+            updateError
+        );
+
+        showMessage(
+            "Photo uploaded but profile could not be updated.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* UPDATE LOCAL PROFILE */
+
+    currentProfile.avatar_url =
+        avatarUrl;
+
+
+    document.getElementById(
+        "avatar"
+    ).src =
+        avatarUrl +
+        "?v=" +
+        Date.now();
+
+
+    showMessage(
+        "Profile photo updated successfully.",
+        "success"
+    );
+
+
+    event.target.value =
+        "";
+
+}
+
+
+/* ==========================================
+   SAVE PROFILE
+========================================== */
+
+async function saveProfile() {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+
+    /*
+       Only save the avatar URL.
+
+       Premium status is NOT changed
+       from this page.
+    */
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+
+                avatar_url:
+                    isPremiumActive()
+                    ? currentProfile.avatar_url
+                    : null
+
+            })
+            .eq(
+                "id",
+                currentUser.id
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        showMessage(
+            "Could not save profile.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    showMessage(
+        "Profile saved successfully.",
+        "success"
+    );
+
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadProfile();
+
+</script>
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,978 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>TalkRoom — Chat. Connect. Belong.</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0b0f19;
+    color: white;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+nav {
+    width: 100%;
+    padding: 18px 7%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid #202635;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #6c63ff;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 9px 13px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+    font-size: 12px;
+
+    transition: .2s;
+}
+
+.btn:hover {
+    opacity: .85;
+    transform: translateY(-1px);
+}
+
+.login {
+    color: white;
+    border: 1px solid #303747;
+}
+
+.signup {
+    background: #6c63ff;
+    color: white;
+}
+
+.premium-nav {
+    color: #d0cbff;
+    border: 1px solid #514a88;
+    background: #17152a;
+}
+
+.profile-nav {
+    color: #ffffff;
+    border: 1px solid #303747;
+    background: #111725;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 67vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 65px 20px 50px;
+}
+
+.hero-content {
+    max-width: 900px;
+}
+
+.badge {
+    display: inline-block;
+
+    background: #151b2b;
+
+    border: 1px solid #293149;
+
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    color: #aaa6ff;
+
+    font-size: 13px;
+
+    margin-bottom: 24px;
+}
+
+h1 {
+    font-size: clamp(45px, 8vw, 82px);
+
+    line-height: 1;
+
+    margin-bottom: 25px;
+
+    letter-spacing: -4px;
+}
+
+h1 span {
+    color: #6c63ff;
+}
+
+.hero p {
+    color: #9da5b5;
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+    max-width: 680px;
+
+    margin: auto;
+}
+
+
+/* =========================
+   HERO BUTTONS
+========================= */
+
+.hero-buttons {
+    margin-top: 34px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.main-btn,
+.secondary-btn,
+.premium-btn,
+.create-btn,
+.profile-btn {
+
+    padding: 14px 21px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    transition: .2s;
+}
+
+.main-btn {
+    background: #6c63ff;
+    color: white;
+}
+
+.secondary-btn {
+    border: 1px solid #303747;
+    color: white;
+}
+
+.premium-btn {
+    background: #18152c;
+    border: 1px solid #514a88;
+    color: #c9c3ff;
+}
+
+.create-btn {
+    border: 1px solid #303747;
+    color: white;
+    background: #111725;
+}
+
+.profile-btn {
+    border: 1px solid #303747;
+    color: white;
+    background: #111725;
+}
+
+.main-btn:hover,
+.secondary-btn:hover,
+.premium-btn:hover,
+.create-btn:hover,
+.profile-btn:hover {
+
+    opacity: .88;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   ROOMS
+========================= */
+
+.rooms-section {
+    padding: 55px 7% 75px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.section-title h2 {
+    font-size: 31px;
+    margin-bottom: 9px;
+}
+
+.section-title p {
+    color: #858d9e;
+    font-size: 14px;
+}
+
+.rooms {
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 17px;
+
+    max-width: 1100px;
+
+    margin: auto;
+}
+
+.room {
+
+    background: #111725;
+
+    border: 1px solid #222a3a;
+
+    padding: 24px;
+
+    border-radius: 14px;
+
+    transition: .2s;
+
+    text-decoration: none;
+
+    color: white;
+
+    display: block;
+}
+
+.room:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #6c63ff;
+}
+
+.room-icon {
+
+    font-size: 30px;
+
+    margin-bottom: 14px;
+}
+
+.room h3 {
+
+    margin-bottom: 8px;
+
+    font-size: 18px;
+}
+
+.room p {
+
+    color: #818a9c;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.online {
+
+    margin-top: 15px;
+
+    color: #55d98a;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   PREMIUM SECTION
+========================= */
+
+.premium-section {
+
+    padding: 10px 7% 70px;
+}
+
+.premium-card {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 32px;
+
+    border-radius: 16px;
+
+    background: #111725;
+
+    border: 1px solid #302a55;
+
+    text-align: center;
+}
+
+.premium-icon {
+
+    font-size: 32px;
+
+    margin-bottom: 10px;
+}
+
+.premium-card h2 {
+
+    margin-bottom: 10px;
+
+    font-size: 25px;
+}
+
+.premium-card p {
+
+    color: #858d9e;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    max-width: 650px;
+
+    margin: auto;
+}
+
+.premium-card a {
+
+    display: inline-block;
+
+    margin-top: 20px;
+
+    padding: 12px 22px;
+
+    border-radius: 9px;
+
+    background: #6c63ff;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.features-section {
+
+    padding: 0 7% 70px;
+}
+
+.features {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(210px, 1fr));
+
+    gap: 15px;
+}
+
+.feature {
+
+    background: #0f141e;
+
+    border: 1px solid #222a3a;
+
+    border-radius: 12px;
+
+    padding: 22px;
+}
+
+.feature-icon {
+
+    font-size: 25px;
+
+    margin-bottom: 12px;
+}
+
+.feature h3 {
+
+    font-size: 15px;
+
+    margin-bottom: 7px;
+}
+
+.feature p {
+
+    color: #818a9c;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+    border-top: 1px solid #202635;
+
+    padding: 25px 7%;
+
+    text-align: center;
+
+    color: #697285;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    nav {
+
+        padding: 16px 5%;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+    .logo {
+
+        font-size: 21px;
+    }
+
+    .nav-buttons {
+
+        gap: 5px;
+    }
+
+    .nav-buttons .btn {
+
+        padding: 7px 9px;
+
+        font-size: 10px;
+    }
+
+    h1 {
+
+        letter-spacing: -2px;
+    }
+
+    .hero {
+
+        min-height: 62vh;
+
+        padding-top: 50px;
+    }
+
+    .hero p {
+
+        font-size: 16px;
+    }
+
+    .hero-buttons {
+
+        flex-direction: column;
+
+        max-width: 300px;
+
+        margin-left: auto;
+
+        margin-right: auto;
+    }
+
+    .main-btn,
+    .secondary-btn,
+    .premium-btn,
+    .create-btn,
+    .profile-btn {
+
+        width: 100%;
+
+        text-align: center;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        Talk<span>Room</span>
+    </div>
+
+
+    <div class="nav-buttons">
+
+        <a
+            href="profile.html"
+            class="btn profile-nav"
+        >
+            👤 Profile
+        </a>
+
+
+        <a
+            href="premium.html"
+            class="btn premium-nav"
+        >
+            ⭐ Premium
+        </a>
+
+
+        <a
+            href="login.html"
+            class="btn login"
+        >
+            Login
+        </a>
+
+
+        <a
+            href="signup.html"
+            class="btn signup"
+        >
+            Sign Up
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+
+        <div class="badge">
+            🟢 People are talking right now
+        </div>
+
+
+        <h1>
+
+            Chat. Connect.<br>
+
+            <span>Belong.</span>
+
+        </h1>
+
+
+        <p>
+
+            Join TalkRoom and meet people in live
+            chat rooms. Talk about gaming, music,
+            study, friends and whatever you're into.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="rooms.html"
+                class="main-btn"
+            >
+                Enter TalkRoom →
+            </a>
+
+
+            <a
+                href="signup.html"
+                class="secondary-btn"
+            >
+                Create Account
+            </a>
+
+
+            <a
+                href="premium.html"
+                class="premium-btn"
+            >
+                ⭐ Get Premium
+            </a>
+
+
+            <a
+                href="create-room.html"
+                class="create-btn"
+            >
+                ➕ Create Room
+            </a>
+
+
+            <a
+                href="profile.html"
+                class="profile-btn"
+            >
+                👤 My Profile
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     POPULAR ROOMS
+========================= -->
+
+<section class="rooms-section">
+
+
+    <div class="section-title">
+
+        <h2>
+            Popular Rooms
+        </h2>
+
+        <p>
+            Find a room and start talking.
+        </p>
+
+    </div>
+
+
+    <div class="rooms">
+
+
+        <a
+            href="chat.html?room=General"
+            class="room"
+        >
+
+            <div class="room-icon">
+                💬
+            </div>
+
+            <h3>
+                General
+            </h3>
+
+            <p>
+                Talk about anything and meet
+                new people.
+            </p>
+
+            <div class="online">
+                ● Online now
+            </div>
+
+        </a>
+
+
+        <a
+            href="chat.html?room=Gaming"
+            class="room"
+        >
+
+            <div class="room-icon">
+                🎮
+            </div>
+
+            <h3>
+                Gaming
+            </h3>
+
+            <p>
+                Games, players and everything
+                gaming.
+            </p>
+
+            <div class="online">
+                ● Online now
+            </div>
+
+        </a>
+
+
+        <a
+            href="chat.html?room=Study"
+            class="room"
+        >
+
+            <div class="room-icon">
+                📚
+            </div>
+
+            <h3>
+                Study
+            </h3>
+
+            <p>
+                Study together and discuss
+                ideas.
+            </p>
+
+            <div class="online">
+                ● Online now
+            </div>
+
+        </a>
+
+
+        <a
+            href="chat.html?room=Music"
+            class="room"
+        >
+
+            <div class="room-icon">
+                🎵
+            </div>
+
+            <h3>
+                Music
+            </h3>
+
+            <p>
+                Share songs and talk about
+                music.
+            </p>
+
+            <div class="online">
+                ● Online now
+            </div>
+
+        </a>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PREMIUM
+========================= -->
+
+<section class="premium-section">
+
+
+    <div class="premium-card">
+
+
+        <div class="premium-icon">
+            👑
+        </div>
+
+
+        <h2>
+            Create Your Own TalkRoom
+        </h2>
+
+
+        <p>
+
+            Premium members can create their own
+            chat rooms and become the owner and
+            administrator of the rooms they create.
+
+            Choose Monthly for PKR 299 or Yearly
+            for PKR 2,999.
+
+        </p>
+
+
+        <a
+            href="premium.html"
+        >
+            View Premium Plans
+        </a>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section class="features-section">
+
+
+    <div class="features">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                💬
+            </div>
+
+            <h3>
+                Live Chat
+            </h3>
+
+            <p>
+                Talk with other people in
+                real-time chat rooms.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                👤
+            </div>
+
+            <h3>
+                Profiles
+            </h3>
+
+            <p>
+                Create your profile and add
+                your profile photo.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⭐
+            </div>
+
+            <h3>
+                Premium
+            </h3>
+
+            <p>
+                Premium members receive special
+                features and a Premium badge.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🛡️
+            </div>
+
+            <h3>
+                Room Owners
+            </h3>
+
+            <p>
+                Premium room creators can
+                manage their own rooms.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    © 2026 TalkRoom.
+    Chat responsibly.
+
+</footer>
+
+
+</body>
+
+</html>
+

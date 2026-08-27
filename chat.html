@@ -1,0 +1,5093 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TalkRoom — Chat</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/config.js"></script>
+
+<style>
+
+*{
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+}
+
+:root{
+ --bg:#080b12;
+ --panel:#0f141e;
+ --panel2:#141a26;
+ --border:#252d3b;
+ --text:#f4f6fb;
+ --muted:#8992a4;
+ --accent:#6c63ff;
+ --green:#35d982;
+ --red:#ff6675;
+}
+
+body{
+ height:100vh;
+ overflow:hidden;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Arial,sans-serif;
+}
+
+/* HEADER */
+
+.header{
+ height:64px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 20px;
+ background:var(--panel);
+ border-bottom:1px solid var(--border);
+}
+
+.logo{
+ font-size:19px;
+ font-weight:800;
+}
+
+.logo span{
+ color:var(--accent);
+}
+
+.room-title{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ color:#dce0e9;
+ font-size:14px;
+ font-weight:bold;
+}
+
+.room-dot{
+ width:8px;
+ height:8px;
+ border-radius:50%;
+ background:var(--green);
+}
+
+.back-button{
+ border:none;
+ background:transparent;
+ color:var(--muted);
+ cursor:pointer;
+ font-size:11px;
+}
+
+/* LAYOUT */
+
+.main-layout{
+ height:calc(100vh - 64px);
+ display:grid;
+ grid-template-columns:1fr 260px;
+ min-width:0;
+}
+
+.workspace{
+ min-width:0;
+ display:flex;
+ flex-direction:column;
+ overflow:hidden;
+}
+
+/* TABS */
+
+.chat-tabs{
+ height:46px;
+ display:flex;
+ align-items:stretch;
+ overflow-x:auto;
+ background:#0b1018;
+ border-bottom:1px solid var(--border);
+}
+
+.chat-tab{
+ min-width:130px;
+ max-width:210px;
+ display:flex;
+ align-items:center;
+ gap:8px;
+ padding:0 10px;
+ border-right:1px solid var(--border);
+ color:var(--muted);
+ background:#0b1018;
+ cursor:pointer;
+ font-size:11px;
+ user-select:none;
+ position:relative;
+}
+
+.chat-tab:hover{
+ background:var(--panel2);
+ color:white;
+}
+
+.chat-tab.active{
+ background:var(--panel);
+ color:white;
+ box-shadow:inset 0 -2px 0 var(--accent);
+}
+
+.chat-tab.unread{
+ box-shadow:inset 0 -2px 0 var(--green);
+}
+
+.tab-avatar{
+ width:25px;
+ height:25px;
+ border-radius:50%;
+ overflow:hidden;
+ background:#28235c;
+ color:#b8b3ff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:9px;
+ font-weight:bold;
+ flex-shrink:0;
+}
+
+.tab-avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.tab-name{
+ flex:1;
+ overflow:hidden;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+
+.tab-close{
+ width:20px;
+ height:20px;
+ border:none;
+ border-radius:5px;
+ background:transparent;
+ color:#687286;
+ cursor:pointer;
+ font-size:14px;
+ flex-shrink:0;
+}
+
+.tab-close:hover{
+ background:#2b1b22;
+ color:#ff7885;
+}
+
+.unread-dot{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:var(--green);
+ flex-shrink:0;
+ display:none;
+}
+
+.chat-tab.unread .unread-dot{
+ display:block;
+}
+
+/* PANELS */
+
+.chat-panels{
+ position:relative;
+ flex:1;
+ min-height:0;
+}
+
+.chat-panel{
+ position:absolute;
+ inset:0;
+ display:none;
+ flex-direction:column;
+ background:#0a0e15;
+}
+
+.chat-panel.active{
+ display:flex;
+}
+
+.panel-title{
+ height:45px;
+ display:flex;
+ align-items:center;
+ gap:9px;
+ padding:0 18px;
+ background:var(--panel);
+ border-bottom:1px solid var(--border);
+ font-size:12px;
+ font-weight:bold;
+}
+
+.panel-title small{
+ color:var(--muted);
+ font-size:9px;
+ font-weight:normal;
+}
+
+/* MESSAGES */
+
+.messages,
+.private-messages{
+ flex:1;
+ overflow-y:auto;
+ padding:24px;
+}
+
+.message{
+ display:flex;
+ gap:10px;
+ margin-bottom:18px;
+}
+
+.message-avatar{
+ width:34px;
+ height:34px;
+ flex-shrink:0;
+ border-radius:50%;
+ overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:#28235c;
+ color:#b8b3ff;
+ font-size:12px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.message-avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.message-body{
+ min-width:0;
+ flex:1;
+}
+
+.message-head{
+ display:flex;
+ align-items:center;
+ gap:7px;
+ margin-bottom:5px;
+ flex-wrap:wrap;
+}
+
+.username{
+ color:#aaa5ff;
+ font-size:12px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.username:hover{
+ color:white;
+ text-decoration:underline;
+}
+
+.message-time{
+ color:#555e6e;
+ font-size:9px;
+}
+
+.role-badge{
+ display:inline-flex;
+ align-items:center;
+ padding:2px 6px;
+ border-radius:5px;
+ font-size:8px;
+ font-weight:bold;
+ white-space:nowrap;
+}
+
+.premium-badge{
+ background:#30275b;
+ color:#d7cfff;
+ border:1px solid #514a88;
+}
+
+.admin-badge{
+ background:#44262b;
+ color:#ffb0b8;
+ border:1px solid #71363f;
+}
+
+.mod-badge{
+ background:#193c35;
+ color:#8cf0cf;
+ border:1px solid #286b5c;
+}
+
+.message-text{
+ color:#d8dce5;
+ font-size:13px;
+ line-height:1.6;
+ word-break:break-word;
+ white-space:pre-wrap;
+}
+
+.message-image{
+ display:block;
+ max-width:min(360px,80vw);
+ max-height:360px;
+ margin-top:7px;
+ border-radius:10px;
+ border:1px solid var(--border);
+ cursor:pointer;
+ object-fit:contain;
+}
+
+/* PRIVATE */
+
+.private-message{
+ display:flex;
+ gap:10px;
+ margin-bottom:18px;
+}
+
+.private-message.mine{
+ flex-direction:row-reverse;
+}
+
+.private-message.mine .message-body{
+ text-align:right;
+}
+
+.private-message .message-text{
+ background:#121925;
+ border:1px solid var(--border);
+ padding:9px 11px;
+ border-radius:9px;
+ display:inline-block;
+}
+
+.private-message.mine .message-text{
+ background:#28235c;
+ border-color:#403a78;
+ text-align:left;
+}
+
+.private-header-user{
+ display:flex;
+ align-items:center;
+ gap:8px;
+}
+
+.private-online{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:var(--green);
+}
+
+/* INPUT */
+
+.input-area{
+ padding:12px 15px;
+ border-top:1px solid var(--border);
+ background:var(--panel);
+}
+
+.input-row{
+ display:flex;
+ gap:8px;
+ align-items:center;
+}
+
+.message-input{
+ flex:1;
+ height:44px;
+ padding:0 14px;
+ border:1px solid var(--border);
+ border-radius:10px;
+ outline:none;
+ background:#0b1018;
+ color:white;
+ font-size:13px;
+}
+
+.message-input:focus{
+ border-color:var(--accent);
+}
+
+.send-button{
+ width:75px;
+ height:44px;
+ border:none;
+ border-radius:10px;
+ background:var(--accent);
+ color:white;
+ font-size:12px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.send-button:disabled{
+ opacity:.5;
+ cursor:not-allowed;
+}
+
+.emoji-button,
+.image-button{
+ width:44px;
+ height:44px;
+ border:1px solid var(--border);
+ border-radius:10px;
+ background:#0b1018;
+ color:white;
+ cursor:pointer;
+ font-size:19px;
+ flex-shrink:0;
+}
+
+.image-button{
+ font-size:16px;
+}
+
+.image-button.premium{
+ border-color:#514a88;
+}
+
+.image-button.locked{
+ opacity:.45;
+}
+
+/* EMOJI */
+
+.input-wrapper{
+ position:relative;
+}
+
+.emoji-picker{
+ position:absolute;
+ bottom:52px;
+ left:0;
+ width:300px;
+ max-height:230px;
+ overflow-y:auto;
+ padding:10px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ background:#111823;
+ box-shadow:0 15px 45px rgba(0,0,0,.5);
+ display:none;
+ z-index:100;
+}
+
+.emoji-picker.show{
+ display:block;
+}
+
+.emoji-grid{
+ display:grid;
+ grid-template-columns:repeat(8,1fr);
+ gap:4px;
+}
+
+.emoji-item{
+ border:none;
+ background:transparent;
+ color:white;
+ font-size:22px;
+ padding:6px;
+ border-radius:7px;
+ cursor:pointer;
+}
+
+.emoji-item:hover{
+ background:#202938;
+}
+
+/* IMAGE PREVIEW */
+
+.file-input{
+ display:none;
+}
+
+.image-preview{
+ display:none;
+ align-items:center;
+ gap:10px;
+ margin-bottom:8px;
+ padding:8px;
+ border:1px solid var(--border);
+ border-radius:8px;
+ background:#0b1018;
+}
+
+.image-preview.show{
+ display:flex;
+}
+
+.image-preview img{
+ width:55px;
+ height:55px;
+ border-radius:7px;
+ object-fit:cover;
+}
+
+.image-preview-name{
+ flex:1;
+ color:#cbd1dc;
+ font-size:10px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+
+.remove-image{
+ border:none;
+ background:#351b21;
+ color:#ff8a8a;
+ border-radius:6px;
+ padding:6px 9px;
+ cursor:pointer;
+}
+
+/* USERS */
+
+.users-panel{
+ background:var(--panel);
+ border-left:1px solid var(--border);
+ overflow-y:auto;
+}
+
+.users-header{
+ padding:20px;
+ border-bottom:1px solid var(--border);
+}
+
+.users-title{
+ font-size:13px;
+ font-weight:bold;
+}
+
+.users-count{
+ margin-top:5px;
+ color:var(--muted);
+ font-size:10px;
+}
+
+.users-list{
+ padding:12px;
+}
+
+.user{
+ display:flex;
+ align-items:flex-start;
+ gap:10px;
+ padding:10px;
+ border-radius:9px;
+ cursor:pointer;
+}
+
+.user:hover{
+ background:var(--panel2);
+}
+
+.user-avatar{
+ width:34px;
+ height:34px;
+ flex-shrink:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ overflow:hidden;
+ background:#28235c;
+ color:#b8b3ff;
+ font-size:11px;
+ font-weight:bold;
+}
+
+.user-avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.user-info{
+ min-width:0;
+ flex:1;
+}
+
+.user-name-row{
+ display:flex;
+ align-items:center;
+ gap:5px;
+ flex-wrap:wrap;
+}
+
+.user-name{
+ overflow:hidden;
+ color:#dce0e8;
+ font-size:11px;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+
+.online{
+ margin-top:3px;
+ color:var(--green);
+ font-size:9px;
+}
+
+.user-actions{
+ display:flex;
+ gap:5px;
+ margin-top:7px;
+}
+
+.user-action{
+ padding:4px 7px;
+ border:1px solid #303848;
+ border-radius:5px;
+ background:#151b26;
+ color:#8992a4;
+ font-size:8px;
+ cursor:pointer;
+}
+
+.block-action:hover{
+ color:#ff7d89;
+ border-color:#673039;
+}
+
+/* EMPTY */
+
+.empty-chat{
+ color:var(--muted);
+ font-size:12px;
+ text-align:center;
+ padding:40px 20px;
+}
+
+/* ERROR */
+
+.error{
+ display:none;
+ position:fixed;
+ top:74px;
+ left:50%;
+ transform:translateX(-50%);
+ z-index:500;
+ padding:10px 15px;
+ border-radius:8px;
+ background:#351b21;
+ color:#ff8a8a;
+ font-size:11px;
+ max-width:90%;
+ text-align:center;
+}
+
+/* NOTIFICATION */
+
+.notification{
+ position:fixed;
+ right:20px;
+ bottom:20px;
+ z-index:600;
+ width:300px;
+ padding:14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ background:#111823;
+ box-shadow:0 15px 45px rgba(0,0,0,.5);
+ display:none;
+ cursor:pointer;
+}
+
+.notification.show{
+ display:block;
+}
+
+.notification-top{
+ display:flex;
+ align-items:center;
+ gap:10px;
+}
+
+.notification-avatar{
+ width:36px;
+ height:36px;
+ border-radius:50%;
+ overflow:hidden;
+ background:#28235c;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#b8b3ff;
+ font-weight:bold;
+ flex-shrink:0;
+}
+
+.notification-avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.notification-name{
+ font-size:12px;
+ font-weight:bold;
+}
+
+.notification-label{
+ color:var(--muted);
+ font-size:9px;
+ margin-top:3px;
+}
+
+.notification-message{
+ margin-top:9px;
+ color:#dce0e9;
+ font-size:11px;
+ overflow:hidden;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+}
+
+/* PROFILE */
+
+.profile-overlay{
+ position:fixed;
+ inset:0;
+ z-index:700;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ background:rgba(0,0,0,.65);
+ backdrop-filter:blur(5px);
+}
+
+.profile-overlay.show{
+ display:flex;
+}
+
+.profile-card{
+ width:min(360px,90%);
+ padding:25px;
+ border:1px solid var(--border);
+ border-radius:18px;
+ background:#101621;
+ box-shadow:0 20px 60px rgba(0,0,0,.5);
+ text-align:center;
+}
+
+.profile-close{
+ float:right;
+ width:28px;
+ height:28px;
+ border:none;
+ border-radius:7px;
+ background:#1b2230;
+ color:var(--muted);
+ cursor:pointer;
+}
+
+.profile-avatar-large{
+ width:80px;
+ height:80px;
+ margin:10px auto 15px;
+ border-radius:50%;
+ overflow:hidden;
+ background:#28235c;
+ color:#b8b3ff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:25px;
+ font-weight:bold;
+}
+
+.profile-avatar-large img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.profile-name{
+ font-size:18px;
+ font-weight:bold;
+ margin-bottom:8px;
+}
+
+.profile-status{
+ color:var(--green);
+ font-size:10px;
+ margin-bottom:18px;
+}
+
+.profile-badges{
+ display:flex;
+ justify-content:center;
+ gap:5px;
+ flex-wrap:wrap;
+ margin-bottom:20px;
+}
+
+.profile-connect{
+ width:100%;
+ height:42px;
+ border:none;
+ border-radius:9px;
+ background:var(--accent);
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.nickname-button{
+ width:100%;
+ height:42px;
+ margin-top:8px;
+ border:1px solid #514a88;
+ border-radius:9px;
+ background:#211d3d;
+ color:#d7cfff;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.nickname-button:hover{
+ background:#2d2753;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+ .main-layout{
+  grid-template-columns:1fr;
+ }
+
+ .users-panel{
+  display:none;
+ }
+
+ .room-title{
+  display:none;
+ }
+
+ .messages,
+ .private-messages{
+  padding:16px;
+ }
+
+ .chat-tab{
+  min-width:110px;
+ }
+
+ .notification{
+  left:15px;
+  right:15px;
+  bottom:15px;
+  width:auto;
+ }
+
+ .emoji-picker{
+  left:0;
+  width:min(300px,calc(100vw - 30px));
+ }
+
+ .image-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+ }
+
+ .send-button{
+  width:60px;
+ }
+
+ .message-input{
+  min-width:0;
+ }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+ <div class="logo">
+  Talk<span>Room</span>
+ </div>
+
+ <div class="room-title">
+  <div class="room-dot"></div>
+  <span id="roomName">General</span>
+ </div>
+
+ <button class="back-button" onclick="goBack()">
+  ← Rooms
+ </button>
+
+</header>
+
+<div class="error" id="error"></div>
+
+<div class="main-layout">
+
+<section class="workspace">
+
+ <div class="chat-tabs" id="chatTabs">
+
+  <div
+   class="chat-tab active"
+   id="roomTab"
+   onclick="activateRoomTab()"
+  >
+
+   <div class="tab-avatar">💬</div>
+
+   <div
+    class="tab-name"
+    id="roomTabName"
+   >
+    General
+   </div>
+
+  </div>
+
+ </div>
+
+ <div class="chat-panels" id="chatPanels">
+
+  <!-- ROOM -->
+
+  <section
+   class="chat-panel active"
+   id="roomPanel"
+  >
+
+   <div class="panel-title">
+
+
+💬
+
+<span id="roomPanelTitle">
+ General
+</span>
+
+<small>
+ Public room
+</small>
+
+
+   </div>
+
+   <div
+    class="messages"
+    id="messages"
+   >
+
+
+<div
+ class="empty-chat"
+ id="emptyChat"
+>
+ No messages yet. Start the conversation.
+</div>
+
+
+   </div>
+
+   <div class="input-area">
+
+
+<div
+ class="image-preview"
+ id="roomImagePreview"
+>
+
+ <img
+  id="roomPreviewImage"
+  src=""
+  alt="Preview"
+ >
+
+ <div
+  class="image-preview-name"
+  id="roomPreviewName"
+ ></div>
+
+ <button
+  class="remove-image"
+  onclick="clearRoomImage()"
+ >
+  ×
+ </button>
+
+</div>
+
+<div class="input-wrapper">
+
+ <div
+  class="emoji-picker"
+  id="roomEmojiPicker"
+ >
+
+  <div
+   class="emoji-grid"
+   id="roomEmojiGrid"
+  ></div>
+
+ </div>
+
+ <div class="input-row">
+
+  <button
+   class="emoji-button"
+   type="button"
+   onclick="toggleEmojiPicker('room')"
+  >
+   😀
+  </button>
+
+  <button
+   class="image-button locked"
+   id="roomImageButton"
+   type="button"
+   title="Premium members only"
+   onclick="chooseRoomImage()"
+  >
+   🖼️
+  </button>
+
+  <input
+   class="file-input"
+   id="roomImageInput"
+   type="file"
+   accept="image/jpeg,image/png,image/webp,image/gif"
+   onchange="previewRoomImage(event)"
+  >
+
+  <input
+   class="message-input"
+   id="roomMessageInput"
+   type="text"
+   placeholder="Type a message..."
+   maxlength="500"
+   autocomplete="off"
+  >
+
+  <button
+   class="send-button"
+   id="roomSendButton"
+   onclick="sendRoomMessage()"
+  >
+   Send
+  </button>
+
+ </div>
+
+</div>
+
+
+   </div>
+
+  </section>
+
+ </div>
+
+</section>
+
+<!-- USERS -->
+
+<aside class="users-panel">
+
+ <div class="users-header">
+
+  <div class="users-title">
+   👥 People
+  </div>
+
+  <div
+   class="users-count"
+   id="usersCount"
+  >
+   0 online
+  </div>
+
+ </div>
+
+ <div
+  class="users-list"
+  id="usersList"
+ ></div>
+
+</aside>
+
+</div>
+
+<!-- PRIVATE NOTIFICATION -->
+
+<div
+ class="notification"
+ id="privateNotification"
+ onclick="openNotificationChat()"
+>
+
+ <div class="notification-top">
+
+  <div
+   class="notification-avatar"
+   id="notificationAvatar"
+  >
+   U
+  </div>
+
+  <div>
+
+   <div
+    class="notification-name"
+    id="notificationName"
+   >
+    User
+   </div>
+
+   <div class="notification-label">
+    New private message
+   </div>
+
+  </div>
+
+ </div>
+
+ <div
+  class="notification-message"
+  id="notificationMessage"
+ ></div>
+
+</div>
+
+<!-- PROFILE -->
+
+<div
+ class="profile-overlay"
+ id="profileOverlay"
+ onclick="closeProfileOutside(event)"
+>
+
+ <div class="profile-card">
+
+<button
+class="profile-close"
+onclick="closeProfile()"
+
+>
+
+× </button>
+
+  <div
+   class="profile-avatar-large"
+   id="profileAvatar"
+  >
+   U
+  </div>
+
+  <div
+   class="profile-name"
+   id="profileName"
+  >
+   User
+  </div>
+
+  <div
+   class="profile-status"
+   id="profileStatus"
+  >
+   ● Online
+  </div>
+
+  <div
+   class="profile-badges"
+   id="profileBadges"
+  ></div>
+
+<button
+class="profile-connect"
+id="profileConnectButton"
+
+>
+
+Private Chat </button>
+
+<button
+class="nickname-button"
+id="nicknameButton"
+style="display:none;"
+
+>
+
+✏️ Change Nickname </button>
+
+ </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   GLOBALS
+========================================================= */
+
+let currentUser = null;
+let currentUsername = null;
+let currentNickname = null;
+let currentProfile = null;
+
+let roomName =
+ localStorage.getItem("talkroom_current_room") ||
+ "General";
+
+let chatChannel = null;
+let presenceChannel = null;
+let privateGlobalChannel = null;
+
+let blockedUserIds = new Set();
+let profilesCache = new Map();
+
+let privateChats = new Map();
+let privateChannels = new Map();
+
+let selectedProfileUserId = null;
+let notificationUserId = null;
+
+let roomImageFile = null;
+
+
+/* =========================================================
+   EMOJIS
+========================================================= */
+
+const emojis = [
+
+ "😀","😃","😄","😁","😆","😅","😂","🤣",
+ "😊","😇","🙂","🙃","😉","😌","😍","🥰",
+ "😘","😗","😙","😚","😋","😛","😝","😜",
+ "🤪","🤨","🧐","🤓","😎","🤩","🥳","😏",
+ "😒","😞","😔","😟","😕","🙁","☹️","😣",
+ "😖","😫","😩","🥺","😢","😭","😤","😠",
+ "😡","🤬","🤯","😳","🥵","🥶","😱","😨",
+ "😰","😥","😓","🤗","🤔","🫡","🤭","🤫",
+ "🤥","😶","😐","😑","😬","🙄","😯","😦",
+ "😧","😮","😲","🥱","😴","🤤","😪","😵",
+ "🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕",
+
+ "❤️","🧡","💛","💚","💙","💜","🖤","🤍",
+ "🤎","💔","💕","💖","💗","💓","💞","💘",
+ "💝","❤️‍🔥","💯",
+
+ "👍","👎","👌","✌️","🤞","🤟","🤘","👏",
+ "🙌","🫶","🙏","💪","👋","🤝","☝️",
+
+ "🔥","✨","⭐","🌟","🎉","🎊","🚀","👀",
+ "💀","😈","💎","🏆","🎯","💰","⚡"
+
+];
+
+
+/* =========================================================
+   BUILD EMOJI PICKER
+========================================================= */
+
+function buildEmojiPicker(gridId,inputId){
+
+ const grid =
+  document.getElementById(gridId);
+
+ if(!grid)return;
+
+ grid.innerHTML = "";
+
+ emojis.forEach(emoji=>{
+
+  const button =
+   document.createElement("button");
+
+  button.className="emoji-item";
+  button.type="button";
+  button.textContent=emoji;
+
+  button.onclick=()=>{
+
+   const input =
+    document.getElementById(inputId);
+
+   if(!input)return;
+
+   const start =
+    input.selectionStart || 0;
+
+   const end =
+    input.selectionEnd || 0;
+
+   input.value =
+    input.value.substring(0,start) +
+    emoji +
+    input.value.substring(end);
+
+   input.focus();
+
+   const position =
+    start + emoji.length;
+
+   input.selectionStart=position;
+   input.selectionEnd=position;
+
+  };
+
+  grid.appendChild(button);
+
+ });
+
+}
+
+
+/* =========================================================
+   TOGGLE EMOJI
+========================================================= */
+
+function toggleEmojiPicker(type){
+
+ const picker =
+  document.getElementById(
+   type==="room"
+    ? "roomEmojiPicker"
+    : "emoji-"+type
+  );
+
+ if(!picker)return;
+
+ document
+  .querySelectorAll(".emoji-picker")
+  .forEach(other=>{
+
+   if(other!==picker){
+    other.classList.remove("show");
+   }
+
+  });
+
+ picker.classList.toggle("show");
+
+}
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const messages =
+ document.getElementById("messages");
+
+const roomMessageInput =
+ document.getElementById("roomMessageInput");
+
+const roomSendButton =
+ document.getElementById("roomSendButton");
+
+const usersList =
+ document.getElementById("usersList");
+
+const usersCount =
+ document.getElementById("usersCount");
+
+document.getElementById("roomName").textContent =
+ roomName;
+
+document.getElementById("roomTabName").textContent =
+ roomName;
+
+document.getElementById("roomPanelTitle").textContent =
+ roomName;
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(text){
+
+ const error =
+  document.getElementById("error");
+
+ error.textContent=text;
+ error.style.display="block";
+
+ clearTimeout(showError.timer);
+
+ showError.timer =
+  setTimeout(()=>{
+
+   error.style.display="none";
+
+  },5000);
+
+}
+
+
+/* =========================================================
+   PREMIUM
+========================================================= */
+
+function isPremium(profile){
+
+ if(!profile || !profile.is_premium){
+  return false;
+ }
+
+ if(
+  profile.premium_until &&
+  new Date(profile.premium_until) <= new Date()
+ ){
+  return false;
+ }
+
+ return true;
+}
+
+
+function isAdmin(profile){
+
+ return !!(
+  profile &&
+  (
+   profile.is_admin===true ||
+   profile.role==="admin"
+  )
+ );
+
+}
+
+
+function isModerator(profile){
+
+ return !!(
+  profile &&
+  (
+   profile.is_moderator===true ||
+   profile.role==="moderator"
+  )
+ );
+
+}
+
+
+/* =========================================================
+   PREMIUM UI
+========================================================= */
+
+function updatePremiumUI(){
+
+ const roomButton =
+  document.getElementById("roomImageButton");
+
+ if(!roomButton)return;
+
+ if(isPremium(currentProfile)){
+
+  roomButton.classList.remove("locked");
+  roomButton.classList.add("premium");
+  roomButton.title="Send image";
+
+ }else{
+
+  roomButton.classList.add("locked");
+  roomButton.classList.remove("premium");
+  roomButton.title =
+   "⭐ Premium members only";
+
+ }
+
+}
+
+
+/* =========================================================
+   PROFILES
+========================================================= */
+
+async function loadProfiles(userIds){
+
+ const ids =
+  [...new Set(userIds)]
+   .filter(Boolean)
+   .filter(id=>!profilesCache.has(id));
+
+ if(!ids.length)return;
+
+ const {data,error} =
+  await supabaseClient
+   .from("profiles")
+   .select(
+    "id,username,nickname,avatar_url,is_premium,premium_until,is_admin,is_moderator,role"
+   )
+   .in("id",ids);
+
+ if(error){
+
+  console.error("Profiles:",error);
+  return;
+
+ }
+
+ (data||[]).forEach(profile=>{
+
+  profilesCache.set(
+   profile.id,
+   profile
+  );
+
+ });
+
+}
+
+
+/* =========================================================
+   DISPLAY NAME
+========================================================= */
+
+function getDisplayName(profile){
+
+ if(!profile)return "User";
+
+ return (
+  profile.nickname ||
+  profile.username ||
+  "User"
+ );
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function createAvatar(
+ profile,
+ username,
+ className
+){
+
+ const avatar =
+  document.createElement("div");
+
+ avatar.className=className;
+
+ const displayName =
+  getDisplayName(profile) ||
+  username ||
+  "User";
+
+ const valid =
+  isPremium(profile) &&
+  profile.avatar_url;
+
+ if(valid){
+
+  const image =
+   document.createElement("img");
+
+  image.src=profile.avatar_url;
+  image.alt=displayName;
+
+  image.onerror=()=>{
+
+   image.remove();
+
+   avatar.textContent =
+    displayName
+     .charAt(0)
+     .toUpperCase();
+
+  };
+
+  avatar.appendChild(image);
+
+ }else{
+
+  avatar.textContent =
+   displayName
+    .charAt(0)
+    .toUpperCase();
+
+ }
+
+ return avatar;
+
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+function addBadges(container,profile){
+
+ if(!profile)return;
+
+ if(isPremium(profile)){
+
+  const badge =
+   document.createElement("span");
+
+  badge.className =
+   "role-badge premium-badge";
+
+  badge.textContent =
+   "⭐ Premium";
+
+  container.appendChild(badge);
+
+ }
+
+ if(isAdmin(profile)){
+
+  const badge =
+   document.createElement("span");
+
+  badge.className =
+   "role-badge admin-badge";
+
+  badge.textContent =
+   "👑 Admin";
+
+  container.appendChild(badge);
+
+ }
+
+ if(isModerator(profile)){
+
+  const badge =
+   document.createElement("span");
+
+  badge.className =
+   "role-badge mod-badge";
+
+  badge.textContent =
+   "🛡️ Moderator";
+
+  container.appendChild(badge);
+
+ }
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function startChat(){
+
+ try{
+
+  const {data,error} =
+   await supabaseClient.auth.getUser();
+
+  if(error || !data.user){
+
+   window.location.href="login.html";
+   return;
+
+  }
+
+  currentUser=data.user;
+
+  const {
+   data:profile,
+   error:profileError
+  } =
+   await supabaseClient
+    .from("profiles")
+    .select(
+     "id,username,nickname,avatar_url,is_premium,premium_until,is_admin,is_moderator,role"
+    )
+    .eq("id",currentUser.id)
+    .single();
+
+  if(profileError || !profile){
+
+   console.error(
+    "Profile:",
+    profileError
+   );
+
+   showError(
+    "Could not load your profile."
+   );
+
+   return;
+
+  }
+
+  currentProfile=profile;
+
+  currentUsername =
+   profile.username;
+
+  currentNickname =
+   profile.nickname ||
+   profile.username;
+
+  profilesCache.set(
+   profile.id,
+   profile
+  );
+
+  updatePremiumUI();
+
+  await loadBlockedUsers();
+
+  await joinDatabaseRoom();
+
+  await loadMessages();
+
+  setupRoomRealtime();
+
+  setupPresence();
+
+  setupGlobalPrivateRealtime();
+
+ }catch(error){
+
+  console.error(
+   "Start:",
+   error
+  );
+
+  showError(
+   "Something went wrong."
+  );
+
+ }
+
+}
+
+
+/* =========================================================
+   JOIN ROOM
+========================================================= */
+
+async function joinDatabaseRoom(){
+
+ const {error} =
+  await supabaseClient
+   .from("room_members")
+   .upsert(
+    {
+     room_name:roomName,
+     user_id:currentUser.id,
+     username:currentUsername
+    },
+    {
+     onConflict:
+      "room_name,user_id"
+    }
+   );
+
+ if(error){
+
+  console.error(
+   "Join room:",
+   error
+  );
+
+ }
+
+}
+
+
+/* =========================================================
+   BLOCKED USERS
+========================================================= */
+
+async function loadBlockedUsers(){
+
+ const {data,error} =
+  await supabaseClient
+   .from("blocked_users")
+   .select("blocked_id")
+   .eq(
+    "blocker_id",
+    currentUser.id
+   );
+
+ if(error){
+
+  console.error(
+   "Blocks:",
+   error
+  );
+
+  return;
+
+ }
+
+ blockedUserIds =
+  new Set(
+   (data||[])
+    .map(row=>row.blocked_id)
+  );
+
+}
+
+
+/* =========================================================
+   LOAD ROOM MESSAGES
+========================================================= */
+
+async function loadMessages(){
+
+ const {data,error} =
+  await supabaseClient
+   .from("messages")
+   .select(
+    "id,room_name,user_id,username,content,image_url,created_at"
+   )
+   .eq(
+    "room_name",
+    roomName
+   )
+   .order(
+    "created_at",
+    {ascending:true}
+   );
+
+ if(error){
+
+  console.error(
+   "Messages:",
+   error
+  );
+
+  showError(
+   error.message ||
+   "Could not load messages."
+  );
+
+  return;
+
+ }
+
+ await loadProfiles(
+  (data||[])
+   .map(m=>m.user_id)
+ );
+
+ messages.innerHTML="";
+
+ if(!data || !data.length){
+
+  showEmptyChat();
+  return;
+
+ }
+
+ data.forEach(
+  displayMessage
+ );
+
+ scrollToBottom();
+
+}
+
+
+/* =========================================================
+   ROOM REALTIME
+========================================================= */
+
+function setupRoomRealtime(){
+
+ chatChannel =
+  supabaseClient
+   .channel(
+    "room-messages-" +
+    roomName +
+    "-" +
+    currentUser.id
+   );
+
+ chatChannel
+  .on(
+   "postgres_changes",
+   {
+    event:"INSERT",
+    schema:"public",
+    table:"messages",
+    filter:
+     "room_name=eq."+roomName
+   },
+   async payload=>{
+
+    if(
+     document.querySelector(
+      '[data-room-message-id="' +
+      payload.new.id +
+      '"]'
+     )
+    ){
+     return;
+    }
+
+    await loadProfiles([
+     payload.new.user_id
+    ]);
+
+    displayMessage(
+     payload.new
+    );
+
+    scrollToBottom();
+
+   }
+  )
+  .subscribe(status=>{
+
+   console.log(
+    "Room realtime:",
+    status
+   );
+
+  });
+
+}
+
+
+/* =========================================================
+   PRESENCE
+========================================================= */
+
+function setupPresence(){
+
+ presenceChannel =
+  supabaseClient
+   .channel(
+    "talkroom-"+roomName
+   );
+
+ presenceChannel
+  .on(
+   "presence",
+   {event:"sync"},
+   updateUsers
+  )
+  .on(
+   "presence",
+   {event:"join"},
+   updateUsers
+  )
+  .on(
+   "presence",
+   {event:"leave"},
+   updateUsers
+  )
+  .subscribe(
+   async status=>{
+
+    if(status!=="SUBSCRIBED"){
+     return;
+    }
+
+    await presenceChannel.track({
+     user_id:currentUser.id,
+     username:currentUsername
+    });
+
+    updateUsers();
+
+   }
+  );
+
+}
+
+
+/* =========================================================
+   USERS
+========================================================= */
+
+async function updateUsers(){
+
+ if(!presenceChannel)return;
+
+ const state =
+  presenceChannel.presenceState();
+
+ const uniqueUsers={};
+
+ Object.values(state)
+  .flat()
+  .forEach(user=>{
+
+   if(
+    user.user_id &&
+    user.username &&
+    !blockedUserIds.has(
+     user.user_id
+    )
+   ){
+
+    uniqueUsers[
+     user.user_id
+    ]=user;
+
+   }
+
+  });
+
+ const users =
+  Object.values(uniqueUsers);
+
+ await loadProfiles(
+  users.map(
+   u=>u.user_id
+  )
+ );
+
+ usersList.innerHTML="";
+
+ users.forEach(user=>{
+
+  const profile =
+   profilesCache.get(
+    user.user_id
+   );
+
+  const displayName =
+   getDisplayName(profile);
+
+  const userDiv =
+   document.createElement("div");
+
+  userDiv.className="user";
+
+  userDiv.onclick=()=>{
+
+   if(
+    user.user_id !==
+    currentUser.id
+   ){
+
+    openProfile(
+     user.user_id
+    );
+
+   }
+
+  };
+
+  const avatar =
+   createAvatar(
+    profile,
+    displayName,
+    "user-avatar"
+   );
+
+  const info =
+   document.createElement("div");
+
+  info.className="user-info";
+
+  const nameRow =
+   document.createElement("div");
+
+  nameRow.className="user-name-row";
+
+  const name =
+   document.createElement("div");
+
+  name.className="user-name";
+  name.textContent =
+   displayName;
+
+  nameRow.appendChild(name);
+
+  addBadges(
+   nameRow,
+   profile
+  );
+
+  const online =
+   document.createElement("div");
+
+  online.className="online";
+  online.textContent="● Online";
+
+  info.appendChild(nameRow);
+  info.appendChild(online);
+
+  if(
+   user.user_id !==
+   currentUser.id
+  ){
+
+   const actions =
+    document.createElement("div");
+
+   actions.className="user-actions";
+
+   const report =
+    document.createElement("button");
+
+   report.className="user-action";
+   report.textContent="Report";
+
+   report.onclick=e=>{
+
+    e.stopPropagation();
+
+    reportUser(
+     user.user_id,
+     displayName
+    );
+
+   };
+
+   const block =
+    document.createElement("button");
+
+   block.className =
+    "user-action block-action";
+
+   block.textContent="Block";
+
+   block.onclick=e=>{
+
+    e.stopPropagation();
+
+    blockUser(
+     user.user_id,
+     displayName
+    );
+
+   };
+
+   actions.appendChild(report);
+   actions.appendChild(block);
+
+   info.appendChild(actions);
+
+  }
+
+  userDiv.appendChild(avatar);
+  userDiv.appendChild(info);
+
+  usersList.appendChild(userDiv);
+
+ });
+
+ usersCount.textContent =
+  users.length +
+  (
+   users.length===1
+    ? " person online"
+    : " people online"
+  );
+
+}
+
+
+/* =========================================================
+   DISPLAY ROOM MESSAGE
+========================================================= */
+
+function displayMessage(message){
+
+ if(!message)return;
+
+ if(
+  message.user_id &&
+  blockedUserIds.has(
+   message.user_id
+  )
+ ){
+  return;
+ }
+
+ const empty =
+  document.getElementById(
+   "emptyChat"
+  );
+
+ if(empty){
+  empty.remove();
+ }
+
+ const profile =
+  profilesCache.get(
+   message.user_id
+  );
+
+ const displayName =
+  getDisplayName(profile) ||
+  message.username ||
+  "User";
+
+ const wrapper =
+  document.createElement("div");
+
+ wrapper.className="message";
+
+ if(message.id){
+
+  wrapper.dataset.roomMessageId =
+   message.id;
+
+ }
+
+ const avatar =
+  createAvatar(
+   profile,
+   displayName,
+   "message-avatar"
+  );
+
+ if(
+  message.user_id !==
+  currentUser.id
+ ){
+
+  avatar.onclick=()=>{
+
+   openProfile(
+    message.user_id
+   );
+
+  };
+
+ }
+
+ const body =
+  document.createElement("div");
+
+ body.className="message-body";
+
+ const head =
+  document.createElement("div");
+
+ head.className="message-head";
+
+ const username =
+  document.createElement("div");
+
+ username.className="username";
+ username.textContent =
+  displayName;
+
+ if(
+  message.user_id !==
+  currentUser.id
+ ){
+
+  username.onclick=()=>{
+
+   openProfile(
+    message.user_id
+   );
+
+  };
+
+ }
+
+ head.appendChild(username);
+
+ addBadges(
+  head,
+  profile
+ );
+
+ const time =
+  document.createElement("div");
+
+ time.className="message-time";
+
+ if(message.created_at){
+
+  time.textContent =
+   new Date(
+    message.created_at
+   )
+   .toLocaleTimeString(
+    [],
+    {
+     hour:"2-digit",
+     minute:"2-digit"
+    }
+   );
+
+ }
+
+ head.appendChild(time);
+
+ body.appendChild(head);
+
+ if(
+  message.content !== null &&
+  message.content !== undefined &&
+  message.content !== ""
+ ){
+
+  const text =
+   document.createElement("div");
+
+  text.className="message-text";
+
+  text.textContent =
+   message.content;
+
+  body.appendChild(text);
+
+ }
+
+ if(message.image_url){
+
+  const image =
+   document.createElement("img");
+
+  image.className="message-image";
+
+  image.src =
+   message.image_url;
+
+  image.alt =
+   "Shared image";
+
+  image.loading="lazy";
+
+  image.onclick=()=>{
+
+   window.open(
+    message.image_url,
+    "_blank"
+   );
+
+  };
+
+  body.appendChild(image);
+
+ }
+
+ wrapper.appendChild(avatar);
+ wrapper.appendChild(body);
+
+ messages.appendChild(wrapper);
+
+}
+
+
+/* =========================================================
+   ROOM IMAGE
+========================================================= */
+
+function chooseRoomImage(){
+
+ if(
+  !isPremium(currentProfile)
+ ){
+
+  showError(
+   "⭐ Image sending is available for Premium members only."
+  );
+
+  return;
+
+ }
+
+ document
+  .getElementById(
+   "roomImageInput"
+  )
+  .click();
+
+}
+
+
+function previewRoomImage(event){
+
+ if(
+  !isPremium(currentProfile)
+ ){
+  return;
+ }
+
+ const file =
+  event.target.files[0];
+
+ if(!file)return;
+
+ if(
+  file.size >
+  5*1024*1024
+ ){
+
+  showError(
+   "Image must be 5MB or smaller."
+  );
+
+  event.target.value="";
+  return;
+
+ }
+
+ if(
+  !file.type.startsWith("image/")
+ ){
+
+  showError(
+   "Please select an image."
+  );
+
+  event.target.value="";
+  return;
+
+ }
+
+ roomImageFile=file;
+
+ const preview =
+  document.getElementById(
+   "roomImagePreview"
+  );
+
+ const image =
+  document.getElementById(
+   "roomPreviewImage"
+  );
+
+ const name =
+  document.getElementById(
+   "roomPreviewName"
+  );
+
+ image.src =
+  URL.createObjectURL(file);
+
+ name.textContent =
+  file.name;
+
+ preview.classList.add("show");
+
+}
+
+
+function clearRoomImage(){
+
+ roomImageFile=null;
+
+ const input =
+  document.getElementById(
+   "roomImageInput"
+  );
+
+ input.value="";
+
+ document
+  .getElementById(
+   "roomImagePreview"
+  )
+  .classList.remove("show");
+
+ document
+  .getElementById(
+   "roomPreviewImage"
+  )
+  .src="";
+
+}
+
+
+/* =========================================================
+   UPLOAD IMAGE
+========================================================= */
+
+async function uploadPremiumImage(file){
+
+ if(
+  !isPremium(currentProfile)
+ ){
+
+  throw new Error(
+   "Only Premium members can send images."
+  );
+
+ }
+
+ if(!file){
+  return null;
+ }
+
+ if(
+  file.size >
+  5*1024*1024
+ ){
+
+  throw new Error(
+   "Image must be 5MB or smaller."
+  );
+
+ }
+
+ const extension =
+  file.name
+   .split(".")
+   .pop()
+   .toLowerCase();
+
+ const safeExtension =
+  [
+   "jpg",
+   "jpeg",
+   "png",
+   "webp",
+   "gif"
+  ].includes(extension)
+   ? extension
+   : "jpg";
+
+ const path =
+  currentUser.id +
+  "/" +
+  Date.now() +
+  "-" +
+  Math.random()
+   .toString(36)
+   .slice(2) +
+  "." +
+  safeExtension;
+
+ const {
+  error:uploadError
+ } =
+  await supabaseClient
+   .storage
+   .from("chat-images")
+   .upload(
+    path,
+    file,
+    {
+     cacheControl:"3600",
+     upsert:false,
+     contentType:file.type
+    }
+   );
+
+ if(uploadError){
+
+  throw uploadError;
+
+ }
+
+ const {data} =
+  supabaseClient
+   .storage
+   .from("chat-images")
+   .getPublicUrl(path);
+
+ return data.publicUrl;
+
+}
+
+
+/* =========================================================
+   SEND ROOM
+========================================================= */
+
+async function sendRoomMessage(){
+
+ const text =
+  roomMessageInput.value.trim();
+
+ if(
+  !text &&
+  !roomImageFile
+ ){
+  return;
+ }
+
+ if(
+  roomImageFile &&
+  !isPremium(currentProfile)
+ ){
+
+  showError(
+   "⭐ Only Premium members can send images."
+  );
+
+  return;
+
+ }
+
+ roomSendButton.disabled=true;
+
+ try{
+
+  let imageUrl=null;
+
+  if(roomImageFile){
+
+   imageUrl =
+    await uploadPremiumImage(
+     roomImageFile
+    );
+
+  }
+
+  const {
+   data,
+   error
+  } =
+   await supabaseClient
+    .from("messages")
+    .insert({
+     room_name:roomName,
+     user_id:currentUser.id,
+     username:currentUsername,
+
+     /*
+       IMPORTANT:
+       content must NOT be null because
+       your database column is NOT NULL.
+     */
+
+     content:text || "",
+
+     image_url:imageUrl
+    })
+    .select()
+    .single();
+
+  if(error){
+
+   throw error;
+
+  }
+
+  if(data){
+
+   await loadProfiles([
+    data.user_id
+   ]);
+
+   if(
+    !document.querySelector(
+     '[data-room-message-id="' +
+     data.id +
+     '"]'
+    )
+   ){
+
+    displayMessage(data);
+
+    scrollToBottom();
+
+   }
+
+  }
+
+  roomMessageInput.value="";
+
+  clearRoomImage();
+
+  roomMessageInput.focus();
+
+ }catch(error){
+
+  console.error(
+   "Room send:",
+   error
+  );
+
+  showError(
+   error.message ||
+   "Could not send message."
+  );
+
+ }finally{
+
+  roomSendButton.disabled=false;
+
+ }
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+async function openProfile(userId){
+
+ if(
+  !userId ||
+  userId===currentUser.id
+ ){
+  return;
+ }
+
+ selectedProfileUserId=userId;
+
+ await loadProfiles([
+  userId
+ ]);
+
+ const profile =
+  profilesCache.get(userId);
+
+ if(!profile){
+
+  showError(
+   "Could not load user profile."
+  );
+
+  return;
+
+ }
+
+ const overlay =
+  document.getElementById(
+   "profileOverlay"
+  );
+
+ const avatarContainer =
+  document.getElementById(
+   "profileAvatar"
+  );
+
+ avatarContainer.innerHTML="";
+
+ const generated =
+  createAvatar(
+   profile,
+   getDisplayName(profile),
+   "profile-avatar-large"
+  );
+
+ while(
+  generated.firstChild
+ ){
+
+  avatarContainer.appendChild(
+   generated.firstChild
+  );
+
+ }
+
+ if(
+  !avatarContainer.innerHTML
+ ){
+
+  avatarContainer.textContent =
+   getDisplayName(profile)
+    .charAt(0)
+    .toUpperCase();
+
+ }
+
+ document
+  .getElementById(
+   "profileName"
+  )
+  .textContent =
+   getDisplayName(profile);
+
+ document
+  .getElementById(
+   "profileStatus"
+  )
+  .textContent =
+   "● Online";
+
+ const badges =
+  document.getElementById(
+   "profileBadges"
+  );
+
+ badges.innerHTML="";
+
+ addBadges(
+  badges,
+  profile
+ );
+
+ document
+  .getElementById(
+   "profileConnectButton"
+  )
+  .onclick=()=>{
+
+   closeProfile();
+
+   openPrivateChat(
+    userId
+   );
+
+  };
+
+ overlay.classList.add("show");
+
+}
+
+
+/* =========================================================
+   CHANGE NICKNAME
+========================================================= */
+
+async function changeNickname(){
+
+ if(
+  !currentUser ||
+  !currentProfile
+ ){
+  return;
+ }
+
+ if(
+  !isPremium(currentProfile)
+ ){
+
+  showError(
+   "Nickname changing is a Premium feature."
+  );
+
+  return;
+
+ }
+
+ const oldNickname =
+  currentProfile.nickname ||
+  currentProfile.username ||
+  "";
+
+ const nickname =
+  prompt(
+   "Enter your new nickname:",
+   oldNickname
+  );
+
+ if(nickname===null){
+  return;
+ }
+
+ const cleanNickname =
+  nickname.trim();
+
+ if(!cleanNickname){
+
+  showError(
+   "Nickname cannot be empty."
+  );
+
+  return;
+
+ }
+
+ if(cleanNickname.length>20){
+
+  showError(
+   "Nickname must be 20 characters or less."
+  );
+
+  return;
+
+ }
+
+ const {
+  data,
+  error
+ } =
+  await supabaseClient
+   .from("profiles")
+   .update({
+    nickname:cleanNickname
+   })
+   .eq(
+    "id",
+    currentUser.id
+   )
+   .select()
+   .single();
+
+ if(error){
+
+  console.error(
+   "Nickname:",
+   error
+  );
+
+  showError(
+   error.message ||
+   "Could not change nickname."
+  );
+
+  return;
+
+ }
+
+ currentProfile=data;
+
+ currentUsername =
+  data.username;
+
+ currentNickname =
+  data.nickname ||
+  data.username;
+
+ profilesCache.set(
+  currentUser.id,
+  data
+ );
+
+ showError(
+  "Nickname changed to @" +
+  currentNickname
+ );
+
+ /*
+   Refresh current room presence name.
+ */
+
+ if(presenceChannel){
+
+  try{
+
+   await presenceChannel.track({
+    user_id:currentUser.id,
+    username:currentUsername
+   });
+
+  }catch(error){
+
+   console.error(
+    "Presence update:",
+    error
+   );
+
+  }
+
+ }
+
+ updatePremiumUI();
+
+}
+
+
+/* =========================================================
+   PROFILE CLOSE
+========================================================= */
+
+function closeProfile(){
+
+ document
+  .getElementById(
+   "profileOverlay"
+  )
+  .classList.remove("show");
+
+ selectedProfileUserId=null;
+
+}
+
+
+function closeProfileOutside(event){
+
+ if(
+  event.target.id ===
+  "profileOverlay"
+ ){
+
+  closeProfile();
+
+ }
+
+}
+
+
+/* =========================================================
+   PRIVATE KEY
+========================================================= */
+
+function privateKey(userId){
+
+ return [
+  currentUser.id,
+  userId
+ ]
+ .sort()
+ .join("_");
+
+}
+
+
+/* =========================================================
+   OPEN PRIVATE CHAT
+========================================================= */
+
+async function openPrivateChat(userId){
+
+ if(
+  !userId ||
+  userId===currentUser.id
+ ){
+  return;
+ }
+
+ await loadProfiles([
+  userId
+ ]);
+
+ const profile =
+  profilesCache.get(userId);
+
+ if(!profile){
+
+  showError(
+   "User profile not found."
+  );
+
+  return;
+
+ }
+
+ const key =
+  privateKey(userId);
+
+ if(
+  privateChats.has(key)
+ ){
+
+  activatePrivateTab(key);
+
+  markPrivateRead(key);
+
+  return;
+
+ }
+
+ createPrivateTab(
+  key,
+  profile
+ );
+
+ createPrivatePanel(
+  key,
+  profile
+ );
+
+ await loadPrivateMessages(
+  key,
+  userId
+ );
+
+ setupPrivateRealtime(
+  key,
+  userId
+ );
+
+ activatePrivateTab(key);
+
+ markPrivateRead(key);
+
+}
+
+
+/* =========================================================
+   PRIVATE TAB
+========================================================= */
+
+function createPrivateTab(
+ key,
+ profile
+){
+
+ const tabs =
+  document.getElementById(
+   "chatTabs"
+  );
+
+ const tab =
+  document.createElement("div");
+
+ tab.className="chat-tab";
+
+ tab.id =
+  "tab-"+key;
+
+ const displayName =
+  getDisplayName(profile);
+
+ const avatar =
+  createAvatar(
+   profile,
+   displayName,
+   "tab-avatar"
+  );
+
+ const name =
+  document.createElement("div");
+
+ name.className="tab-name";
+
+ name.textContent =
+  displayName;
+
+ const unread =
+  document.createElement("div");
+
+ unread.className="unread-dot";
+
+ const close =
+  document.createElement("button");
+
+ close.className="tab-close";
+
+ close.textContent="×";
+
+ close.onclick=e=>{
+
+  e.stopPropagation();
+
+  closePrivateChat(key);
+
+ };
+
+ tab.appendChild(avatar);
+ tab.appendChild(name);
+ tab.appendChild(unread);
+ tab.appendChild(close);
+
+ tab.onclick=()=>{
+
+  activatePrivateTab(key);
+
+  markPrivateRead(key);
+
+ };
+
+ tabs.appendChild(tab);
+
+}
+
+
+/* =========================================================
+   PRIVATE PANEL
+========================================================= */
+
+function createPrivatePanel(
+ key,
+ profile
+){
+
+ const panels =
+  document.getElementById(
+   "chatPanels"
+  );
+
+ const panel =
+  document.createElement("section");
+
+ panel.className="chat-panel";
+
+ panel.id =
+  "panel-"+key;
+
+ const title =
+  document.createElement("div");
+
+ title.className="panel-title";
+
+ const displayName =
+  getDisplayName(profile);
+
+ const avatar =
+  createAvatar(
+   profile,
+   displayName,
+   "tab-avatar"
+  );
+
+ const userHeader =
+  document.createElement("div");
+
+ userHeader.className =
+  "private-header-user";
+
+ userHeader.appendChild(
+  document.createTextNode(
+   displayName
+  )
+ );
+
+ const online =
+  document.createElement("div");
+
+ online.className="private-online";
+
+ userHeader.appendChild(online);
+
+ title.appendChild(avatar);
+ title.appendChild(userHeader);
+
+ const privateMessages =
+  document.createElement("div");
+
+ privateMessages.className =
+  "private-messages";
+
+ privateMessages.id =
+  "private-messages-"+key;
+
+ const empty =
+  document.createElement("div");
+
+ empty.className="empty-chat";
+
+ empty.id =
+  "private-empty-"+key;
+
+ empty.textContent =
+  "No private messages yet.";
+
+ privateMessages.appendChild(empty);
+
+ const inputArea =
+  document.createElement("div");
+
+ inputArea.className="input-area";
+
+ /* IMAGE PREVIEW */
+
+ const preview =
+  document.createElement("div");
+
+ preview.className="image-preview";
+
+ preview.id =
+  "private-preview-"+key;
+
+ const previewImage =
+  document.createElement("img");
+
+ previewImage.id =
+  "private-preview-image-"+key;
+
+ const previewName =
+  document.createElement("div");
+
+ previewName.className =
+  "image-preview-name";
+
+ previewName.id =
+  "private-preview-name-"+key;
+
+ const remove =
+  document.createElement("button");
+
+ remove.className =
+  "remove-image";
+
+ remove.textContent="×";
+
+ remove.onclick=()=>{
+
+  clearPrivateImage(key);
+
+ };
+
+ preview.appendChild(
+  previewImage
+ );
+
+ preview.appendChild(
+  previewName
+ );
+
+ preview.appendChild(
+  remove
+ );
+
+ /* INPUT WRAPPER */
+
+ const inputWrapper =
+  document.createElement("div");
+
+ inputWrapper.className =
+  "input-wrapper";
+
+ /* EMOJI PICKER */
+
+ const emojiPicker =
+  document.createElement("div");
+
+ emojiPicker.className =
+  "emoji-picker";
+
+ emojiPicker.id =
+  "emoji-"+key;
+
+ const emojiGrid =
+  document.createElement("div");
+
+ emojiGrid.className =
+  "emoji-grid";
+
+ emojiGrid.id =
+  "emoji-grid-"+key;
+
+ emojiPicker.appendChild(
+  emojiGrid
+ );
+
+ /* INPUT ROW */
+
+ const inputRow =
+  document.createElement("div");
+
+ inputRow.className="input-row";
+
+ const emojiButton =
+  document.createElement("button");
+
+ emojiButton.className =
+  "emoji-button";
+
+ emojiButton.type="button";
+
+ emojiButton.textContent="😀";
+
+ emojiButton.onclick=()=>{
+
+  toggleEmojiPicker(key);
+
+ };
+
+ const imageButton =
+  document.createElement("button");
+
+ imageButton.className =
+  "image-button";
+
+ imageButton.type="button";
+
+ imageButton.textContent="🖼️";
+
+ imageButton.title =
+  isPremium(currentProfile)
+   ? "Send image"
+   : "⭐ Premium members only";
+
+ if(
+  !isPremium(currentProfile)
+ ){
+
+  imageButton.classList.add(
+   "locked"
+  );
+
+ }
+
+ imageButton.onclick=()=>{
+
+  choosePrivateImage(key);
+
+ };
+
+ const fileInput =
+  document.createElement("input");
+
+ fileInput.className =
+  "file-input";
+
+ fileInput.id =
+  "private-file-"+key;
+
+ fileInput.type="file";
+
+ fileInput.accept =
+  "image/jpeg,image/png,image/webp,image/gif";
+
+ fileInput.onchange=e=>{
+
+  previewPrivateImage(
+   key,
+   e
+  );
+
+ };
+
+ const input =
+  document.createElement("input");
+
+ input.className =
+  "message-input";
+
+ input.id =
+  "private-input-"+key;
+
+ input.type="text";
+
+ input.placeholder =
+  "Message @"+displayName+"...";
+
+ input.maxLength=500;
+
+ input.autocomplete="off";
+
+ const send =
+  document.createElement("button");
+
+ send.className="send-button";
+
+ send.id =
+  "private-send-"+key;
+
+ send.textContent="Send";
+
+ send.onclick=()=>{
+
+  sendPrivateMessage(
+   key,
+   profile.id
+  );
+
+ };
+
+ input.addEventListener(
+  "keydown",
+  e=>{
+
+   if(e.key==="Enter"){
+
+    e.preventDefault();
+
+    sendPrivateMessage(
+     key,
+     profile.id
+    );
+
+   }
+
+  }
+ );
+
+ inputRow.appendChild(
+  emojiButton
+ );
+
+ inputRow.appendChild(
+  imageButton
+ );
+
+ inputRow.appendChild(
+  fileInput
+ );
+
+ inputRow.appendChild(
+  input
+ );
+
+ inputRow.appendChild(
+  send
+ );
+
+ inputWrapper.appendChild(
+  emojiPicker
+ );
+
+ inputWrapper.appendChild(
+  inputRow
+ );
+
+ inputArea.appendChild(
+  preview
+ );
+
+ inputArea.appendChild(
+  inputWrapper
+ );
+
+ panel.appendChild(title);
+ panel.appendChild(privateMessages);
+ panel.appendChild(inputArea);
+
+ panels.appendChild(panel);
+
+ privateChats.set(
+  key,
+  {
+   userId:profile.id,
+   username:profile.username,
+   panel:panel,
+   unread:0,
+   imageFile:null
+  }
+ );
+
+ buildEmojiPicker(
+  "emoji-grid-"+key,
+  "private-input-"+key
+ );
+
+}
+
+
+/* =========================================================
+   PRIVATE IMAGE
+========================================================= */
+
+function choosePrivateImage(key){
+
+ if(
+  !isPremium(currentProfile)
+ ){
+
+  showError(
+   "⭐ Image sending is available for Premium members only."
+  );
+
+  return;
+
+ }
+
+ const input =
+  document.getElementById(
+   "private-file-"+key
+  );
+
+ if(input){
+
+  input.click();
+
+ }
+
+}
+
+
+function previewPrivateImage(
+ key,
+ event
+){
+
+ if(
+  !isPremium(currentProfile)
+ ){
+  return;
+ }
+
+ const file =
+  event.target.files[0];
+
+ if(!file)return;
+
+ if(
+  file.size >
+  5*1024*1024
+ ){
+
+  showError(
+   "Image must be 5MB or smaller."
+  );
+
+  event.target.value="";
+  return;
+
+ }
+
+ if(
+  !file.type.startsWith("image/")
+ ){
+
+  showError(
+   "Please select an image."
+  );
+
+  event.target.value="";
+  return;
+
+ }
+
+ const chat =
+  privateChats.get(key);
+
+ if(!chat)return;
+
+ chat.imageFile=file;
+
+ const preview =
+  document.getElementById(
+   "private-preview-"+key
+  );
+
+ const image =
+  document.getElementById(
+   "private-preview-image-"+key
+  );
+
+ const name =
+  document.getElementById(
+   "private-preview-name-"+key
+  );
+
+ image.src =
+  URL.createObjectURL(file);
+
+ name.textContent =
+  file.name;
+
+ preview.classList.add("show");
+
+}
+
+
+function clearPrivateImage(key){
+
+ const chat =
+  privateChats.get(key);
+
+ if(chat){
+
+  chat.imageFile=null;
+
+ }
+
+ const input =
+  document.getElementById(
+   "private-file-"+key
+  );
+
+ if(input){
+
+  input.value="";
+
+ }
+
+ const preview =
+  document.getElementById(
+   "private-preview-"+key
+  );
+
+ if(preview){
+
+  preview.classList.remove(
+   "show"
+  );
+
+ }
+
+}
+
+
+/* =========================================================
+   PRIVATE HISTORY
+========================================================= */
+
+async function loadPrivateMessages(
+ key,
+ otherUserId
+){
+
+ const {data,error} =
+  await supabaseClient
+   .from("private_messages")
+   .select(
+    "id,sender_id,receiver_id,content,image_url,created_at"
+   )
+   .or(
+    "and(sender_id.eq."+currentUser.id+
+    ",receiver_id.eq."+otherUserId+
+    "),and(sender_id.eq."+otherUserId+
+    ",receiver_id.eq."+currentUser.id+")"
+   )
+   .order(
+    "created_at",
+    {
+     ascending:true
+    }
+   );
+
+ if(error){
+
+  console.error(
+   "Private history:",
+   error
+  );
+
+  showError(
+   error.message ||
+   "Could not load private messages."
+  );
+
+  return;
+
+ }
+
+ const container =
+  document.getElementById(
+   "private-messages-"+key
+  );
+
+ if(!container)return;
+
+ container.innerHTML="";
+
+ if(
+  !data ||
+  !data.length
+ ){
+
+  const empty =
+   document.createElement("div");
+
+  empty.className="empty-chat";
+
+  empty.id =
+   "private-empty-"+key;
+
+  empty.textContent =
+   "No private messages yet.";
+
+  container.appendChild(empty);
+
+  return;
+
+ }
+
+ await loadProfiles(
+  data.map(
+   m=>m.sender_id
+  )
+ );
+
+ data.forEach(
+  message=>{
+   displayPrivateMessage(
+    key,
+    message
+   );
+  }
+ );
+
+ scrollPrivateBottom(key);
+
+}
+
+
+/* =========================================================
+   PRIVATE REALTIME
+========================================================= */
+
+function setupPrivateRealtime(
+ key,
+ otherUserId
+){
+
+ if(
+  privateChannels.has(key)
+ ){
+  return;
+ }
+
+ const channel =
+  supabaseClient
+   .channel(
+    "private-open-"+key
+   );
+
+ channel
+  .on(
+   "postgres_changes",
+   {
+    event:"INSERT",
+    schema:"public",
+    table:"private_messages"
+   },
+   async payload=>{
+
+    const message =
+     payload.new;
+
+    const belongs =
+     (
+      message.sender_id===
+      currentUser.id &&
+      message.receiver_id===
+      otherUserId
+     )
+     ||
+     (
+      message.sender_id===
+      otherUserId &&
+      message.receiver_id===
+      currentUser.id
+     );
+
+    if(!belongs)return;
+
+    if(
+     document.querySelector(
+      '[data-private-message-id="' +
+      message.id +
+      '"]'
+     )
+    ){
+     return;
+    }
+
+    await loadProfiles([
+     message.sender_id
+    ]);
+
+    displayPrivateMessage(
+     key,
+     message
+    );
+
+    scrollPrivateBottom(key);
+
+   }
+  )
+  .subscribe(status=>{
+
+   console.log(
+    "Private realtime:",
+    status
+   );
+
+  });
+
+ privateChannels.set(
+  key,
+  channel
+ );
+
+}
+
+
+/* =========================================================
+   GLOBAL PRIVATE REALTIME
+========================================================= */
+
+function setupGlobalPrivateRealtime(){
+
+ privateGlobalChannel =
+  supabaseClient
+   .channel(
+    "global-private-"+currentUser.id
+   );
+
+ privateGlobalChannel
+  .on(
+   "postgres_changes",
+   {
+    event:"INSERT",
+    schema:"public",
+    table:"private_messages",
+    filter:
+     "receiver_id=eq."+currentUser.id
+   },
+   async payload=>{
+
+    await handleIncomingPrivateMessage(
+     payload.new
+    );
+
+   }
+  )
+  .subscribe(status=>{
+
+   console.log(
+    "Global private realtime:",
+    status
+   );
+
+   if(
+    status==="CHANNEL_ERROR"
+   ){
+
+    showError(
+     "Private chat realtime connection failed."
+    );
+
+   }
+
+  });
+
+}
+
+
+/* =========================================================
+   HANDLE INCOMING PRIVATE
+========================================================= */
+
+async function handleIncomingPrivateMessage(
+ message
+){
+
+ if(!message)return;
+
+ if(
+  message.receiver_id !==
+  currentUser.id
+ ){
+  return;
+ }
+
+ if(
+  blockedUserIds.has(
+   message.sender_id
+  )
+ ){
+  return;
+ }
+
+ const senderId =
+  message.sender_id;
+
+ await loadProfiles([
+  senderId
+ ]);
+
+ const profile =
+  profilesCache.get(
+   senderId
+  );
+
+ if(!profile)return;
+
+ const key =
+  privateKey(senderId);
+
+ if(
+  !privateChats.has(key)
+ ){
+
+  createPrivateTab(
+   key,
+   profile
+  );
+
+  createPrivatePanel(
+   key,
+   profile
+  );
+
+  await loadPrivateMessages(
+   key,
+   senderId
+  );
+
+  setupPrivateRealtime(
+   key,
+   senderId
+  );
+
+ }
+
+ if(
+  document.querySelector(
+   '[data-private-message-id="' +
+   message.id +
+   '"]'
+  )
+ ){
+  return;
+ }
+
+ /*
+   The message is displayed here.
+ */
+
+ displayPrivateMessage(
+  key,
+  message
+ );
+
+ const chat =
+  privateChats.get(key);
+
+ const active =
+  document
+   .getElementById(
+    "panel-"+key
+   )
+   ?.classList
+   .contains("active");
+
+ if(!active){
+
+  if(chat){
+
+   chat.unread =
+    (chat.unread||0)+1;
+
+  }
+
+  const tab =
+   document.getElementById(
+    "tab-"+key
+   );
+
+  if(tab){
+
+   tab.classList.add(
+    "unread"
+   );
+
+  }
+
+  showPrivateNotification(
+   profile,
+   message.content ||
+   "🖼️ Image",
+   senderId
+  );
+
+ }
+
+ scrollPrivateBottom(key);
+
+}
+
+
+/* =========================================================
+   DISPLAY PRIVATE MESSAGE
+========================================================= */
+
+function displayPrivateMessage(
+ key,
+ message
+){
+
+ const container =
+  document.getElementById(
+   "private-messages-"+key
+  );
+
+ if(!container)return;
+
+ const empty =
+  document.getElementById(
+   "private-empty-"+key
+  );
+
+ if(empty){
+
+  empty.remove();
+
+ }
+
+ if(
+  message.id &&
+  document.querySelector(
+   '[data-private-message-id="' +
+   message.id +
+   '"]'
+  )
+ ){
+  return;
+ }
+
+ const profile =
+  profilesCache.get(
+   message.sender_id
+  );
+
+ const displayName =
+  getDisplayName(profile);
+
+ const wrapper =
+  document.createElement("div");
+
+ wrapper.className =
+  "private-message";
+
+ if(
+  message.sender_id ===
+  currentUser.id
+ ){
+
+  wrapper.classList.add(
+   "mine"
+  );
+
+ }
+
+ if(message.id){
+
+  wrapper.dataset.privateMessageId =
+   message.id;
+
+ }
+
+ const avatar =
+  createAvatar(
+   profile,
+   displayName,
+   "message-avatar"
+  );
+
+ const body =
+  document.createElement("div");
+
+ body.className="message-body";
+
+ const head =
+  document.createElement("div");
+
+ head.className="message-head";
+
+ const username =
+  document.createElement("div");
+
+ username.className="username";
+
+ username.textContent =
+  displayName;
+
+ head.appendChild(username);
+
+ if(profile){
+
+  addBadges(
+   head,
+   profile
+  );
+
+ }
+
+ const time =
+  document.createElement("div");
+
+ time.className="message-time";
+
+ if(message.created_at){
+
+  time.textContent =
+   new Date(
+    message.created_at
+   )
+   .toLocaleTimeString(
+    [],
+    {
+     hour:"2-digit",
+     minute:"2-digit"
+    }
+   );
+
+ }
+
+ head.appendChild(time);
+
+ body.appendChild(head);
+
+ if(
+  message.content !== null &&
+  message.content !== undefined &&
+  message.content !== ""
+ ){
+
+  const text =
+   document.createElement("div");
+
+  text.className =
+   "message-text";
+
+  text.textContent =
+   message.content;
+
+  body.appendChild(text);
+
+ }
+
+ if(message.image_url){
+
+  const image =
+   document.createElement("img");
+
+  image.className =
+   "message-image";
+
+  image.src =
+   message.image_url;
+
+  image.alt =
+   "Shared image";
+
+  image.loading="lazy";
+
+  image.onclick=()=>{
+
+   window.open(
+    message.image_url,
+    "_blank"
+   );
+
+  };
+
+  body.appendChild(image);
+
+ }
+
+ wrapper.appendChild(avatar);
+ wrapper.appendChild(body);
+
+ container.appendChild(wrapper);
+
+}
+
+
+/* =========================================================
+   SEND PRIVATE
+========================================================= */
+
+async function sendPrivateMessage(
+ key,
+ receiverId
+){
+
+ const input =
+  document.getElementById(
+   "private-input-"+key
+  );
+
+ const button =
+  document.getElementById(
+   "private-send-"+key
+  );
+
+ const chat =
+  privateChats.get(key);
+
+ if(
+  !input ||
+  !chat
+ ){
+  return;
+ }
+
+ const text =
+  input.value.trim();
+
+ const imageFile =
+  chat.imageFile;
+
+ if(
+  !text &&
+  !imageFile
+ ){
+  return;
+ }
+
+ if(
+  imageFile &&
+  !isPremium(currentProfile)
+ ){
+
+  showError(
+   "⭐ Only Premium members can send images."
+  );
+
+  return;
+
+ }
+
+ button.disabled=true;
+
+ try{
+
+  let imageUrl=null;
+
+  if(imageFile){
+
+   imageUrl =
+    await uploadPremiumImage(
+     imageFile
+    );
+
+  }
+
+  const {
+   data,
+   error
+  } =
+   await supabaseClient
+    .from("private_messages")
+    .insert({
+
+     sender_id:
+      currentUser.id,
+
+     receiver_id:
+      receiverId,
+
+     /*
+       IMPORTANT:
+       Never send null because
+       content is NOT NULL.
+     */
+
+     content:
+      text || "",
+
+     image_url:
+      imageUrl
+
+    })
+    .select()
+    .single();
+
+  if(error){
+
+   throw error;
+
+  }
+
+  if(data){
+
+   await loadProfiles([
+    currentUser.id
+   ]);
+
+   displayPrivateMessage(
+    key,
+    data
+   );
+
+   scrollPrivateBottom(key);
+
+  }
+
+  input.value="";
+
+  clearPrivateImage(key);
+
+  input.focus();
+
+ }catch(error){
+
+  console.error(
+   "Private send:",
+   error
+  );
+
+  showError(
+   error.message ||
+   "Could not send private message."
+  );
+
+ }finally{
+
+  button.disabled=false;
+
+ }
+
+}
+
+
+/* =========================================================
+   PRIVATE NOTIFICATION
+========================================================= */
+
+async function showPrivateNotification(
+ profile,
+ message,
+ userId
+){
+
+ notificationUserId=userId;
+
+ const notification =
+  document.getElementById(
+   "privateNotification"
+  );
+
+ const avatar =
+  document.getElementById(
+   "notificationAvatar"
+  );
+
+ avatar.innerHTML="";
+
+ const generated =
+  createAvatar(
+   profile,
+   getDisplayName(profile),
+   "notification-avatar"
+  );
+
+ while(
+  generated.firstChild
+ ){
+
+  avatar.appendChild(
+   generated.firstChild
+  );
+
+ }
+
+ if(
+  !avatar.innerHTML
+ ){
+
+  avatar.textContent =
+   getDisplayName(profile)
+    .charAt(0)
+    .toUpperCase();
+
+ }
+
+ document
+  .getElementById(
+   "notificationName"
+  )
+  .textContent =
+   "@"+getDisplayName(profile);
+
+ document
+  .getElementById(
+   "notificationMessage"
+  )
+  .textContent =
+   message ||
+   "New message";
+
+ notification.classList.add(
+  "show"
+ );
+
+ clearTimeout(
+  showPrivateNotification.timer
+ );
+
+ showPrivateNotification.timer =
+  setTimeout(()=>{
+
+   notification.classList.remove(
+    "show"
+   );
+
+  },7000);
+
+}
+
+
+/* =========================================================
+   OPEN NOTIFICATION
+========================================================= */
+
+async function openNotificationChat(){
+
+ if(!notificationUserId){
+  return;
+ }
+
+ const userId =
+  notificationUserId;
+
+ document
+  .getElementById(
+   "privateNotification"
+  )
+  .classList.remove("show");
+
+ await openPrivateChat(
+  userId
+ );
+
+ markPrivateRead(
+  privateKey(userId)
+ );
+
+}
+
+
+/* =========================================================
+   MARK READ
+========================================================= */
+
+function markPrivateRead(key){
+
+ const chat =
+  privateChats.get(key);
+
+ if(chat){
+
+  chat.unread=0;
+
+ }
+
+ const tab =
+  document.getElementById(
+   "tab-"+key
+  );
+
+ if(tab){
+
+  tab.classList.remove(
+   "unread"
+  );
+
+ }
+
+ const notification =
+  document.getElementById(
+   "privateNotification"
+  );
+
+ if(
+  notificationUserId &&
+  privateKey(
+   notificationUserId
+  )===key
+ ){
+
+  notification.classList.remove(
+   "show"
+  );
+
+ }
+
+}
+
+
+/* =========================================================
+   ACTIVATE ROOM
+========================================================= */
+
+function activateRoomTab(){
+
+ document
+  .querySelectorAll(".chat-tab")
+  .forEach(tab=>{
+
+   tab.classList.remove(
+    "active"
+   );
+
+  });
+
+ document
+  .querySelectorAll(".chat-panel")
+  .forEach(panel=>{
+
+   panel.classList.remove(
+    "active"
+   );
+
+  });
+
+ document
+  .getElementById(
+   "roomTab"
+  )
+  .classList.add(
+   "active"
+  );
+
+ document
+  .getElementById(
+   "roomPanel"
+  )
+  .classList.add(
+   "active"
+  );
+
+ roomMessageInput.focus();
+
+}
+
+
+/* =========================================================
+   ACTIVATE PRIVATE
+========================================================= */
+
+function activatePrivateTab(key){
+
+ document
+  .querySelectorAll(".chat-tab")
+  .forEach(tab=>{
+
+   tab.classList.remove(
+    "active"
+   );
+
+  });
+
+ document
+  .querySelectorAll(".chat-panel")
+  .forEach(panel=>{
+
+   panel.classList.remove(
+    "active"
+   );
+
+  });
+
+ const tab =
+  document.getElementById(
+   "tab-"+key
+  );
+
+ const panel =
+  document.getElementById(
+   "panel-"+key
+  );
+
+ if(tab){
+
+  tab.classList.add(
+   "active"
+  );
+
+ }
+
+ if(panel){
+
+  panel.classList.add(
+   "active"
+  );
+
+ }
+
+ markPrivateRead(key);
+
+ const input =
+  document.getElementById(
+   "private-input-"+key
+  );
+
+ if(input){
+
+  input.focus();
+
+ }
+
+ scrollPrivateBottom(key);
+
+}
+
+
+/* =========================================================
+   CLOSE PRIVATE
+========================================================= */
+
+async function closePrivateChat(key){
+
+ const tab =
+  document.getElementById(
+   "tab-"+key
+  );
+
+ const panel =
+  document.getElementById(
+   "panel-"+key
+  );
+
+ if(tab){
+  tab.remove();
+ }
+
+ if(panel){
+  panel.remove();
+ }
+
+ const channel =
+  privateChannels.get(key);
+
+ if(channel){
+
+  await supabaseClient
+   .removeChannel(
+    channel
+   );
+
+  privateChannels.delete(
+   key
+  );
+
+ }
+
+ privateChats.delete(key);
+
+ activateRoomTab();
+
+}
+
+
+/* =========================================================
+   BLOCK
+========================================================= */
+
+async function blockUser(
+ userId,
+ username
+){
+
+ if(
+  !currentUser ||
+  userId===currentUser.id
+ ){
+  return;
+ }
+
+ if(
+  !confirm(
+   "Block @"+username+"?"
+  )
+ ){
+  return;
+ }
+
+ const {error} =
+  await supabaseClient
+   .from("blocked_users")
+   .insert({
+    blocker_id:
+     currentUser.id,
+
+    blocked_id:
+     userId
+   });
+
+ if(error){
+
+  if(
+   error.code==="23505"
+  ){
+
+   showError(
+    "This user is already blocked."
+   );
+
+  }else{
+
+   showError(
+    error.message ||
+    "Could not block user."
+   );
+
+  }
+
+  return;
+
+ }
+
+ blockedUserIds.add(
+  userId
+ );
+
+ updateUsers();
+
+ const key =
+  privateKey(userId);
+
+ if(
+  privateChats.has(key)
+ ){
+
+  closePrivateChat(key);
+
+ }
+
+ showError(
+  "@"+username+
+  " has been blocked."
+ );
+
+}
+
+
+/* =========================================================
+   REPORT
+========================================================= */
+
+async function reportUser(
+ userId,
+ username
+){
+
+ if(
+  !currentUser ||
+  userId===currentUser.id
+ ){
+  return;
+ }
+
+ const reason =
+  prompt(
+   "Why are you reporting @"+
+   username+
+   "?\n\nExamples: spam, harassment, inappropriate behavior, scam"
+  );
+
+ if(!reason)return;
+
+ const cleanReason =
+  reason.trim();
+
+ if(!cleanReason)return;
+
+ const {error} =
+  await supabaseClient
+   .from("reports")
+   .insert({
+
+    reporter_id:
+     currentUser.id,
+
+    reported_id:
+     userId,
+
+    room_name:
+     roomName,
+
+    reason:
+     cleanReason
+
+   });
+
+ if(error){
+
+  console.error(
+   "Report:",
+   error
+  );
+
+  showError(
+   error.message ||
+   "Could not submit report."
+  );
+
+  return;
+
+ }
+
+ showError(
+  "Report submitted. Thank you."
+ );
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+function showEmptyChat(){
+
+ messages.innerHTML="";
+
+ const empty =
+  document.createElement("div");
+
+ empty.className="empty-chat";
+
+ empty.id="emptyChat";
+
+ empty.textContent =
+  "No messages yet. Start the conversation.";
+
+ messages.appendChild(empty);
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToBottom(){
+
+ messages.scrollTop =
+  messages.scrollHeight;
+
+}
+
+
+function scrollPrivateBottom(key){
+
+ const container =
+  document.getElementById(
+   "private-messages-"+key
+  );
+
+ if(container){
+
+  container.scrollTop =
+   container.scrollHeight;
+
+ }
+
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+async function goBack(){
+
+ try{
+
+  if(currentUser){
+
+   await supabaseClient
+    .from("room_members")
+    .delete()
+    .eq(
+     "room_name",
+     roomName
+    )
+    .eq(
+     "user_id",
+     currentUser.id
+    );
+
+  }
+
+  if(chatChannel){
+
+   await supabaseClient
+    .removeChannel(
+     chatChannel
+    );
+
+  }
+
+  if(presenceChannel){
+
+   await supabaseClient
+    .removeChannel(
+     presenceChannel
+    );
+
+  }
+
+  if(privateGlobalChannel){
+
+   await supabaseClient
+    .removeChannel(
+     privateGlobalChannel
+    );
+
+  }
+
+  for(
+   const channel of
+   privateChannels.values()
+  ){
+
+   await supabaseClient
+    .removeChannel(
+     channel
+    );
+
+  }
+
+ }catch(error){
+
+  console.error(
+   "Leaving chat:",
+   error
+  );
+
+ }
+
+ window.location.href =
+  "rooms.html";
+
+}
+
+
+/* =========================================================
+   ROOM ENTER
+========================================================= */
+
+roomMessageInput.addEventListener(
+ "keydown",
+ e=>{
+
+  if(e.key==="Enter"){
+
+   e.preventDefault();
+
+   sendRoomMessage();
+
+  }
+
+ }
+);
+
+
+/* =========================================================
+   CLOSE EMOJI
+========================================================= */
+
+document.addEventListener(
+ "click",
+ event=>{
+
+  if(
+   !event.target.closest(
+    ".emoji-picker"
+   ) &&
+   !event.target.closest(
+    ".emoji-button"
+   )
+  ){
+
+   document
+    .querySelectorAll(
+     ".emoji-picker"
+    )
+    .forEach(picker=>{
+
+     picker.classList.remove(
+      "show"
+     );
+
+    });
+
+  }
+
+ }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+buildEmojiPicker(
+ "roomEmojiGrid",
+ "roomMessageInput"
+);
+
+startChat();
+
+</script>
+
+</body>
+</html>
