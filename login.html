@@ -1,262 +1,793 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login — TalkRoom</title>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+   content="width=device-width, initial-scale=1.0,
+            viewport-fit=cover">
+
+<title>Login — TalkRoom</title>
+
 <meta name="description"
-      content="Log in to your TalkRoom account and join online chat rooms.">
+   content="Log in to your TalkRoom account and join online chat rooms.">
 
 <meta name="robots" content="noindex, follow">
 
-<link rel="canonical" href="https://talkroom.fun/login.html">
-    
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="canonical"
+      href="https://talkroom.fun/login.html">
 
-    <!-- TalkRoom Config -->
-    <script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<script src="js/config.js"></script>
 
-        body {
-            min-height: 100vh;
-            background: #0b0f19;
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+<style>
 
-        .login-box {
-            width: 100%;
-            max-width: 420px;
-            background: #111725;
-            border: 1px solid #252d3d;
-            border-radius: 18px;
-            padding: 35px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-        }
+/* ==========================================
+   RESET
+========================================== */
 
-        .logo {
-            text-align: center;
-            font-size: 30px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .logo span {
-            color: #6c63ff;
-        }
+html {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+}
 
-        .subtitle {
-            text-align: center;
-            color: #858d9e;
-            margin-bottom: 30px;
-        }
+body {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: bold;
-        }
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(108,99,255,.13),
+            transparent 42%
+        ),
+        #0b0f19;
 
-        input {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 18px;
-            background: #0b0f19;
-            border: 1px solid #303747;
-            border-radius: 9px;
-            color: white;
-            outline: none;
-            font-size: 15px;
-        }
+    color: white;
 
-        input:focus {
-            border-color: #6c63ff;
-        }
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #6c63ff;
-            border: none;
-            border-radius: 9px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        button:hover {
-            background: #5b52e8;
-        }
+    padding:
+        20px 14px;
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+    overflow-x: hidden;
 
-        #message {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            min-height: 20px;
-            color: #ff8585;
-        }
+    -webkit-text-size-adjust: 100%;
+}
 
-        .signup {
-            text-align: center;
-            margin-top: 25px;
-            color: #858d9e;
-            font-size: 14px;
-        }
 
-        .signup a {
-            color: #8d87ff;
-            text-decoration: none;
-            font-weight: bold;
-        }
+/* ==========================================
+   LOGIN BOX
+========================================== */
 
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #858d9e;
-            text-decoration: none;
-            font-size: 14px;
-        }
+.login-box {
 
-        .back:hover,
-        .signup a:hover {
-            color: white;
-        }
-    </style>
+    width: 100%;
+
+    max-width: 420px;
+
+    background:
+        rgba(17,23,37,.97);
+
+    border:
+        1px solid #252d3d;
+
+    border-radius: 18px;
+
+    padding:
+        34px 30px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35);
+}
+
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.logo {
+
+    text-align: center;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    margin-bottom: 8px;
+
+    letter-spacing: -.4px;
+}
+
+.logo span {
+    color: #6c63ff;
+}
+
+
+/* ==========================================
+   SUBTITLE
+========================================== */
+
+.subtitle {
+
+    text-align: center;
+
+    color: #858d9e;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    margin-bottom: 28px;
+}
+
+
+/* ==========================================
+   FORM
+========================================== */
+
+form {
+    width: 100%;
+}
+
+
+/* ==========================================
+   LABEL
+========================================== */
+
+label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #e8eaf0;
+}
+
+
+/* ==========================================
+   INPUT
+========================================== */
+
+input {
+
+    display: block;
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding:
+        13px 14px;
+
+    margin-bottom: 18px;
+
+    background: #0b0f19;
+
+    border:
+        1px solid #303747;
+
+    border-radius: 10px;
+
+    color: white;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    line-height: 1.3;
+
+    -webkit-appearance: none;
+
+    appearance: none;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+input::placeholder {
+    color: #697285;
+}
+
+input:focus {
+
+    border-color: #6c63ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(108,99,255,.10);
+}
+
+
+/* ==========================================
+   BUTTON
+========================================== */
+
+button {
+
+    display: block;
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding:
+        13px 15px;
+
+    background: #6c63ff;
+
+    border: none;
+
+    border-radius: 10px;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        background .2s,
+        transform .15s,
+        opacity .2s;
+}
+
+button:hover {
+    background: #5b52e8;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+button:disabled {
+
+    opacity: .6;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* ==========================================
+   MESSAGE
+========================================== */
+
+#message {
+
+    width: 100%;
+
+    min-height: 20px;
+
+    margin-top: 14px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================
+   SIGNUP
+========================================== */
+
+.signup {
+
+    text-align: center;
+
+    margin-top: 24px;
+
+    color: #858d9e;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.signup a {
+
+    color: #8d87ff;
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.signup a:hover {
+    color: white;
+}
+
+
+/* ==========================================
+   BACK
+========================================== */
+
+.back {
+
+    display: block;
+
+    width: fit-content;
+
+    margin:
+        18px auto 0;
+
+    padding:
+        7px 10px;
+
+    color: #858d9e;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    border-radius: 8px;
+
+    transition:
+        background .2s,
+        color .2s;
+}
+
+.back:hover {
+
+    color: white;
+
+    background: #151b26;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    body {
+
+        align-items: flex-start;
+
+        padding:
+            18px 10px 25px;
+    }
+
+    .login-box {
+
+        max-width: 100%;
+
+        margin-top:
+            max(10px, env(safe-area-inset-top));
+
+        padding:
+            28px 18px;
+
+        border-radius: 16px;
+    }
+
+    .logo {
+        font-size: 27px;
+    }
+
+    .subtitle {
+
+        font-size: 13px;
+
+        margin-bottom: 25px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    input {
+
+        min-height: 50px;
+
+        margin-bottom: 17px;
+
+        font-size: 16px;
+    }
+
+    button {
+
+        min-height: 50px;
+
+        font-size: 15px;
+    }
+
+    .signup {
+
+        margin-top: 22px;
+
+        font-size: 12px;
+    }
+
+    .back {
+
+        font-size: 11px;
+
+        margin-top: 15px;
+    }
+}
+
+
+/* ==========================================
+   SMALL PHONES
+========================================== */
+
+@media (max-width: 380px) {
+
+    body {
+        padding:
+            10px 8px 20px;
+    }
+
+    .login-box {
+
+        padding:
+            24px 15px;
+
+        border-radius: 15px;
+    }
+
+    .logo {
+        font-size: 25px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    input {
+        min-height: 48px;
+    }
+
+    button {
+        min-height: 48px;
+    }
+}
+
+
+/* ==========================================
+   VERY SHORT SCREENS
+========================================== */
+
+@media (max-height: 650px) {
+
+    body {
+        align-items: flex-start;
+    }
+
+    .login-box {
+        margin-top: 10px;
+    }
+
+    .subtitle {
+        margin-bottom: 20px;
+    }
+
+    input {
+        margin-bottom: 14px;
+    }
+
+    .signup {
+        margin-top: 18px;
+    }
+}
+
+
+/* ==========================================
+   TOUCH DEVICES
+========================================== */
+
+@media (hover: none) {
+
+    button:hover {
+        background: #6c63ff;
+    }
+
+    .back:hover {
+        color: #858d9e;
+        background: transparent;
+    }
+
+    .signup a:hover {
+        color: #8d87ff;
+    }
+}
+
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        transition: none !important;
+
+        scroll-behavior: auto !important;
+    }
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <div class="login-box">
+<div class="login-box">
 
-        <div class="logo">
-            Talk<span>Room</span>
-        </div>
+<!-- LOGO -->
 
-        <p class="subtitle">
-            Welcome back 👋
-        </p>
+<div class="logo">
+    Talk<span>Room</span>
+</div>
 
-        <form id="loginForm">
+<!-- SUBTITLE -->
 
-            <label for="email">Email</label>
+<p class="subtitle">
+    Welcome back 👋
+</p>
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-            >
+<!-- LOGIN FORM -->
 
-            <label for="password">Password</label>
+<form id="loginForm">
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                required
-            >
+<label for="email">
+    Email
+</label>
 
-            <button type="submit" id="loginButton">
-                Login
-            </button>
+<input
+type="email"
+id="email"
+name="email"
+placeholder="Enter your email"
+autocomplete="email"
+inputmode="email"
+required
 
-        </form>
+>
 
-        <div id="message"></div>
+<label for="password">
+    Password
+</label>
 
-        <div class="signup">
-            Don't have an account?
-            <a href="signup.html">Create one</a>
-        </div>
+<input
+type="password"
+id="password"
+name="password"
+placeholder="Enter your password"
+autocomplete="current-password"
+required
 
-        <a href="index.html" class="back">
-            ← Back to TalkRoom
-        </a>
+>
 
-    </div>
+<button
+type="submit"
+id="loginButton"
 
-    <script>
-        const loginForm = document.getElementById("loginForm");
-        const loginButton = document.getElementById("loginButton");
-        const message = document.getElementById("message");
+>
 
-        loginForm.addEventListener("submit", async function(event) {
+Login
 
-            event.preventDefault();
 
-            const email =
-                document.getElementById("email").value.trim();
+</button>
 
-            const password =
-                document.getElementById("password").value;
+</form>
 
-            message.textContent = "";
+<!-- MESSAGE -->
 
-            loginButton.disabled = true;
-            loginButton.textContent = "Logging in...";
+<div id="message"></div>
 
-            try {
+<!-- SIGNUP -->
 
-                const { data, error } =
-                    await supabaseClient.auth.signInWithPassword({
-                        email: email,
-                        password: password
+<div class="signup">
+
+Don't have an account?
+
+<a href="signup.html">
+    Create one
+</a>
+
+
+</div>
+
+<!-- BACK -->
+
+<a
+href="index.html"
+class="back"
+
+>
+
+← Back to TalkRoom
+
+
+</a>
+
+</div>
+
+<script>
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+/* ==========================================
+   LOGIN
+========================================== */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        message.textContent = "";
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+            "Logging in...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signInWithPassword({
+
+                        email:
+                            email,
+
+                        password:
+                            password
+
                     });
 
-                if (error) {
-                    throw error;
-                }
 
-                if (!data.user) {
-                    throw new Error("Login failed.");
-                }
+            if (error) {
+                throw error;
+            }
 
-                message.style.color = "#55d98a";
-                message.textContent =
-                    "Login successful! 🚀";
 
-                setTimeout(function() {
-                    window.location.href = "rooms.html";
-                }, 800);
+            if (!data.user) {
 
-            } catch (error) {
-
-                console.error(error);
-
-                message.style.color = "#ff8585";
-
-                message.textContent =
-                    error.message || "Invalid email or password.";
-
-            } finally {
-
-                loginButton.disabled = false;
-                loginButton.textContent = "Login";
+                throw new Error(
+                    "Login failed."
+                );
 
             }
 
-        });
-    </script>
+
+            message.style.color =
+                "#55d98a";
+
+            message.textContent =
+                "Login successful! 🚀";
+
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "rooms.html";
+
+                },
+                700
+            );
+
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            message.style.color =
+                "#ff8585";
+
+
+            message.textContent =
+                error.message ||
+                "Invalid email or password.";
+
+        }
+
+
+        finally {
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "Login";
+
+        }
+
+    }
+);
+
+</script>
 
 </body>
+
 </html>
