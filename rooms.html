@@ -831,12 +831,10 @@ async function loadUser() {
     /*
        PUBLIC ROOMS PAGE
 
-       Logged-out visitors are allowed
-       to view the room directory.
-
-       They will still be required to
-       log in when they actually try
-       to use protected features.
+       Guests can view the room directory.
+       Authentication is required when
+       they actually enter/use protected
+       chat features.
     */
 
     if (
@@ -923,10 +921,17 @@ async function loadUser() {
         "User";
 
 
-    document
-        .getElementById("accountName")
-        .textContent =
-        name;
+    const accountName =
+        document.getElementById(
+            "accountName"
+        );
+
+    if (accountName) {
+
+        accountName.textContent =
+            name;
+
+    }
 
 
     const avatarElement =
@@ -936,48 +941,57 @@ async function loadUser() {
 
 
     if (
-        profile.is_premium === true &&
-        profile.avatar_url &&
-        (
-            !profile.premium_until ||
-            new Date(profile.premium_until) >
-            new Date()
-        )
+        avatarElement
     ) {
 
-        const img =
-            document.createElement("img");
+        if (
+            profile.is_premium === true &&
+            profile.avatar_url &&
+            (
+                !profile.premium_until ||
+                new Date(profile.premium_until) >
+                new Date()
+            )
+        ) {
 
-        img.src =
-            profile.avatar_url;
+            const img =
+                document.createElement(
+                    "img"
+                );
 
-        img.alt =
-            name;
+            img.src =
+                profile.avatar_url;
 
-        img.onerror =
-            function() {
+            img.alt =
+                name;
 
-                img.remove();
+            img.onerror =
+                function() {
 
-                avatarElement.textContent =
-                    name
-                        .charAt(0)
-                        .toUpperCase();
+                    img.remove();
 
-            };
+                    avatarElement.textContent =
+                        name
+                            .charAt(0)
+                            .toUpperCase();
 
-        avatarElement.innerHTML = "";
+                };
 
-        avatarElement.appendChild(
-            img
-        );
+            avatarElement.innerHTML =
+                "";
 
-    } else {
+            avatarElement.appendChild(
+                img
+            );
 
-        avatarElement.textContent =
-            name
-                .charAt(0)
-                .toUpperCase();
+        } else {
+
+            avatarElement.textContent =
+                name
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
 
     }
 
@@ -985,116 +999,6 @@ async function loadUser() {
     return true;
 
 }
-
-
-    currentUser =
-        data.user;
-
-
-    const {
-        data: profile,
-        error: profileError
-    } =
-        await supabaseClient
-            .from("profiles")
-            .select(
-                "id,username,avatar_url,is_premium,premium_until,is_admin,is_moderator,role"
-            )
-            .eq(
-                "id",
-                currentUser.id
-            )
-            .single();
-
-
-    if (
-        profileError ||
-        !profile
-    ) {
-
-        console.error(
-            profileError
-        );
-
-        showError(
-            "Could not load your profile."
-        );
-
-        return false;
-
-    }
-
-
-    currentProfile =
-        profile;
-
-
-    const name =
-        profile.username ||
-        "User";
-
-
-    document
-        .getElementById("accountName")
-        .textContent =
-        name;
-
-
-    const avatarElement =
-        document.getElementById(
-            "accountAvatar"
-        );
-
-
-    if (
-        profile.is_premium === true &&
-        profile.avatar_url &&
-        (
-            !profile.premium_until ||
-            new Date(profile.premium_until) >
-            new Date()
-        )
-    ) {
-
-        const img =
-            document.createElement("img");
-
-        img.src =
-            profile.avatar_url;
-
-        img.alt =
-            name;
-
-        img.onerror =
-            function() {
-
-                img.remove();
-
-                avatarElement.textContent =
-                    name
-                        .charAt(0)
-                        .toUpperCase();
-
-            };
-
-        avatarElement.innerHTML = "";
-
-        avatarElement.appendChild(img);
-
-    } else {
-
-        avatarElement.textContent =
-            name
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
-
-    return true;
-
-}
-
 
 /* ============================================================
    LOAD ROOMS FROM DATABASE
