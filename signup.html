@@ -344,17 +344,13 @@
 
 if (data.session) {
 
-    const {
-        error: profileError
-    } =
+    const { error: profileError } =
         await supabaseClient
             .from("profiles")
             .upsert(
                 {
                     id: data.user.id,
-
-                    username:
-                        cleanUsername
+                    username: cleanUsername
                 },
                 {
                     onConflict: "id"
@@ -366,6 +362,10 @@ if (data.session) {
     }
 
 }
+
+    
+
+
 
 
                     message.style.color =
