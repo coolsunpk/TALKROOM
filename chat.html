@@ -3945,7 +3945,10 @@ async function handleIncomingPrivateMessage(
 ){
 
  if(!message)return;
-
+console.log(
+  "🔔 INCOMING PRIVATE MESSAGE:",
+  message
+);
  if(
   message.receiver_id !==
   currentUser.id
