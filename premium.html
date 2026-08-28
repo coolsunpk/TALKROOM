@@ -562,16 +562,16 @@ async function loadUser() {
 
 
     if (
-        error ||
-        !data.user
-    ) {
+    error ||
+    !data.user
+) {
 
-        window.location.href =
-            "login.html";
+    currentUser = null;
+    currentProfile = null;
 
-        return;
+    return;
 
-    }
+}
 
 
     currentUser =
