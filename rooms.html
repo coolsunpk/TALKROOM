@@ -828,17 +828,163 @@ async function loadUser() {
             .getUser();
 
 
+    /*
+       PUBLIC ROOMS PAGE
+
+       Logged-out visitors are allowed
+       to view the room directory.
+
+       They will still be required to
+       log in when they actually try
+       to use protected features.
+    */
+
     if (
         error ||
         !data.user
     ) {
 
-        window.location.href =
-            "login.html";
+        currentUser = null;
+        currentProfile = null;
+
+        const accountName =
+            document.getElementById(
+                "accountName"
+            );
+
+        if (accountName) {
+
+            accountName.textContent =
+                "Guest";
+
+        }
+
+        const avatarElement =
+            document.getElementById(
+                "accountAvatar"
+            );
+
+        if (avatarElement) {
+
+            avatarElement.textContent =
+                "G";
+
+        }
+
+        return true;
+
+    }
+
+
+    currentUser =
+        data.user;
+
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id,username,avatar_url,is_premium,premium_until,is_admin,is_moderator,role"
+            )
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .single();
+
+
+    if (
+        profileError ||
+        !profile
+    ) {
+
+        console.error(
+            profileError
+        );
+
+        showError(
+            "Could not load your profile."
+        );
 
         return false;
 
     }
+
+
+    currentProfile =
+        profile;
+
+
+    const name =
+        profile.username ||
+        "User";
+
+
+    document
+        .getElementById("accountName")
+        .textContent =
+        name;
+
+
+    const avatarElement =
+        document.getElementById(
+            "accountAvatar"
+        );
+
+
+    if (
+        profile.is_premium === true &&
+        profile.avatar_url &&
+        (
+            !profile.premium_until ||
+            new Date(profile.premium_until) >
+            new Date()
+        )
+    ) {
+
+        const img =
+            document.createElement("img");
+
+        img.src =
+            profile.avatar_url;
+
+        img.alt =
+            name;
+
+        img.onerror =
+            function() {
+
+                img.remove();
+
+                avatarElement.textContent =
+                    name
+                        .charAt(0)
+                        .toUpperCase();
+
+            };
+
+        avatarElement.innerHTML = "";
+
+        avatarElement.appendChild(
+            img
+        );
+
+    } else {
+
+        avatarElement.textContent =
+            name
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+
+    return true;
+
+}
 
 
     currentUser =
