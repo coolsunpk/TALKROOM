@@ -6,7 +6,8 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+   content="width=device-width, initial-scale=1.0">
 
 <title>TalkRoom — Profile</title>
 
@@ -16,37 +17,74 @@
 
 <style>
 
+/* =========================
+   RESET
+========================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    min-height: 100vh;
-    background: #080b12;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 25px 15px;
+html {
+    width: 100%;
+    overflow-x: hidden;
 }
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(108,99,255,.12),
+            transparent 38%
+        ),
+        #080b12;
+
+    color: white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    padding:
+        18px 12px 35px;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
 
 .container {
     width: 100%;
     max-width: 550px;
-    margin: auto;
+    margin: 0 auto;
 }
 
-/* NAV */
+
+/* =========================
+   NAV
+========================= */
 
 .nav {
+    width: 100%;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+
+    margin-bottom: 16px;
 }
 
 .logo {
-    font-size: 23px;
+    font-size: 21px;
     font-weight: 800;
 }
 
@@ -58,64 +96,117 @@ body {
     color: #8992a4;
     text-decoration: none;
     font-size: 11px;
+
+    padding: 8px 10px;
+
+    border-radius: 8px;
+
+    transition: .2s;
 }
 
 .back:hover {
     color: white;
+    background: #151b26;
 }
 
-/* CARD */
+
+/* =========================
+   CARD
+========================= */
 
 .card {
-    background: #0f141e;
-    border: 1px solid #292f3c;
+    width: 100%;
+
+    background: rgba(15,20,30,.96);
+
+    border:
+        1px solid #292f3c;
+
     border-radius: 18px;
-    padding: 30px;
+
+    padding: 28px 24px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
 }
 
-/* PROFILE */
+
+/* =========================
+   PROFILE HEADER
+========================= */
 
 .profile-header {
     text-align: center;
 }
 
-/* AVATAR */
+
+/* =========================
+   AVATAR
+========================= */
 
 .avatar-wrapper {
     position: relative;
-    width: 125px;
-    height: 125px;
-    margin: 0 auto 18px;
+
+    width: 120px;
+    height: 120px;
+
+    margin:
+        0 auto 16px;
 }
 
 .avatar {
-    width: 125px;
-    height: 125px;
+    display: block;
+
+    width: 120px;
+    height: 120px;
+
     border-radius: 50%;
+
     object-fit: cover;
+
     background: #171d29;
-    border: 3px solid #303848;
+
+    border:
+        3px solid #303848;
 }
 
 .avatar.premium-avatar {
     border-color: #6c63ff;
+
+    box-shadow:
+        0 0 0 4px rgba(108,99,255,.08);
 }
 
-/* UPLOAD */
+
+/* =========================
+   UPLOAD BUTTON
+========================= */
 
 .upload-button {
     display: none;
+
     position: absolute;
-    right: 0;
-    bottom: 2px;
+
+    right: -2px;
+    bottom: 0;
+
     width: 38px;
     height: 38px;
+
     border-radius: 50%;
-    border: 3px solid #0f141e;
+
+    border:
+        3px solid #0f141e;
+
     background: #6c63ff;
+
     color: white;
+
     cursor: pointer;
-    font-size: 16px;
+
+    font-size: 15px;
+
+    touch-action: manipulation;
 }
 
 .upload-button.show {
@@ -124,6 +215,10 @@ body {
 
 .upload-button:hover {
     opacity: .9;
+}
+
+.upload-button:active {
+    transform: scale(.95);
 }
 
 .upload-button:disabled {
@@ -135,20 +230,35 @@ body {
     display: none;
 }
 
-/* USERNAME */
+
+/* =========================
+   USERNAME
+========================= */
 
 .username {
+    width: 100%;
+
     font-size: 23px;
     font-weight: 800;
+
     margin-bottom: 8px;
+
+    overflow-wrap: anywhere;
 }
 
-/* USERNAME EDITOR */
+
+/* =========================
+   USERNAME EDITOR
+========================= */
 
 .username-editor {
     display: none;
-    margin: 15px auto 0;
-    max-width: 300px;
+
+    width: 100%;
+    max-width: 320px;
+
+    margin:
+        14px auto 0;
 }
 
 .username-editor.show {
@@ -156,40 +266,78 @@ body {
 }
 
 .username-input {
+    display: block;
+
     width: 100%;
-    padding: 12px;
-    border-radius: 9px;
-    border: 1px solid #292f3c;
+
+    min-height: 45px;
+
+    padding:
+        11px 13px;
+
+    border-radius: 10px;
+
+    border:
+        1px solid #292f3c;
+
     background: #151b26;
+
     color: white;
+
     outline: none;
+
     text-align: center;
-    font-size: 12px;
+
+    font-size: 13px;
+
+    -webkit-appearance: none;
 }
 
 .username-input:focus {
     border-color: #6c63ff;
+
+    box-shadow:
+        0 0 0 3px rgba(108,99,255,.08);
 }
 
 .username-hint {
     margin-top: 7px;
+
     color: #8992a4;
+
     font-size: 10px;
-    line-height: 1.4;
+
+    line-height: 1.5;
 }
 
-/* PREMIUM */
+
+/* =========================
+   PREMIUM BADGE
+========================= */
 
 .premium-badge {
     display: none;
+
     width: fit-content;
-    margin: 8px auto 0;
-    padding: 6px 11px;
+    max-width: 100%;
+
+    margin:
+        10px auto 0;
+
+    padding:
+        6px 11px;
+
     border-radius: 20px;
+
     background: #1b1730;
-    border: 1px solid #514a88;
+
+    border:
+        1px solid #514a88;
+
     color: #c9c3ff;
+
     font-size: 10px;
+
     font-weight: bold;
 }
 
@@ -197,18 +345,33 @@ body {
     display: block;
 }
 
-/* FREE NOTICE */
+
+/* =========================
+   FREE NOTICE
+========================= */
 
 .free-notice {
     display: none;
+
+    width: 100%;
+
     margin-top: 18px;
+
     padding: 12px;
-    border-radius: 9px;
+
+    border-radius: 10px;
+
     background: #151b26;
-    border: 1px solid #292f3c;
+
+    border:
+        1px solid #292f3c;
+
     color: #8992a4;
+
     font-size: 11px;
-    line-height: 1.5;
+
+    line-height: 1.55;
+
     text-align: center;
 }
 
@@ -216,29 +379,57 @@ body {
     display: block;
 }
 
-/* INFO */
+
+/* =========================
+   INFORMATION
+========================= */
 
 .info {
-    margin-top: 28px;
-    border-top: 1px solid #252c39;
+    width: 100%;
+
+    margin-top: 26px;
+
+    border-top:
+        1px solid #252c39;
 }
 
 .info-row {
+    width: 100%;
+
     display: flex;
-    justify-content: space-between;
+
+    justify-content:
+        space-between;
+
     align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #252c39;
+
+    gap: 15px;
+
+    padding:
+        14px 0;
+
+    border-bottom:
+        1px solid #252c39;
 }
 
 .info-label {
+    flex-shrink: 0;
+
     color: #8992a4;
+
     font-size: 11px;
 }
 
 .info-value {
+    min-width: 0;
+
     font-size: 12px;
+
     font-weight: bold;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
 }
 
 .premium-active {
@@ -249,26 +440,52 @@ body {
     color: #8992a4;
 }
 
-/* ACTIONS */
+
+/* =========================
+   ACTIONS
+========================= */
 
 .actions {
-    margin-top: 25px;
+    width: 100%;
+
+    margin-top: 23px;
 }
 
 .save-button {
     width: 100%;
-    padding: 13px;
+
+    min-height: 45px;
+
+    padding:
+        12px 15px;
+
     border: none;
-    border-radius: 9px;
+
+    border-radius: 10px;
+
     background: #303747;
+
     color: white;
+
     font-size: 12px;
+
     font-weight: bold;
+
     cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        transform .15s,
+        opacity .15s;
 }
 
 .save-button:hover {
     opacity: .9;
+}
+
+.save-button:active {
+    transform: scale(.98);
 }
 
 .save-button:disabled {
@@ -276,36 +493,71 @@ body {
     cursor: not-allowed;
 }
 
-/* PREMIUM LINK */
+
+/* =========================
+   PREMIUM LINK
+========================= */
 
 .premium-link {
     display: none;
-    margin-top: 12px;
-    padding: 13px;
-    border-radius: 9px;
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    min-height: 45px;
+
+    padding:
+        13px 12px;
+
+    border-radius: 10px;
+
     background: #18152c;
-    border: 1px solid #514a88;
+
+    border:
+        1px solid #514a88;
+
     color: #c9c3ff;
+
     text-align: center;
+
     text-decoration: none;
+
     font-size: 11px;
+
     font-weight: bold;
+
+    touch-action: manipulation;
 }
 
 .premium-link.show {
     display: block;
 }
 
-/* MESSAGE */
+
+/* =========================
+   MESSAGE
+========================= */
 
 .message {
     display: none;
-    margin-top: 15px;
-    padding: 11px;
-    border-radius: 8px;
+
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding:
+        11px;
+
+    border-radius: 9px;
+
     text-align: center;
+
     font-size: 11px;
+
     line-height: 1.5;
+
+    overflow-wrap: anywhere;
 }
 
 .message.show {
@@ -315,27 +567,173 @@ body {
 .message.success {
     background: #10271c;
     color: #55db91;
-    border: 1px solid #1c4a31;
+    border:
+        1px solid #1c4a31;
 }
 
 .message.error {
     background: #2b1217;
     color: #ff7b88;
-    border: 1px solid #4b2028;
+    border:
+        1px solid #4b2028;
 }
 
 .message.info-message {
     background: #151b2b;
     color: #aaa6ff;
-    border: 1px solid #293149;
+    border:
+        1px solid #293149;
 }
 
-/* MOBILE */
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 600px) {
 
+    body {
+        padding:
+            12px 10px 28px;
+    }
+
+    .nav {
+        margin-bottom: 12px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .back {
+        font-size: 10px;
+
+        padding:
+            7px 9px;
+    }
+
     .card {
-        padding: 25px 18px;
+        padding:
+            25px 16px;
+
+        border-radius: 16px;
+    }
+
+    .avatar-wrapper {
+        width: 105px;
+        height: 105px;
+
+        margin-bottom: 15px;
+    }
+
+    .avatar {
+        width: 105px;
+        height: 105px;
+    }
+
+    .upload-button {
+        width: 35px;
+        height: 35px;
+
+        font-size: 14px;
+    }
+
+    .username {
+        font-size: 21px;
+    }
+
+    .username-editor {
+        max-width: 100%;
+    }
+
+    .username-input {
+        min-height: 46px;
+
+        font-size: 13px;
+    }
+
+    .info {
+        margin-top: 22px;
+    }
+
+    .info-row {
+        padding:
+            13px 0;
+
+        gap: 10px;
+    }
+
+    .info-label {
+        font-size: 10px;
+    }
+
+    .info-value {
+        font-size: 11px;
+    }
+
+    .save-button,
+    .premium-link {
+        min-height: 46px;
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+    body {
+        padding:
+            10px 8px 25px;
+    }
+
+    .card {
+        padding:
+            22px 13px;
+    }
+
+    .avatar-wrapper {
+        width: 95px;
+        height: 95px;
+    }
+
+    .avatar {
+        width: 95px;
+        height: 95px;
+    }
+
+    .upload-button {
+        width: 32px;
+        height: 32px;
+
+        font-size: 13px;
+    }
+
+    .username {
+        font-size: 19px;
+    }
+
+    .info-row {
+        align-items:
+            flex-start;
+    }
+
+}
+
+
+/* =========================
+   TOUCH DEVICES
+========================= */
+
+@media (hover: none) {
+
+    .back:hover,
+    .save-button:hover,
+    .upload-button:hover {
+        opacity: 1;
     }
 
 }
@@ -348,23 +746,29 @@ body {
 
 <div class="container">
 
-<!-- NAV -->
+<!-- =========================
+     NAV
+========================= -->
 
 <div class="nav">
-
 
 <div class="logo">
     Talk<span>Room</span>
 </div>
 
-<a href="index.html" class="back">
+<a
+    href="index.html"
+    class="back"
+>
     ← Home
 </a>
 
 
 </div>
 
-<!-- PROFILE CARD -->
+<!-- =========================
+     PROFILE CARD
+========================= -->
 
 <div class="card">
 
@@ -386,10 +790,10 @@ body {
     class="upload-button"
     onclick="openAvatarPicker()"
     title="Change profile photo"
+    aria-label="Change profile photo"
 >
     📷
 </button>
-
 
 </div>
 
@@ -417,7 +821,6 @@ onchange="uploadAvatar(event)"
     class="username-editor"
 >
 
-
 <input
     id="usernameInput"
     class="username-input"
@@ -425,6 +828,8 @@ onchange="uploadAvatar(event)"
     maxlength="20"
     placeholder="Enter new username"
     autocomplete="off"
+    autocapitalize="none"
+    spellcheck="false"
 >
 
 <div class="username-hint">
@@ -457,7 +862,9 @@ onchange="uploadAvatar(event)"
 
 </div>
 
-<!-- INFORMATION -->
+<!-- =========================
+     INFORMATION
+========================= -->
 
 <div class="info">
 
@@ -495,7 +902,6 @@ onchange="uploadAvatar(event)"
 
 <div class="info-row">
 
-
 <div class="info-label">
     Premium
 </div>
@@ -516,7 +922,6 @@ onchange="uploadAvatar(event)"
     style="display:none;"
 >
 
-
 <div class="info-label">
     Premium expires
 </div>
@@ -533,10 +938,11 @@ onchange="uploadAvatar(event)"
 
 </div>
 
-<!-- ACTIONS -->
+<!-- =========================
+     ACTIONS
+========================= -->
 
 <div class="actions">
-
 
 <button
     id="saveButton"
@@ -545,6 +951,7 @@ onchange="uploadAvatar(event)"
 >
     Save Profile
 </button>
+
 
 <a
     id="premiumLink"
@@ -569,6 +976,10 @@ onchange="uploadAvatar(event)"
 </div>
 
 <script>
+
+/* ==========================================
+   GLOBALS
+========================================== */
 
 let currentUser = null;
 let currentProfile = null;
@@ -629,15 +1040,22 @@ function defaultAvatar() {
    MESSAGE
 ========================================== */
 
-function showMessage(text, type) {
+function showMessage(
+    text,
+    type
+) {
 
     const message =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
-    message.textContent = text;
+    message.textContent =
+        text;
 
     message.className =
-        "message show " + type;
+        "message show " +
+        type;
 
 }
 
@@ -692,7 +1110,9 @@ async function loadProfile() {
 
     if (profileError) {
 
-        console.error(profileError);
+        console.error(
+            profileError
+        );
 
         showMessage(
             "Could not load your profile.",
@@ -777,7 +1197,9 @@ function renderProfile() {
 
 
     const avatar =
-        document.getElementById("avatar");
+        document.getElementById(
+            "avatar"
+        );
 
 
     const premium =
@@ -825,9 +1247,7 @@ function renderProfile() {
         );
 
 
-    /* ======================================
-       AVATAR
-    ====================================== */
+    /* AVATAR */
 
     if (
         premium &&
@@ -847,9 +1267,7 @@ function renderProfile() {
     }
 
 
-    /* ======================================
-       PREMIUM
-    ====================================== */
+    /* PREMIUM */
 
     if (premium) {
 
@@ -914,9 +1332,7 @@ function renderProfile() {
     }
 
 
-    /* ======================================
-       FREE
-    ====================================== */
+    /* FREE */
 
     else {
 
@@ -964,7 +1380,9 @@ function renderProfile() {
 
 function formatDate(date) {
 
-    return new Date(date).toLocaleDateString(
+    return new Date(
+        date
+    ).toLocaleDateString(
         undefined,
         {
             year: "numeric",
@@ -977,12 +1395,14 @@ function formatDate(date) {
 
 
 /* ==========================================
-   OPEN AVATAR PICKER
+   AVATAR PICKER
 ========================================== */
 
 function openAvatarPicker() {
 
-    if (!isPremiumActive()) {
+    if (
+        !isPremiumActive()
+    ) {
 
         showMessage(
             "Only Premium members can use profile photos.",
@@ -995,7 +1415,9 @@ function openAvatarPicker() {
 
 
     document
-        .getElementById("avatarInput")
+        .getElementById(
+            "avatarInput"
+        )
         .click();
 
 }
@@ -1007,14 +1429,17 @@ function openAvatarPicker() {
 
 async function uploadAvatar(event) {
 
-    if (!isPremiumActive()) {
+    if (
+        !isPremiumActive()
+    ) {
 
         showMessage(
             "Premium membership is required for profile photos.",
             "error"
         );
 
-        event.target.value = "";
+        event.target.value =
+            "";
 
         return;
 
@@ -1040,7 +1465,8 @@ async function uploadAvatar(event) {
             "error"
         );
 
-        event.target.value = "";
+        event.target.value =
+            "";
 
         return;
 
@@ -1065,7 +1491,8 @@ async function uploadAvatar(event) {
             "error"
         );
 
-        event.target.value = "";
+        event.target.value =
+            "";
 
         return;
 
@@ -1078,7 +1505,8 @@ async function uploadAvatar(event) {
         );
 
 
-    button.disabled = true;
+    button.disabled =
+        true;
 
 
     showMessage(
@@ -1124,9 +1552,12 @@ async function uploadAvatar(event) {
 
     if (uploadError) {
 
-        console.error(uploadError);
+        console.error(
+            uploadError
+        );
 
-        button.disabled = false;
+        button.disabled =
+            false;
 
         showMessage(
             "Upload failed: " +
@@ -1169,12 +1600,15 @@ async function uploadAvatar(event) {
             );
 
 
-    button.disabled = false;
+    button.disabled =
+        false;
 
 
     if (updateError) {
 
-        console.error(updateError);
+        console.error(
+            updateError
+        );
 
         showMessage(
             "Photo uploaded but profile could not be updated.",
@@ -1204,7 +1638,8 @@ async function uploadAvatar(event) {
     );
 
 
-    event.target.value = "";
+    event.target.value =
+        "";
 
 }
 
@@ -1228,9 +1663,7 @@ async function saveProfile() {
         currentProfile.username;
 
 
-    /* ======================================
-       PREMIUM USERNAME
-    ====================================== */
+    /* PREMIUM USERNAME */
 
     if (premium) {
 
@@ -1244,8 +1677,6 @@ async function saveProfile() {
             usernameInput.value.trim();
 
 
-        /* EMPTY */
-
         if (!username) {
 
             showMessage(
@@ -1258,9 +1689,9 @@ async function saveProfile() {
         }
 
 
-        /* MINIMUM */
-
-        if (username.length < 3) {
+        if (
+            username.length < 3
+        ) {
 
             showMessage(
                 "Username must be at least 3 characters.",
@@ -1272,9 +1703,9 @@ async function saveProfile() {
         }
 
 
-        /* MAXIMUM */
-
-        if (username.length > 20) {
+        if (
+            username.length > 20
+        ) {
 
             showMessage(
                 "Username must be 20 characters or less.",
@@ -1285,8 +1716,6 @@ async function saveProfile() {
 
         }
 
-
-        /* CHARACTERS */
 
         if (
             !/^[a-zA-Z0-9_-]+$/.test(
@@ -1312,7 +1741,8 @@ async function saveProfile() {
         );
 
 
-    saveButton.disabled = true;
+    saveButton.disabled =
+        true;
 
 
     showMessage(
@@ -1330,10 +1760,6 @@ async function saveProfile() {
 
     };
 
-
-    /* ======================================
-       ONLY PREMIUM CAN CHANGE USERNAME
-    ====================================== */
 
     if (premium) {
 
@@ -1357,12 +1783,15 @@ async function saveProfile() {
             );
 
 
-    saveButton.disabled = false;
+    saveButton.disabled =
+        false;
 
 
     if (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         showMessage(
             "Could not save profile: " +
@@ -1374,10 +1803,6 @@ async function saveProfile() {
 
     }
 
-
-    /* ======================================
-       UPDATE LOCAL PROFILE
-    ====================================== */
 
     currentProfile.username =
         username;
