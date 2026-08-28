@@ -1,17 +1,17 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>TalkRoom — Profile</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="js/config.js"></script>
 
 <style>
@@ -23,458 +23,318 @@
 }
 
 body {
-
     min-height: 100vh;
-
     background: #080b12;
-
     color: white;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+    font-family: Arial, Helvetica, sans-serif;
     padding: 25px 15px;
 }
 
-
-/* =========================
-   CONTAINER
-========================= */
-
 .container {
-
     width: 100%;
-
     max-width: 550px;
-
     margin: auto;
-
 }
 
-
-/* =========================
-   NAV
-========================= */
+/* NAV */
 
 .nav {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     margin-bottom: 20px;
 }
 
 .logo {
-
     font-size: 23px;
-
     font-weight: 800;
 }
 
 .logo span {
-
     color: #6c63ff;
 }
 
 .back {
-
     color: #8992a4;
-
     text-decoration: none;
-
     font-size: 11px;
 }
 
 .back:hover {
-
     color: white;
 }
 
-
-/* =========================
-   CARD
-========================= */
+/* CARD */
 
 .card {
-
     background: #0f141e;
-
     border: 1px solid #292f3c;
-
     border-radius: 18px;
-
     padding: 30px;
 }
 
-
-/* =========================
-   PROFILE HEADER
-========================= */
+/* PROFILE */
 
 .profile-header {
-
     text-align: center;
 }
 
-
-/* =========================
-   AVATAR
-========================= */
+/* AVATAR */
 
 .avatar-wrapper {
-
     position: relative;
-
     width: 125px;
-
     height: 125px;
-
     margin: 0 auto 18px;
 }
 
 .avatar {
-
     width: 125px;
-
     height: 125px;
-
     border-radius: 50%;
-
     object-fit: cover;
-
     background: #171d29;
-
     border: 3px solid #303848;
 }
 
 .avatar.premium-avatar {
-
     border-color: #6c63ff;
 }
 
-
-/* =========================
-   UPLOAD BUTTON
-========================= */
+/* UPLOAD */
 
 .upload-button {
-
     display: none;
-
     position: absolute;
-
     right: 0;
-
     bottom: 2px;
-
     width: 38px;
-
     height: 38px;
-
     border-radius: 50%;
-
     border: 3px solid #0f141e;
-
     background: #6c63ff;
-
     color: white;
-
     cursor: pointer;
-
     font-size: 16px;
 }
 
 .upload-button.show {
-
     display: block;
 }
 
 .upload-button:hover {
-
     opacity: .9;
 }
 
 .upload-button:disabled {
-
     opacity: .5;
-
     cursor: not-allowed;
 }
 
 #avatarInput {
-
     display: none;
 }
 
-
-/* =========================
-   USERNAME
-========================= */
+/* USERNAME */
 
 .username {
-
     font-size: 23px;
-
     font-weight: 800;
-
     margin-bottom: 8px;
 }
 
+/* USERNAME EDITOR */
 
-/* =========================
-   PREMIUM BADGE
-========================= */
+.username-editor {
+    display: none;
+    margin: 15px auto 0;
+    max-width: 300px;
+}
+
+.username-editor.show {
+    display: block;
+}
+
+.username-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 9px;
+    border: 1px solid #292f3c;
+    background: #151b26;
+    color: white;
+    outline: none;
+    text-align: center;
+    font-size: 12px;
+}
+
+.username-input:focus {
+    border-color: #6c63ff;
+}
+
+.username-hint {
+    margin-top: 7px;
+    color: #8992a4;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* PREMIUM */
 
 .premium-badge {
-
     display: none;
-
     width: fit-content;
-
     margin: 8px auto 0;
-
     padding: 6px 11px;
-
     border-radius: 20px;
-
     background: #1b1730;
-
     border: 1px solid #514a88;
-
     color: #c9c3ff;
-
     font-size: 10px;
-
     font-weight: bold;
 }
 
 .premium-badge.show {
-
     display: block;
 }
 
-
-/* =========================
-   FREE NOTICE
-========================= */
+/* FREE NOTICE */
 
 .free-notice {
-
     display: none;
-
     margin-top: 18px;
-
     padding: 12px;
-
     border-radius: 9px;
-
     background: #151b26;
-
     border: 1px solid #292f3c;
-
     color: #8992a4;
-
     font-size: 11px;
-
     line-height: 1.5;
-
     text-align: center;
 }
 
 .free-notice.show {
-
     display: block;
 }
 
-
-/* =========================
-   INFO
-========================= */
+/* INFO */
 
 .info {
-
     margin-top: 28px;
-
     border-top: 1px solid #252c39;
 }
 
 .info-row {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     padding: 15px 0;
-
     border-bottom: 1px solid #252c39;
 }
 
 .info-label {
-
     color: #8992a4;
-
     font-size: 11px;
 }
 
 .info-value {
-
     font-size: 12px;
-
     font-weight: bold;
 }
 
 .premium-active {
-
     color: #55db91;
 }
 
 .free-user {
-
     color: #8992a4;
 }
 
-
-/* =========================
-   ACTIONS
-========================= */
+/* ACTIONS */
 
 .actions {
-
     margin-top: 25px;
 }
 
 .save-button {
-
     width: 100%;
-
     padding: 13px;
-
     border: none;
-
     border-radius: 9px;
-
     background: #303747;
-
     color: white;
-
     font-size: 12px;
-
     font-weight: bold;
-
     cursor: pointer;
 }
 
 .save-button:hover {
-
     opacity: .9;
 }
 
+.save-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
 
-/* =========================
-   PREMIUM LINK
-========================= */
+/* PREMIUM LINK */
 
 .premium-link {
-
     display: none;
-
     margin-top: 12px;
-
     padding: 13px;
-
     border-radius: 9px;
-
     background: #18152c;
-
     border: 1px solid #514a88;
-
     color: #c9c3ff;
-
     text-align: center;
-
     text-decoration: none;
-
     font-size: 11px;
-
     font-weight: bold;
 }
 
 .premium-link.show {
-
     display: block;
 }
 
-
-/* =========================
-   MESSAGE
-========================= */
+/* MESSAGE */
 
 .message {
-
     display: none;
-
     margin-top: 15px;
-
     padding: 11px;
-
     border-radius: 8px;
-
     text-align: center;
-
     font-size: 11px;
-
     line-height: 1.5;
 }
 
-.success {
-
+.message.show {
     display: block;
+}
 
+.message.success {
     background: #10271c;
-
     color: #55db91;
-
     border: 1px solid #1c4a31;
 }
 
-.error {
-
-    display: block;
-
+.message.error {
     background: #2b1217;
-
     color: #ff7b88;
-
     border: 1px solid #4b2028;
 }
 
-.info-message {
-
-    display: block;
-
+.message.info-message {
     background: #151b2b;
-
     color: #aaa6ff;
-
     border: 1px solid #293149;
 }
 
-
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
 @media (max-width: 600px) {
 
     .card {
-
         padding: 25px 18px;
     }
 
@@ -484,69 +344,63 @@ body {
 
 </head>
 
-
 <body>
 
-
 <div class="container">
-
 
 <!-- NAV -->
 
 <div class="nav">
 
-    <div class="logo">
-        Talk<span>Room</span>
-    </div>
+```
+<div class="logo">
+    Talk<span>Room</span>
+</div>
 
-    <a
-        href="index.html"
-        class="back"
-    >
-        ← Home
-    </a>
+<a href="index.html" class="back">
+    ← Home
+</a>
+```
 
 </div>
 
-
-<!-- PROFILE -->
+<!-- PROFILE CARD -->
 
 <div class="card">
 
-
 <div class="profile-header">
-
 
 <!-- AVATAR -->
 
 <div class="avatar-wrapper">
 
-    <img
-        id="avatar"
-        class="avatar"
-        src=""
-        alt="Profile photo"
-    >
+```
+<img
+    id="avatar"
+    class="avatar"
+    src=""
+    alt="Profile photo"
+>
 
-    <button
-        id="uploadButton"
-        class="upload-button"
-        onclick="openAvatarPicker()"
-        title="Change profile photo"
-    >
-        📷
-    </button>
+<button
+    id="uploadButton"
+    class="upload-button"
+    onclick="openAvatarPicker()"
+    title="Change profile photo"
+>
+    📷
+</button>
+```
 
 </div>
 
-
 <input
-    id="avatarInput"
-    type="file"
-    accept="image/jpeg,image/png,image/webp"
-    onchange="uploadAvatar(event)"
->
+id="avatarInput"
+type="file"
+accept="image/jpeg,image/png,image/webp"
+onchange="uploadAvatar(event)"
 
+>
 
 <!-- USERNAME -->
 
@@ -557,60 +411,30 @@ body {
     Loading...
 </div>
 
-      <input
+<!-- USERNAME EDITOR -->
+
+<div
+    id="usernameEditor"
+    class="username-editor"
+>
+
+```
+<input
     id="usernameInput"
+    class="username-input"
     type="text"
     maxlength="20"
-    placeholder="Enter username"
+    placeholder="Enter new username"
     autocomplete="off"
-    style="
-        display: none;
-        width: 100%;
-        max-width: 280px;
-        margin: 12px auto 0;
-        padding: 11px 13px;
-        border-radius: 9px;
-        border: 1px solid #292f3c;
-        background: #151b26;
-        color: white;
-        outline: none;
-        text-align: center;
-        font-size: 12px;
-    "
 >
-<div id="usernameEditor" style="display:none; margin-top:15px;">
 
-    <input
-        id="usernameInput"
-        type="text"
-        maxlength="20"
-        placeholder="Enter new username"
-        autocomplete="off"
-        style="
-            width:100%;
-            padding:12px;
-            border-radius:9px;
-            border:1px solid #292f3c;
-            background:#151b26;
-            color:white;
-            outline:none;
-            font-size:12px;
-        "
-    >
-
-    <div
-        id="usernameHint"
-        style="
-            margin-top:7px;
-            color:#8992a4;
-            font-size:10px;
-        "
-    >
-        Premium members can change their username.
-    </div>
+<div class="username-hint">
+    ⭐ Premium members can change their username.
+    3–20 characters. Letters, numbers, _ and - only.
+</div>
+```
 
 </div>
-
 
 <!-- PREMIUM BADGE -->
 
@@ -621,73 +445,73 @@ body {
     ⭐ PREMIUM MEMBER
 </div>
 
-
 <!-- FREE NOTICE -->
 
 <div
     id="freeNotice"
     class="free-notice"
 >
-    Profile photos are available to Premium members.
-    Upgrade to Premium to add your photo.
+    Profile photos and username changes are available
+    to Premium members. Upgrade to Premium to unlock
+    these features.
 </div>
 
-
 </div>
-
 
 <!-- INFORMATION -->
 
 <div class="info">
 
-
 <div class="info-row">
 
-    <div class="info-label">
-        Username
-    </div>
+```
+<div class="info-label">
+    Username
+</div>
 
-    <div
-        id="usernameInfo"
-        class="info-value"
-    >
-        —
-    </div>
+<div
+    id="usernameInfo"
+    class="info-value"
+>
+    —
+</div>
+```
 
 </div>
 
-
 <div class="info-row">
 
-    <div class="info-label">
-        Account
-    </div>
+```
+<div class="info-label">
+    Account
+</div>
 
-    <div
-        id="accountStatus"
-        class="info-value"
-    >
-        —
-    </div>
+<div
+    id="accountStatus"
+    class="info-value"
+>
+    —
+</div>
+```
 
 </div>
 
-
 <div class="info-row">
 
-    <div class="info-label">
-        Premium
-    </div>
-
-    <div
-        id="premiumStatus"
-        class="info-value"
-    >
-        —
-    </div>
-
+```
+<div class="info-label">
+    Premium
 </div>
 
+<div
+    id="premiumStatus"
+    class="info-value"
+>
+    —
+</div>
+```
+
+</div>
 
 <div
     id="expiryRow"
@@ -695,46 +519,46 @@ body {
     style="display:none;"
 >
 
-    <div class="info-label">
-        Premium expires
-    </div>
+```
+<div class="info-label">
+    Premium expires
+</div>
 
-    <div
-        id="premiumExpiry"
-        class="info-value"
-    >
-        —
-    </div>
+<div
+    id="premiumExpiry"
+    class="info-value"
+>
+    —
+</div>
+```
 
 </div>
 
-
 </div>
-
 
 <!-- ACTIONS -->
 
 <div class="actions">
 
-    <button
-        id="saveButton"
-        class="save-button"
-        onclick="saveProfile()"
-    >
-        Save Profile
-    </button>
+```
+<button
+    id="saveButton"
+    class="save-button"
+    onclick="saveProfile()"
+>
+    Save Profile
+</button>
 
-
-    <a
-        id="premiumLink"
-        href="premium.html"
-        class="premium-link"
-    >
-        ⭐ Upgrade to Premium
-    </a>
+<a
+    id="premiumLink"
+    href="premium.html"
+    class="premium-link"
+>
+    ⭐ Upgrade to Premium
+</a>
+```
 
 </div>
-
 
 <!-- MESSAGE -->
 
@@ -743,18 +567,13 @@ body {
     class="message"
 ></div>
 
-
 </div>
 
-
 </div>
-
 
 <script>
 
-
 let currentUser = null;
-
 let currentProfile = null;
 
 
@@ -813,22 +632,15 @@ function defaultAvatar() {
    MESSAGE
 ========================================== */
 
-function showMessage(
-    text,
-    type
-) {
+function showMessage(text, type) {
 
     const message =
-        document.getElementById(
-            "message"
-        );
+        document.getElementById("message");
 
-    message.textContent =
-        text;
+    message.textContent = text;
 
     message.className =
-        "message " +
-        type;
+        "message show " + type;
 
 }
 
@@ -883,9 +695,7 @@ async function loadProfile() {
 
     if (profileError) {
 
-        console.error(
-            profileError
-        );
+        console.error(profileError);
 
         showMessage(
             "Could not load your profile.",
@@ -940,7 +750,7 @@ function isPremiumActive() {
 
 
 /* ==========================================
-   RENDER
+   RENDER PROFILE
 ========================================== */
 
 function renderProfile() {
@@ -970,42 +780,12 @@ function renderProfile() {
 
 
     const avatar =
-        document.getElementById(
-            "avatar"
-        );
+        document.getElementById("avatar");
 
 
     const premium =
         isPremiumActive();
 
-
-    /* =========================
-       AVATAR
-    ========================= */
-
-    if (
-        premium &&
-        currentProfile.avatar_url
-    ) {
-
-        avatar.src =
-            currentProfile.avatar_url;
-
-    }
-
-    else {
-document.getElementById(
-    "usernameEditor"
-).style.display = "none";
-        avatar.src =
-            defaultAvatar();
-
-    }
-
-
-    /* =========================
-       ELEMENTS
-    ========================= */
 
     const uploadButton =
         document.getElementById(
@@ -1037,20 +817,45 @@ document.getElementById(
             "premiumLink"
         );
 
+    const usernameEditor =
+        document.getElementById(
+            "usernameEditor"
+        );
 
-    /* =========================
-       PREMIUM USER
-    ========================= */
+    const usernameInput =
+        document.getElementById(
+            "usernameInput"
+        );
+
+
+    /* ======================================
+       AVATAR
+    ====================================== */
+
+    if (
+        premium &&
+        currentProfile.avatar_url
+    ) {
+
+        avatar.src =
+            currentProfile.avatar_url;
+
+    }
+
+    else {
+
+        avatar.src =
+            defaultAvatar();
+
+    }
+
+
+    /* ======================================
+       PREMIUM
+    ====================================== */
 
     if (premium) {
-document.getElementById(
-    "usernameEditor"
-).style.display = "block";
 
-document.getElementById(
-    "usernameInput"
-).value =
-    currentProfile.username || "";
         uploadButton.classList.add(
             "show"
         );
@@ -1066,6 +871,13 @@ document.getElementById(
         avatar.classList.add(
             "premium-avatar"
         );
+
+        usernameEditor.classList.add(
+            "show"
+        );
+
+        usernameInput.value =
+            currentProfile.username || "";
 
         premiumStatus.textContent =
             "⭐ Active";
@@ -1090,6 +902,13 @@ document.getElementById(
 
         }
 
+        else {
+
+            expiryRow.style.display =
+                "none";
+
+        }
+
 
         premiumLink.classList.remove(
             "show"
@@ -1098,9 +917,9 @@ document.getElementById(
     }
 
 
-    /* =========================
-       FREE USER
-    ========================= */
+    /* ======================================
+       FREE
+    ====================================== */
 
     else {
 
@@ -1118,6 +937,10 @@ document.getElementById(
 
         avatar.classList.remove(
             "premium-avatar"
+        );
+
+        usernameEditor.classList.remove(
+            "show"
         );
 
         premiumStatus.textContent =
@@ -1142,13 +965,9 @@ document.getElementById(
    DATE
 ========================================== */
 
-function formatDate(
-    date
-) {
+function formatDate(date) {
 
-    return new Date(
-        date
-    ).toLocaleDateString(
+    return new Date(date).toLocaleDateString(
         undefined,
         {
             year: "numeric",
@@ -1161,14 +980,12 @@ function formatDate(
 
 
 /* ==========================================
-   FILE PICKER
+   OPEN AVATAR PICKER
 ========================================== */
 
 function openAvatarPicker() {
 
-    if (
-        !isPremiumActive()
-    ) {
+    if (!isPremiumActive()) {
 
         showMessage(
             "Only Premium members can use profile photos.",
@@ -1181,9 +998,7 @@ function openAvatarPicker() {
 
 
     document
-        .getElementById(
-            "avatarInput"
-        )
+        .getElementById("avatarInput")
         .click();
 
 }
@@ -1193,23 +1008,16 @@ function openAvatarPicker() {
    UPLOAD AVATAR
 ========================================== */
 
-async function uploadAvatar(
-    event
-) {
+async function uploadAvatar(event) {
 
-    /* SECURITY CHECK */
-
-    if (
-        !isPremiumActive()
-    ) {
+    if (!isPremiumActive()) {
 
         showMessage(
             "Premium membership is required for profile photos.",
             "error"
         );
 
-        event.target.value =
-            "";
+        event.target.value = "";
 
         return;
 
@@ -1221,13 +1029,9 @@ async function uploadAvatar(
 
 
     if (!file) {
-
         return;
-
     }
 
-
-    /* SIZE */
 
     if (
         file.size >
@@ -1239,22 +1043,17 @@ async function uploadAvatar(
             "error"
         );
 
-        event.target.value =
-            "";
+        event.target.value = "";
 
         return;
 
     }
 
 
-    /* TYPE */
-
     const allowedTypes = [
-
         "image/jpeg",
         "image/png",
         "image/webp"
-
     ];
 
 
@@ -1269,8 +1068,7 @@ async function uploadAvatar(
             "error"
         );
 
-        event.target.value =
-            "";
+        event.target.value = "";
 
         return;
 
@@ -1283,8 +1081,7 @@ async function uploadAvatar(
         );
 
 
-    button.disabled =
-        true;
+    button.disabled = true;
 
 
     showMessage(
@@ -1292,13 +1089,6 @@ async function uploadAvatar(
         "info-message"
     );
 
-
-    /*
-       Use a unique file name.
-
-       This avoids browser/cache problems
-       when replacing a previous photo.
-    */
 
     const extension =
         file.type === "image/png"
@@ -1315,10 +1105,6 @@ async function uploadAvatar(
         "." +
         extension;
 
-
-    /* =========================
-       UPLOAD
-    ========================= */
 
     const {
         error: uploadError
@@ -1341,12 +1127,9 @@ async function uploadAvatar(
 
     if (uploadError) {
 
-        console.error(
-            uploadError
-        );
+        console.error(uploadError);
 
-        button.disabled =
-            false;
+        button.disabled = false;
 
         showMessage(
             "Upload failed: " +
@@ -1358,10 +1141,6 @@ async function uploadAvatar(
 
     }
 
-
-    /* =========================
-       PUBLIC URL
-    ========================= */
 
     const {
         data: publicData
@@ -1378,10 +1157,6 @@ async function uploadAvatar(
         publicData.publicUrl;
 
 
-    /* =========================
-       SAVE PROFILE URL
-    ========================= */
-
     const {
         error: updateError
     } =
@@ -1397,15 +1172,12 @@ async function uploadAvatar(
             );
 
 
-    button.disabled =
-        false;
+    button.disabled = false;
 
 
     if (updateError) {
 
-        console.error(
-            updateError
-        );
+        console.error(updateError);
 
         showMessage(
             "Photo uploaded but profile could not be updated.",
@@ -1416,8 +1188,6 @@ async function uploadAvatar(
 
     }
 
-
-    /* UPDATE LOCAL PROFILE */
 
     currentProfile.avatar_url =
         avatarUrl;
@@ -1437,8 +1207,7 @@ async function uploadAvatar(
     );
 
 
-    event.target.value =
-        "";
+    event.target.value = "";
 
 }
 
@@ -1453,24 +1222,32 @@ async function saveProfile() {
         return;
     }
 
+
     const premium =
         isPremiumActive();
+
 
     let username =
         currentProfile.username;
 
 
-    /* =========================
+    /* ======================================
        PREMIUM USERNAME
-    ========================= */
+    ====================================== */
 
     if (premium) {
 
-        username =
+        const usernameInput =
             document.getElementById(
                 "usernameInput"
-            ).value.trim();
+            );
 
+
+        username =
+            usernameInput.value.trim();
+
+
+        /* EMPTY */
 
         if (!username) {
 
@@ -1480,8 +1257,11 @@ async function saveProfile() {
             );
 
             return;
+
         }
 
+
+        /* MINIMUM */
 
         if (username.length < 3) {
 
@@ -1491,8 +1271,11 @@ async function saveProfile() {
             );
 
             return;
+
         }
 
+
+        /* MAXIMUM */
 
         if (username.length > 20) {
 
@@ -1502,8 +1285,11 @@ async function saveProfile() {
             );
 
             return;
+
         }
 
+
+        /* CHARACTERS */
 
         if (
             !/^[a-zA-Z0-9_-]+$/.test(
@@ -1517,14 +1303,26 @@ async function saveProfile() {
             );
 
             return;
+
         }
 
     }
 
 
-    /* =========================
-       SAVE PROFILE
-    ========================= */
+    const saveButton =
+        document.getElementById(
+            "saveButton"
+        );
+
+
+    saveButton.disabled = true;
+
+
+    showMessage(
+        "Saving profile...",
+        "info-message"
+    );
+
 
     const updateData = {
 
@@ -1536,10 +1334,9 @@ async function saveProfile() {
     };
 
 
-    /*
-       Only Premium users can
-       change username.
-    */
+    /* ======================================
+       ONLY PREMIUM CAN CHANGE USERNAME
+    ====================================== */
 
     if (premium) {
 
@@ -1563,11 +1360,12 @@ async function saveProfile() {
             );
 
 
+    saveButton.disabled = false;
+
+
     if (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         showMessage(
             "Could not save profile: " +
@@ -1580,12 +1378,20 @@ async function saveProfile() {
     }
 
 
-    /* =========================
+    /* ======================================
        UPDATE LOCAL PROFILE
-    ========================= */
+    ====================================== */
 
     currentProfile.username =
         username;
+
+
+    if (!premium) {
+
+        currentProfile.avatar_url =
+            null;
+
+    }
 
 
     document.getElementById(
@@ -1608,14 +1414,6 @@ async function saveProfile() {
 }
 
 
-    showMessage(
-        "Profile saved successfully.",
-        "success"
-    );
-
-}
-
-
 /* ==========================================
    START
 ========================================== */
@@ -1624,8 +1422,6 @@ loadProfile();
 
 </script>
 
-
 </body>
 
 </html>
-
