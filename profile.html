@@ -1429,32 +1429,113 @@ async function uploadAvatar(
 async function saveProfile() {
 
     if (!currentUser) {
-
         return;
+    }
+
+    const premium =
+        isPremiumActive();
+
+    let username =
+        currentProfile.username;
+
+
+    /* =========================
+       PREMIUM USERNAME
+    ========================= */
+
+    if (premium) {
+
+        username =
+            document.getElementById(
+                "usernameInput"
+            ).value.trim();
+
+
+        if (!username) {
+
+            showMessage(
+                "Username cannot be empty.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (username.length < 3) {
+
+            showMessage(
+                "Username must be at least 3 characters.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (username.length > 20) {
+
+            showMessage(
+                "Username must be 20 characters or less.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            !/^[a-zA-Z0-9_-]+$/.test(
+                username
+            )
+        ) {
+
+            showMessage(
+                "Username can only contain letters, numbers, _ or -.",
+                "error"
+            );
+
+            return;
+        }
 
     }
 
 
-    /*
-       Only save the avatar URL.
+    /* =========================
+       SAVE PROFILE
+    ========================= */
 
-       Premium status is NOT changed
-       from this page.
+    const updateData = {
+
+        avatar_url:
+            premium
+            ? currentProfile.avatar_url
+            : null
+
+    };
+
+
+    /*
+       Only Premium users can
+       change username.
     */
+
+    if (premium) {
+
+        updateData.username =
+            username;
+
+    }
+
 
     const {
         error
     } =
         await supabaseClient
             .from("profiles")
-            .update({
-
-                avatar_url:
-                    isPremiumActive()
-                    ? currentProfile.avatar_url
-                    : null
-
-            })
+            .update(
+                updateData
+            )
             .eq(
                 "id",
                 currentUser.id
@@ -1468,13 +1549,42 @@ async function saveProfile() {
         );
 
         showMessage(
-            "Could not save profile.",
+            "Could not save profile: " +
+            error.message,
             "error"
         );
 
         return;
 
     }
+
+
+    /* =========================
+       UPDATE LOCAL PROFILE
+    ========================= */
+
+    currentProfile.username =
+        username;
+
+
+    document.getElementById(
+        "username"
+    ).textContent =
+        username;
+
+
+    document.getElementById(
+        "usernameInfo"
+    ).textContent =
+        username;
+
+
+    showMessage(
+        "Profile saved successfully.",
+        "success"
+    );
+
+}
 
 
     showMessage(
