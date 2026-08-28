@@ -367,34 +367,38 @@
 
                     }
 
+/*
+    Create profile only when a session exists.
 
-                    /*
-                        Create/update profile
-                    */
+    If email confirmation is enabled,
+    the user is not authenticated yet,
+    so RLS correctly blocks the insert.
+*/
 
-                    const {
-                        error: profileError
-                    } =
-                        await supabaseClient
-                            .from("profiles")
-                            .upsert(
-                                {
-                                    id: data.user.id,
+if (data.session) {
 
-                                    username:
-                                        cleanUsername
-                                },
-                                {
-                                    onConflict: "id"
-                                }
-                            );
+    const {
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .upsert(
+                {
+                    id: data.user.id,
 
+                    username:
+                        cleanUsername
+                },
+                {
+                    onConflict: "id"
+                }
+            );
 
-                    if (profileError) {
+    if (profileError) {
+        throw profileError;
+    }
 
-                        throw profileError;
-
-                    }
+}
 
 
                     message.style.color =
