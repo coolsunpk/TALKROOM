@@ -4,51 +4,53 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>TalkRoom — Free Online Chat Rooms & Community</title>
+<title>TalkRoom — Free Online Chat Rooms & Community</title>
 
-    <meta name="description"
-          content="TalkRoom is a free online chat community where you can join chat rooms, meet people, and chat in real time.">
+<meta name="description"
+      content="TalkRoom is a free online chat community where you can join chat rooms, meet people, and chat in real time.">
 
-    <meta name="robots"
-          content="index, follow">
+<meta name="robots"
+      content="index, follow">
 
-    <link rel="canonical"
-          href="https://talkroom.fun/">
+<link rel="canonical"
+      href="https://talkroom.fun/">
 
-    <!-- Open Graph -->
+<!-- Open Graph -->
+<meta property="og:type"
+      content="website">
 
-    <meta property="og:type"
-          content="website">
+<meta property="og:title"
+      content="TalkRoom — Free Online Chat Rooms">
 
-    <meta property="og:title"
-          content="TalkRoom — Free Online Chat Rooms">
+<meta property="og:description"
+      content="Join TalkRoom and chat with people in real time across online chat rooms.">
 
-    <meta property="og:description"
-          content="Join TalkRoom and chat with people in real time across online chat rooms.">
+<meta property="og:url"
+      content="https://talkroom.fun/">
 
-    <meta property="og:url"
-          content="https://talkroom.fun/">
+<meta property="og:site_name"
+      content="TalkRoom">
 
-    <meta property="og:site_name"
-          content="TalkRoom">
+<!-- Twitter -->
+<meta name="twitter:card"
+      content="summary">
 
-    <!-- Twitter -->
+<meta name="twitter:title"
+      content="TalkRoom — Free Online Chat Rooms">
 
-    <meta name="twitter:card"
-          content="summary">
+<meta name="twitter:description"
+      content="Join TalkRoom and chat with people in real time.">
 
-    <meta name="twitter:title"
-          content="TalkRoom — Free Online Chat Rooms">
+<style>
 
-    <meta name="twitter:description"
-          content="Join TalkRoom and chat with people in real time.">
-
-    <style>
+/* =========================
+   RESET
+========================= */
 
 * {
     margin: 0;
@@ -56,11 +58,31 @@
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #0b0f19;
-    color: white;
+    width: 100%;
     min-height: 100vh;
+
+    background: #0b0f19;
+
+    color: white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+}
+
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -70,18 +92,28 @@ body {
 
 nav {
     width: 100%;
+
     padding: 18px 7%;
 
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 
-    border-bottom: 1px solid #202635;
+    gap: 20px;
+
+    border-bottom:
+        1px solid #202635;
 }
 
 .logo {
+    flex-shrink: 0;
+
     font-size: 26px;
+
     font-weight: bold;
+
     letter-spacing: -1px;
 }
 
@@ -91,13 +123,25 @@ nav {
 
 .nav-buttons {
     display: flex;
-    gap: 8px;
+
     align-items: center;
+
     justify-content: flex-end;
+
+    gap: 8px;
+
     flex-wrap: wrap;
 }
 
 .btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 38px;
+
     padding: 9px 13px;
 
     border-radius: 8px;
@@ -105,36 +149,55 @@ nav {
     text-decoration: none;
 
     font-weight: bold;
+
     font-size: 12px;
 
-    transition: .2s;
+    white-space: nowrap;
+
+    transition:
+        .2s;
 }
 
 .btn:hover {
     opacity: .85;
-    transform: translateY(-1px);
+
+    transform:
+        translateY(-1px);
 }
 
 .login {
     color: white;
-    border: 1px solid #303747;
+
+    border:
+        1px solid #303747;
 }
 
 .signup {
-    background: #6c63ff;
+    background:
+        #6c63ff;
+
     color: white;
 }
 
 .premium-nav {
-    color: #d0cbff;
-    border: 1px solid #514a88;
-    background: #17152a;
+    color:
+        #d0cbff;
+
+    border:
+        1px solid #514a88;
+
+    background:
+        #17152a;
 }
 
 .profile-nav {
-    color: #ffffff;
-    border: 1px solid #303747;
-    background: #111725;
+    color: white;
+
+    border:
+        1px solid #303747;
+
+    background:
+        #111725;
 }
 
 
@@ -143,63 +206,96 @@ nav {
 ========================= */
 
 .hero {
+    width: 100%;
+
     min-height: 67vh;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
 
-    padding: 65px 20px 50px;
+    padding:
+        70px 20px 60px;
 }
 
 .hero-content {
+    width: 100%;
+
     max-width: 900px;
 }
 
 .badge {
-    display: inline-block;
+    display: inline-flex;
 
-    background: #151b2b;
+    align-items: center;
 
-    border: 1px solid #293149;
+    justify-content: center;
 
-    padding: 8px 15px;
+    max-width: 100%;
 
-    border-radius: 30px;
+    background:
+        #151b2b;
 
-    color: #aaa6ff;
+    border:
+        1px solid #293149;
 
-    font-size: 13px;
+    padding:
+        8px 15px;
 
-    margin-bottom: 24px;
+    border-radius:
+        30px;
+
+    color:
+        #aaa6ff;
+
+    font-size:
+        13px;
+
+    margin-bottom:
+        24px;
 }
 
 h1 {
-    font-size: clamp(45px, 8vw, 82px);
+    font-size:
+        clamp(44px, 8vw, 82px);
 
-    line-height: 1;
+    line-height:
+        .98;
 
-    margin-bottom: 25px;
+    margin-bottom:
+        25px;
 
-    letter-spacing: -4px;
+    letter-spacing:
+        -4px;
 }
 
 h1 span {
-    color: #6c63ff;
+    color:
+        #6c63ff;
 }
 
 .hero p {
-    color: #9da5b5;
+    color:
+        #9da5b5;
 
-    font-size: 18px;
+    font-size:
+        18px;
 
-    line-height: 1.6;
+    line-height:
+        1.6;
 
-    max-width: 680px;
+    width:
+        100%;
 
-    margin: auto;
+    max-width:
+        680px;
+
+    margin:
+        auto;
 }
 
 
@@ -208,15 +304,25 @@ h1 span {
 ========================= */
 
 .hero-buttons {
-    margin-top: 34px;
+    width: 100%;
 
-    display: flex;
+    margin-top:
+        34px;
 
-    justify-content: center;
+    display:
+        flex;
 
-    gap: 10px;
+    justify-content:
+        center;
 
-    flex-wrap: wrap;
+    align-items:
+        stretch;
+
+    gap:
+        10px;
+
+    flex-wrap:
+        wrap;
 }
 
 .main-btn,
@@ -225,45 +331,84 @@ h1 span {
 .create-btn,
 .profile-btn {
 
-    padding: 14px 21px;
+    display:
+        inline-flex;
 
-    border-radius: 10px;
+    align-items:
+        center;
 
-    text-decoration: none;
+    justify-content:
+        center;
 
-    font-weight: bold;
+    min-height:
+        48px;
 
-    font-size: 13px;
+    padding:
+        14px 21px;
 
-    transition: .2s;
+    border-radius:
+        10px;
+
+    text-decoration:
+        none;
+
+    font-weight:
+        bold;
+
+    font-size:
+        13px;
+
+    transition:
+        .2s;
 }
 
 .main-btn {
-    background: #6c63ff;
-    color: white;
+    background:
+        #6c63ff;
+
+    color:
+        white;
 }
 
 .secondary-btn {
-    border: 1px solid #303747;
-    color: white;
+    border:
+        1px solid #303747;
+
+    color:
+        white;
 }
 
 .premium-btn {
-    background: #18152c;
-    border: 1px solid #514a88;
-    color: #c9c3ff;
+    background:
+        #18152c;
+
+    border:
+        1px solid #514a88;
+
+    color:
+        #c9c3ff;
 }
 
 .create-btn {
-    border: 1px solid #303747;
-    color: white;
-    background: #111725;
+    border:
+        1px solid #303747;
+
+    color:
+        white;
+
+    background:
+        #111725;
 }
 
 .profile-btn {
-    border: 1px solid #303747;
-    color: white;
-    background: #111725;
+    border:
+        1px solid #303747;
+
+    color:
+        white;
+
+    background:
+        #111725;
 }
 
 .main-btn:hover,
@@ -272,105 +417,146 @@ h1 span {
 .create-btn:hover,
 .profile-btn:hover {
 
-    opacity: .88;
+    opacity:
+        .88;
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-2px);
 }
 
 
 /* =========================
-   ROOMS
+   ROOMS SECTION
 ========================= */
 
 .rooms-section {
-    padding: 55px 7% 75px;
+    width: 100%;
+
+    padding:
+        55px 7% 75px;
 }
 
 .section-title {
-    text-align: center;
-    margin-bottom: 32px;
+    text-align:
+        center;
+
+    margin-bottom:
+        32px;
 }
 
 .section-title h2 {
-    font-size: 31px;
-    margin-bottom: 9px;
+    font-size:
+        31px;
+
+    margin-bottom:
+        9px;
 }
 
 .section-title p {
-    color: #858d9e;
-    font-size: 14px;
+    color:
+        #858d9e;
+
+    font-size:
+        14px;
 }
 
 .rooms {
+    width: 100%;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
-    repeat(auto-fit, minmax(220px, 1fr));
+        repeat(
+            auto-fit,
+            minmax(220px, 1fr)
+        );
 
-    gap: 17px;
+    gap:
+        17px;
 
-    max-width: 1100px;
+    max-width:
+        1100px;
 
-    margin: auto;
+    margin:
+        auto;
 }
 
 .room {
+    width: 100%;
 
-    background: #111725;
+    background:
+        #111725;
 
-    border: 1px solid #222a3a;
+    border:
+        1px solid #222a3a;
 
-    padding: 24px;
+    padding:
+        24px;
 
-    border-radius: 14px;
+    border-radius:
+        14px;
 
-    transition: .2s;
+    transition:
+        .2s;
 
-    text-decoration: none;
+    text-decoration:
+        none;
 
-    color: white;
+    color:
+        white;
 
-    display: block;
+    display:
+        block;
+
+    min-width:
+        0;
 }
 
 .room:hover {
+    transform:
+        translateY(-4px);
 
-    transform: translateY(-4px);
-
-    border-color: #6c63ff;
+    border-color:
+        #6c63ff;
 }
 
 .room-icon {
+    font-size:
+        30px;
 
-    font-size: 30px;
-
-    margin-bottom: 14px;
+    margin-bottom:
+        14px;
 }
 
 .room h3 {
+    margin-bottom:
+        8px;
 
-    margin-bottom: 8px;
-
-    font-size: 18px;
+    font-size:
+        18px;
 }
 
 .room p {
+    color:
+        #818a9c;
 
-    color: #818a9c;
+    font-size:
+        13px;
 
-    font-size: 13px;
-
-    line-height: 1.5;
+    line-height:
+        1.5;
 }
 
 .online {
+    margin-top:
+        15px;
 
-    margin-top: 15px;
+    color:
+        #55d98a;
 
-    color: #55d98a;
-
-    font-size: 12px;
+    font-size:
+        12px;
 }
 
 
@@ -379,73 +565,109 @@ h1 span {
 ========================= */
 
 .premium-section {
+    width: 100%;
 
-    padding: 10px 7% 70px;
+    padding:
+        10px 7% 70px;
 }
 
 .premium-card {
+    width: 100%;
 
-    max-width: 1100px;
+    max-width:
+        1100px;
 
-    margin: auto;
+    margin:
+        auto;
 
-    padding: 32px;
+    padding:
+        32px;
 
-    border-radius: 16px;
+    border-radius:
+        16px;
 
-    background: #111725;
+    background:
+        #111725;
 
-    border: 1px solid #302a55;
+    border:
+        1px solid #302a55;
 
-    text-align: center;
+    text-align:
+        center;
 }
 
 .premium-icon {
+    font-size:
+        32px;
 
-    font-size: 32px;
-
-    margin-bottom: 10px;
+    margin-bottom:
+        10px;
 }
 
 .premium-card h2 {
+    margin-bottom:
+        10px;
 
-    margin-bottom: 10px;
-
-    font-size: 25px;
+    font-size:
+        25px;
 }
 
 .premium-card p {
+    color:
+        #858d9e;
 
-    color: #858d9e;
+    font-size:
+        14px;
 
-    font-size: 14px;
+    line-height:
+        1.6;
 
-    line-height: 1.6;
+    width:
+        100%;
 
-    max-width: 650px;
+    max-width:
+        650px;
 
-    margin: auto;
+    margin:
+        auto;
 }
 
 .premium-card a {
+    display:
+        inline-flex;
 
-    display: inline-block;
+    align-items:
+        center;
 
-    margin-top: 20px;
+    justify-content:
+        center;
 
-    padding: 12px 22px;
+    min-height:
+        46px;
 
-    border-radius: 9px;
+    margin-top:
+        20px;
 
-    background: #6c63ff;
+    padding:
+        12px 22px;
 
-    color: white;
+    border-radius:
+        9px;
 
-    text-decoration: none;
+    background:
+        #6c63ff;
 
-    font-weight: bold;
+    color:
+        white;
 
-    font-size: 13px;
+    text-decoration:
+        none;
+
+    font-weight:
+        bold;
+
+    font-size:
+        13px;
 }
 
 
@@ -454,56 +676,75 @@ h1 span {
 ========================= */
 
 .features-section {
+    width: 100%;
 
-    padding: 0 7% 70px;
+    padding:
+        0 7% 70px;
 }
 
 .features {
+    width: 100%;
 
-    max-width: 1100px;
+    max-width:
+        1100px;
 
-    margin: auto;
+    margin:
+        auto;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
-    repeat(auto-fit, minmax(210px, 1fr));
+        repeat(
+            auto-fit,
+            minmax(210px, 1fr)
+        );
 
-    gap: 15px;
+    gap:
+        15px;
 }
 
 .feature {
+    width: 100%;
 
-    background: #0f141e;
+    background:
+        #0f141e;
 
-    border: 1px solid #222a3a;
+    border:
+        1px solid #222a3a;
 
-    border-radius: 12px;
+    border-radius:
+        12px;
 
-    padding: 22px;
+    padding:
+        22px;
 }
 
 .feature-icon {
+    font-size:
+        25px;
 
-    font-size: 25px;
-
-    margin-bottom: 12px;
+    margin-bottom:
+        12px;
 }
 
 .feature h3 {
+    font-size:
+        15px;
 
-    font-size: 15px;
-
-    margin-bottom: 7px;
+    margin-bottom:
+        7px;
 }
 
 .feature p {
+    color:
+        #818a9c;
 
-    color: #818a9c;
+    font-size:
+        12px;
 
-    font-size: 12px;
-
-    line-height: 1.5;
+    line-height:
+        1.5;
 }
 
 
@@ -512,16 +753,54 @@ h1 span {
 ========================= */
 
 footer {
+    width: 100%;
 
-    border-top: 1px solid #202635;
+    border-top:
+        1px solid #202635;
 
-    padding: 25px 7%;
+    padding:
+        25px 7%;
 
-    text-align: center;
+    text-align:
+        center;
 
-    color: #697285;
+    color:
+        #697285;
 
-    font-size: 13px;
+    font-size:
+        13px;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 850px) {
+
+    nav {
+        padding:
+            16px 5%;
+    }
+
+    .hero {
+        min-height:
+            62vh;
+
+        padding:
+            60px 20px 50px;
+    }
+
+    .rooms-section,
+    .premium-section,
+    .features-section {
+        padding-left:
+            5%;
+
+        padding-right:
+            5%;
+    }
+
 }
 
 
@@ -532,57 +811,121 @@ footer {
 @media (max-width: 700px) {
 
     nav {
+        padding:
+            14px 12px;
 
-        padding: 16px 5%;
+        flex-direction:
+            column;
 
-        align-items: flex-start;
+        align-items:
+            center;
 
-        gap: 12px;
+        gap:
+            12px;
     }
 
     .logo {
-
-        font-size: 21px;
+        font-size:
+            22px;
     }
 
     .nav-buttons {
+        width:
+            100%;
 
-        gap: 5px;
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap:
+            7px;
     }
 
-    .nav-buttons .btn {
+    .btn {
+        width:
+            100%;
 
-        padding: 7px 9px;
+        min-height:
+            40px;
 
-        font-size: 10px;
+        padding:
+            9px 7px;
+
+        font-size:
+            11px;
+    }
+
+
+    /* HERO */
+
+    .hero {
+        min-height:
+            auto;
+
+        padding:
+            55px 14px 50px;
+    }
+
+    .badge {
+        width:
+            auto;
+
+        max-width:
+            100%;
+
+        padding:
+            8px 12px;
+
+        font-size:
+            11px;
+
+        margin-bottom:
+            20px;
     }
 
     h1 {
+        font-size:
+            clamp(
+                42px,
+                14vw,
+                62px
+            );
 
-        letter-spacing: -2px;
-    }
+        letter-spacing:
+            -2.5px;
 
-    .hero {
-
-        min-height: 62vh;
-
-        padding-top: 50px;
+        margin-bottom:
+            20px;
     }
 
     .hero p {
+        font-size:
+            15px;
 
-        font-size: 16px;
+        line-height:
+            1.6;
     }
 
+
+    /* HERO BUTTONS */
+
     .hero-buttons {
+        width:
+            100%;
 
-        flex-direction: column;
+        max-width:
+            360px;
 
-        max-width: 300px;
+        margin:
+            28px auto 0;
 
-        margin-left: auto;
+        flex-direction:
+            column;
 
-        margin-right: auto;
+        gap:
+            9px;
     }
 
     .main-btn,
@@ -591,24 +934,280 @@ footer {
     .create-btn,
     .profile-btn {
 
-        width: 100%;
+        width:
+            100%;
 
-        text-align: center;
+        min-height:
+            48px;
+
+        padding:
+            13px 15px;
+
+        font-size:
+            13px;
+    }
+
+
+    /* ROOMS */
+
+    .rooms-section {
+        padding:
+            45px 14px 60px;
+    }
+
+    .section-title {
+        margin-bottom:
+            24px;
+    }
+
+    .section-title h2 {
+        font-size:
+            27px;
+    }
+
+    .section-title p {
+        font-size:
+            13px;
+    }
+
+    .rooms {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            11px;
+    }
+
+    .room {
+        padding:
+            20px;
+    }
+
+    .room-icon {
+        font-size:
+            27px;
+
+        margin-bottom:
+            10px;
+    }
+
+    .room h3 {
+        font-size:
+            17px;
+    }
+
+
+    /* PREMIUM */
+
+    .premium-section {
+        padding:
+            0 14px 55px;
+    }
+
+    .premium-card {
+        padding:
+            26px 18px;
+
+        border-radius:
+            14px;
+    }
+
+    .premium-icon {
+        font-size:
+            29px;
+    }
+
+    .premium-card h2 {
+        font-size:
+            22px;
+
+        line-height:
+            1.25;
+    }
+
+    .premium-card p {
+        font-size:
+            13px;
+    }
+
+    .premium-card a {
+        width:
+            100%;
+
+        margin-top:
+            18px;
+    }
+
+
+    /* FEATURES */
+
+    .features-section {
+        padding:
+            0 14px 55px;
+    }
+
+    .features {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            11px;
+    }
+
+    .feature {
+        padding:
+            20px;
+    }
+
+
+    /* FOOTER */
+
+    footer {
+        padding:
+            22px 14px;
+
+        font-size:
+            12px;
+    }
+
+}
+
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+    nav {
+        padding:
+            12px 9px;
+    }
+
+    .logo {
+        font-size:
+            20px;
+    }
+
+    .nav-buttons {
+        gap:
+            6px;
+    }
+
+    .btn {
+        min-height:
+            38px;
+
+        font-size:
+            10px;
+
+        padding:
+            8px 5px;
+    }
+
+    .hero {
+        padding:
+            45px 10px 45px;
+    }
+
+    .badge {
+        font-size:
+            10px;
+
+        padding:
+            7px 10px;
+    }
+
+    h1 {
+        font-size:
+            42px;
+
+        letter-spacing:
+            -2px;
+    }
+
+    .hero p {
+        font-size:
+            14px;
+    }
+
+    .rooms-section,
+    .premium-section,
+    .features-section {
+        padding-left:
+            10px;
+
+        padding-right:
+            10px;
+    }
+
+    .room {
+        padding:
+            18px;
+    }
+
+    .premium-card {
+        padding:
+            23px 15px;
+    }
+
+}
+
+
+/* =========================
+   TOUCH DEVICES
+========================= */
+
+@media (hover: none) {
+
+    .btn:hover,
+    .main-btn:hover,
+    .secondary-btn:hover,
+    .premium-btn:hover,
+    .create-btn:hover,
+    .profile-btn:hover,
+    .room:hover {
+        transform:
+            none;
+
+        opacity:
+            1;
+    }
+
+}
+
+
+/* =========================
+   REDUCE MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior:
+            auto;
+    }
+
+    * {
+        transition:
+            none !important;
     }
 
 }
 
 </style>
 
-  <script type="application/ld+json">
+
+<script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "TalkRoom",
-  "url": "https://talkroom.fun/",
-  "description": "TalkRoom is a free online chat community where people can join live chat rooms and talk in real time."
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "TalkRoom",
+    "url": "https://talkroom.fun/",
+    "description": "TalkRoom is a free online chat community where people can join live chat rooms and talk in real time."
 }
-</script>  
+</script>
+
 </head>
 
 
@@ -678,22 +1277,17 @@ footer {
         </div>
 
 
-<h1>
-
-    Join. Chat.<br>
-
-    <span>Connect.</span>
-
-</h1>
+        <h1>
+            Join. Chat.<br>
+            <span>Connect.</span>
+        </h1>
 
 
-<p>
-
-    Join TalkRoom, a free online chat community
-    where you can meet people and join live chat
-    rooms for gaming, music, study, friends and more.
-
-</p>
+        <p>
+            Join TalkRoom, a free online chat community
+            where you can meet people and join live chat
+            rooms for gaming, music, study, friends and more.
+        </p>
 
 
         <div class="hero-buttons">
@@ -881,38 +1475,28 @@ footer {
 
 <section class="premium-section">
 
-
     <div class="premium-card">
-
 
         <div class="premium-icon">
             👑
         </div>
 
-
         <h2>
             Create Your Own TalkRoom
         </h2>
 
-
         <p>
-
             Premium members can create their own
             chat rooms and become the owner and
             administrator of the rooms they create.
 
             Choose Monthly for PKR 299 or Yearly
             for PKR 2,999.
-
         </p>
 
-
-        <a
-            href="premium.html"
-        >
+        <a href="premium.html">
             View Premium Plans
         </a>
-
 
     </div>
 
@@ -925,77 +1509,86 @@ footer {
 
 <section class="features-section">
 
-<div class="feature">
-
-    <div class="feature-icon">
-        💬
-    </div>
-
-    <h3>
-        Live Online Chat
-    </h3>
-
-    <p>
-        Join live online chat rooms and
-        talk with people in real time.
-    </p>
-
-</div>
+    <div class="features">
 
 
-<div class="feature">
+        <div class="feature">
 
-    <div class="feature-icon">
-        👤
-    </div>
+            <div class="feature-icon">
+                💬
+            </div>
 
-    <h3>
-        Personal Profiles
-    </h3>
+            <h3>
+                Live Online Chat
+            </h3>
 
-    <p>
-        Create your TalkRoom profile,
-        choose a username and add a profile photo.
-    </p>
+            <p>
+                Join live online chat rooms and
+                talk with people in real time.
+            </p>
 
-</div>
-
-
-<div class="feature">
-
-    <div class="feature-icon">
-        ⭐
-    </div>
-
-    <h3>
-        Premium Features
-    </h3>
-
-    <p>
-        Upgrade to Premium for special
-        features and a Premium member badge.
-    </p>
-
-</div>
+        </div>
 
 
-<div class="feature">
+        <div class="feature">
 
-    <div class="feature-icon">
-        🛡️
-    </div>
+            <div class="feature-icon">
+                👤
+            </div>
 
-    <h3>
-        Create Your Own Chat Room
-    </h3>
+            <h3>
+                Personal Profiles
+            </h3>
 
-    <p>
-        Premium members can create and
-        manage their own online chat rooms.
-    </p>
+            <p>
+                Create your TalkRoom profile,
+                choose a username and add a profile photo.
+            </p>
 
-</div>
-        
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⭐
+            </div>
+
+            <h3>
+                Premium Features
+            </h3>
+
+            <p>
+                Upgrade to Premium for special
+                features and a Premium member badge.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🛡️
+            </div>
+
+            <h3>
+                Create Your Own Chat Room
+            </h3>
+
+            <p>
+                Premium members can create and
+                manage their own online chat rooms.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                👑
+            </div>
 
             <h3>
                 Room Owners
