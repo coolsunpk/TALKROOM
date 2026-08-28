@@ -1020,7 +1020,14 @@ function renderProfile() {
     ========================= */
 
     if (premium) {
+document.getElementById(
+    "usernameEditor"
+).style.display = "block";
 
+document.getElementById(
+    "usernameInput"
+).value =
+    currentProfile.username || "";
         uploadButton.classList.add(
             "show"
         );
