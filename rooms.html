@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,21 +7,25 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-   content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>TalkRoom Chat Rooms — Join Free Online Chat</title>
 
 <meta name="description"
-   content="Explore TalkRoom chat rooms and join real-time conversations with people online. Find a room and start chatting.">
+      content="Explore TalkRoom chat rooms and join real-time conversations with people online. Find a room and start chatting.">
 
-<meta name="robots" content="index, follow">
+<meta name="robots"
+      content="index, follow">
 
 <link rel="canonical"
       href="https://talkroom.fun/rooms.html">
 
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<!-- TalkRoom Config -->
 <script src="js/config.js"></script>
+
 
 <style>
 
@@ -32,18 +36,24 @@
 }
 
 :root {
+
     --bg: #080b12;
     --panel: #0f141e;
     --panel2: #141a26;
     --border: #252d3b;
+
     --text: #f4f6fb;
     --muted: #8992a4;
+
     --accent: #6c63ff;
+    --accent-hover: #5b52e8;
+
     --green: #35d982;
     --red: #ff6675;
 }
 
 body {
+
     min-height: 100vh;
 
     background:
@@ -63,21 +73,18 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    HEADER
-============================================================ */
+========================================================= */
 
 .header {
 
     min-height: 68px;
 
     display: flex;
-
     align-items: center;
 
-    justify-content: space-between;
-
-    padding: 0 28px;
+    padding: 12px 28px;
 
     background: rgba(15,20,30,.94);
 
@@ -86,8 +93,9 @@ body {
 
     backdrop-filter: blur(12px);
 
-    gap: 15px;
+    gap: 20px;
 }
+
 
 .logo {
 
@@ -98,10 +106,12 @@ body {
     white-space: nowrap;
 }
 
+
 .logo span {
 
     color: var(--accent);
 }
+
 
 .home-link {
 
@@ -116,10 +126,12 @@ body {
     margin-left: auto;
 }
 
+
 .home-link:hover {
 
     color: white;
 }
+
 
 .header-right {
 
@@ -129,6 +141,7 @@ body {
 
     gap: 12px;
 }
+
 
 .create-button {
 
@@ -153,21 +166,16 @@ body {
     transition: .2s;
 }
 
+
 .create-button:hover {
 
-    opacity: .9;
+    background:
+        var(--accent-hover);
 
-    transform: translateY(-1px);
+    transform:
+        translateY(-1px);
 }
 
-.create-button:disabled {
-
-    opacity: .5;
-
-    cursor: not-allowed;
-
-    transform: none;
-}
 
 .account {
 
@@ -178,16 +186,15 @@ body {
     gap: 9px;
 }
 
+
 .account-avatar {
 
     width: 36px;
-
     height: 36px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     border-radius: 50%;
@@ -203,14 +210,15 @@ body {
     font-weight: bold;
 }
 
+
 .account-avatar img {
 
     width: 100%;
-
     height: 100%;
 
     object-fit: cover;
 }
+
 
 .account-name {
 
@@ -218,7 +226,7 @@ body {
 
     font-size: 13px;
 
-    max-width: 120px;
+    max-width: 130px;
 
     overflow: hidden;
 
@@ -228,9 +236,9 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    MAIN
-============================================================ */
+========================================================= */
 
 .container {
 
@@ -238,18 +246,20 @@ body {
 
     margin: auto;
 
-    padding: 55px 0 70px;
+    padding:
+        55px 0 70px;
 }
 
 
-/* ============================================================
+/* =========================================================
    HERO
-============================================================ */
+========================================================= */
 
 .hero {
 
     margin-bottom: 35px;
 }
+
 
 .hero h1 {
 
@@ -261,10 +271,12 @@ body {
     margin-bottom: 12px;
 }
 
+
 .hero h1 span {
 
     color: var(--accent);
 }
+
 
 .hero p {
 
@@ -278,9 +290,9 @@ body {
 }
 
 
-/* ============================================================
-   ERROR / MESSAGE
-============================================================ */
+/* =========================================================
+   ERROR
+========================================================= */
 
 #error {
 
@@ -288,11 +300,14 @@ body {
 
     margin-bottom: 20px;
 
-    padding: 11px;
+    padding: 12px;
 
     border-radius: 10px;
 
     background: #351b21;
+
+    border:
+        1px solid #5a2933;
 
     color: #ff8a8a;
 
@@ -301,29 +316,10 @@ body {
     font-size: 12px;
 }
 
-#success {
 
-    display: none;
-
-    margin-bottom: 20px;
-
-    padding: 11px;
-
-    border-radius: 10px;
-
-    background: #153524;
-
-    color: #65e99a;
-
-    text-align: center;
-
-    font-size: 12px;
-}
-
-
-/* ============================================================
+/* =========================================================
    SEARCH
-============================================================ */
+========================================================= */
 
 .search-box {
 
@@ -331,6 +327,7 @@ body {
 
     margin-bottom: 25px;
 }
+
 
 .search-icon {
 
@@ -347,6 +344,7 @@ body {
 
     pointer-events: none;
 }
+
 
 #searchInput {
 
@@ -371,9 +369,11 @@ body {
     font-size: 14px;
 }
 
+
 #searchInput:focus {
 
-    border-color: var(--accent);
+    border-color:
+        var(--accent);
 
     box-shadow:
         0 0 0 3px
@@ -381,9 +381,9 @@ body {
 }
 
 
-/* ============================================================
-   SECTION
-============================================================ */
+/* =========================================================
+   SECTION TITLE
+========================================================= */
 
 .section-title {
 
@@ -396,10 +396,12 @@ body {
     margin-bottom: 15px;
 }
 
+
 .section-title h2 {
 
     font-size: 15px;
 }
+
 
 .room-count {
 
@@ -409,9 +411,9 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    ROOMS
-============================================================ */
+========================================================= */
 
 .rooms {
 
@@ -427,9 +429,9 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    ROOM CARD
-============================================================ */
+========================================================= */
 
 .room-card {
 
@@ -437,7 +439,8 @@ body {
 
     padding: 20px;
 
-    background: var(--panel);
+    background:
+        var(--panel);
 
     border:
         1px solid var(--border);
@@ -452,6 +455,7 @@ body {
         background .2s;
 }
 
+
 .room-card:hover {
 
     transform:
@@ -464,32 +468,34 @@ body {
         #121925;
 }
 
+
 .room-icon {
 
     width: 46px;
-
     height: 46px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     border-radius: 12px;
 
-    background: #24204e;
+    background:
+        #24204e;
 
     font-size: 21px;
 
     margin-bottom: 16px;
 }
 
-.room-card.adult
-.room-icon {
 
-    background: #43232b;
+.room-card.adult .room-icon {
+
+    background:
+        #43232b;
 }
+
 
 .room-name {
 
@@ -498,7 +504,10 @@ body {
     font-weight: 700;
 
     margin-bottom: 7px;
+
+    padding-right: 35px;
 }
+
 
 .room-description {
 
@@ -510,6 +519,7 @@ body {
 
     line-height: 1.5;
 }
+
 
 .room-bottom {
 
@@ -527,6 +537,7 @@ body {
         1px solid var(--border);
 }
 
+
 .room-status {
 
     color: var(--green);
@@ -536,11 +547,12 @@ body {
     font-weight: bold;
 }
 
-.room-card.adult
-.room-status {
+
+.room-card.adult .room-status {
 
     color: var(--red);
 }
+
 
 .join {
 
@@ -551,6 +563,7 @@ body {
     font-weight: bold;
 }
 
+
 .owner-label {
 
     margin-top: 8px;
@@ -559,6 +572,11 @@ body {
 
     font-size: 9px;
 }
+
+
+/* =========================================================
+   DELETE
+========================================================= */
 
 .delete-room {
 
@@ -574,16 +592,21 @@ body {
     background:
         #24171c;
 
-    color: #ff7d89;
+    color:
+        #ff7d89;
 
     border-radius: 6px;
 
-    padding: 5px 7px;
+    padding:
+        5px 7px;
 
     font-size: 8px;
 
     cursor: pointer;
+
+    z-index: 5;
 }
+
 
 .delete-room:hover {
 
@@ -592,33 +615,9 @@ body {
 }
 
 
-/* ============================================================
-   PREMIUM BADGE
-============================================================ */
-
-.premium-badge {
-
-    display: inline-block;
-
-    margin-top: 8px;
-
-    padding: 4px 7px;
-
-    border-radius: 6px;
-
-    background: #29234f;
-
-    color: #bdb7ff;
-
-    font-size: 8px;
-
-    font-weight: bold;
-}
-
-
-/* ============================================================
+/* =========================================================
    18+
-============================================================ */
+========================================================= */
 
 .age-badge {
 
@@ -628,13 +627,16 @@ body {
 
     right: 15px;
 
-    padding: 4px 7px;
+    padding:
+        4px 7px;
 
     border-radius: 6px;
 
-    background: #4a2028;
+    background:
+        #4a2028;
 
-    color: #ff8b96;
+    color:
+        #ff8b96;
 
     font-size: 9px;
 
@@ -644,9 +646,9 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    EMPTY
-============================================================ */
+========================================================= */
 
 .empty {
 
@@ -665,9 +667,9 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    MODAL
-============================================================ */
+========================================================= */
 
 .modal {
 
@@ -689,10 +691,12 @@ body {
     z-index: 1000;
 }
 
+
 .modal.show {
 
     display: flex;
 }
+
 
 .modal-box {
 
@@ -714,6 +718,7 @@ body {
         rgba(0,0,0,.5);
 }
 
+
 .modal-title {
 
     font-size: 18px;
@@ -722,6 +727,7 @@ body {
 
     margin-bottom: 7px;
 }
+
 
 .modal-subtitle {
 
@@ -733,6 +739,7 @@ body {
 
     margin-bottom: 20px;
 }
+
 
 .form-label {
 
@@ -747,13 +754,15 @@ body {
     font-weight: bold;
 }
 
+
 #roomNameInput {
 
     width: 100%;
 
     height: 44px;
 
-    padding: 0 13px;
+    padding:
+        0 13px;
 
     border:
         1px solid var(--border);
@@ -770,11 +779,13 @@ body {
     font-size: 13px;
 }
 
+
 #roomNameInput:focus {
 
     border-color:
         var(--accent);
 }
+
 
 .modal-actions {
 
@@ -787,11 +798,13 @@ body {
     margin-top: 20px;
 }
 
+
 .modal-button {
 
     height: 38px;
 
-    padding: 0 15px;
+    padding:
+        0 15px;
 
     border-radius: 8px;
 
@@ -801,6 +814,7 @@ body {
 
     cursor: pointer;
 }
+
 
 .cancel-button {
 
@@ -814,6 +828,7 @@ body {
         #9ba3b3;
 }
 
+
 .confirm-button {
 
     border: none;
@@ -824,6 +839,7 @@ body {
     color: white;
 }
 
+
 .confirm-button:disabled {
 
     opacity: .5;
@@ -832,9 +848,9 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    FOOTER
-============================================================ */
+========================================================= */
 
 .footer {
 
@@ -845,7 +861,8 @@ body {
     border-top:
         1px solid var(--border);
 
-    color: #596375;
+    color:
+        #596375;
 
     font-size: 11px;
 
@@ -853,11 +870,11 @@ body {
 }
 
 
-/* ============================================================
+/* =========================================================
    MOBILE
-============================================================ */
+========================================================= */
 
-@media(max-width:600px) {
+@media(max-width:700px) {
 
     .header {
 
@@ -866,35 +883,9 @@ body {
 
         flex-wrap: wrap;
 
-        min-height: 68px;
+        gap: 10px;
     }
 
-    .header-right {
-
-        gap: 8px;
-    }
-
-    .create-button {
-
-        padding: 0 10px;
-
-        font-size: 10px;
-    }
-
-    .account-name {
-
-        display: none;
-    }
-
-    .container {
-
-        padding-top: 35px;
-    }
-
-    .rooms {
-
-        grid-template-columns: 1fr;
-    }
 
     .home-link {
 
@@ -904,7 +895,66 @@ body {
 
         margin-left: 0;
 
-        padding-top: 5px;
+        text-align: center;
+    }
+
+
+    .header-right {
+
+        margin-left: auto;
+    }
+
+
+    .account-name {
+
+        display: none;
+    }
+
+
+    .create-button {
+
+        padding:
+            0 10px;
+
+        font-size: 10px;
+    }
+
+
+    .container {
+
+        padding-top: 35px;
+    }
+
+
+    .rooms {
+
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+@media(max-width:420px) {
+
+    .logo {
+
+        font-size: 18px;
+    }
+
+
+    .header-right {
+
+        gap: 7px;
+    }
+
+
+    .create-button {
+
+        height: 35px;
+
+        padding:
+            0 8px;
     }
 
 }
@@ -913,54 +963,135 @@ body {
 
 </head>
 
+
 <body>
 
-<!-- ============================================================
+
+<!-- =========================================================
      HEADER
-============================================================ -->
+========================================================= -->
 
 <header class="header">
 
 
-<div class="logo">
-    Talk<span>Room</span>
-</div>
+    <div class="logo">
+        Talk<span>Room</span>
+    </div>
 
 
-<a
-    href="index.html"
-    class="home-link"
->
-    Home
-</a>
-
-
-<div class="header-right">
-
-
-    <button
-        class="create-button"
-        id="createRoomHeaderButton"
-        onclick="openCreateRoom()"
+    <a
+        href="index.html"
+        class="home-link"
     >
-        + Create Room
-    </button>
+        Home
+    </a>
 
 
-    <div class="account">
+    <div class="header-right">
 
 
-        <div
-            class="account-avatar"
-            id="accountAvatar"
+        <button
+            class="create-button"
+            id="createRoomOpenButton"
+            type="button"
         >
-            ?
+            + Create Room
+        </button>
+
+
+        <div class="account">
+
+
+            <div
+                class="account-avatar"
+                id="accountAvatar"
+            >
+                ?
+            </div>
+
+
+            <div
+                class="account-name"
+                id="accountName"
+            >
+                Loading...
+            </div>
+
+
         </div>
 
 
+    </div>
+
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <section class="hero">
+
+
+        <h1>
+            Free Online
+            <span>Chat Rooms.</span>
+        </h1>
+
+
+        <p>
+            Explore TalkRoom's free online chat rooms,
+            join live conversations, and meet people
+            in real time.
+        </p>
+
+
+    </section>
+
+
+    <div
+        id="error"
+    ></div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+
+        <div class="search-icon">
+            🔍
+        </div>
+
+
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Search rooms..."
+            autocomplete="off"
+        >
+
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <div class="section-title">
+
+
+        <h2>
+            Available Chat Rooms
+        </h2>
+
+
         <div
-            class="account-name"
-            id="accountName"
+            class="room-count"
+            id="roomCount"
         >
             Loading...
         </div>
@@ -969,110 +1100,33 @@ body {
     </div>
 
 
-</div>
+    <!-- ROOMS -->
+
+    <div
+        class="rooms"
+        id="rooms"
+    ></div>
 
 
-</header>
-
-<!-- ============================================================
-     MAIN
-============================================================ -->
-
-<main class="container">
-
-<section class="hero">
+    <div
+        class="empty"
+        id="empty"
+    >
+        No rooms found.
+    </div>
 
 
-<h1>
+    <footer class="footer">
+        TalkRoom — Meet. Talk. Connect.
+    </footer>
 
-    Free Online
-    <span>Chat Rooms.</span>
-
-</h1>
-
-
-<p>
-
-    Explore TalkRoom's free online chat rooms,
-    join live conversations, and meet people
-    in real time.
-
-</p>
-
-
-</section>
-
-<div id="error"></div>
-
-<div id="success"></div>
-
-<!-- SEARCH -->
-
-<div class="search-box">
-
-
-<div class="search-icon">
-    🔍
-</div>
-
-
-<input
-    id="searchInput"
-    type="text"
-    placeholder="Search rooms..."
-    autocomplete="off"
->
-
-
-</div>
-
-<!-- ROOM TITLE -->
-
-<div class="section-title">
-
-
-<h2>
-    Available Chat Rooms
-</h2>
-
-
-<div
-    class="room-count"
-    id="roomCount"
->
-    Loading...
-</div>
-
-
-</div>
-
-<!-- ROOMS -->
-
-<div
-    class="rooms"
-    id="rooms"
-></div>
-
-<div
-    class="empty"
-    id="empty"
->
-    No rooms found.
-</div>
-
-<footer class="footer">
-
-
-TalkRoom — Meet. Talk. Connect.
-
-
-</footer>
 
 </main>
 
-<!-- ============================================================
+
+<!-- =========================================================
      CREATE ROOM MODAL
-============================================================ -->
+========================================================= -->
 
 <div
     class="modal"
@@ -1080,61 +1134,59 @@ TalkRoom — Meet. Talk. Connect.
 >
 
 
-<div class="modal-box">
+    <div class="modal-box">
 
 
-    <div class="modal-title">
-
-        Create a room
-
-    </div>
+        <div class="modal-title">
+            Create a room
+        </div>
 
 
-    <div class="modal-subtitle">
-
-        Creating your own room is a
-        Premium feature. Upgrade your
-        account to create and manage
-        your own TalkRoom.
-
-    </div>
+        <div class="modal-subtitle">
+            Premium members can create their own
+            public TalkRoom room and manage it.
+        </div>
 
 
-    <label
-        class="form-label"
-        for="roomNameInput"
-    >
-        ROOM NAME
-    </label>
-
-
-    <input
-        id="roomNameInput"
-        type="text"
-        maxlength="40"
-        placeholder="e.g. Pakistani Friends"
-        autocomplete="off"
-    >
-
-
-    <div class="modal-actions">
-
-
-        <button
-            class="modal-button cancel-button"
-            onclick="closeCreateRoom()"
+        <label
+            class="form-label"
+            for="roomNameInput"
         >
-            Cancel
-        </button>
+            ROOM NAME
+        </label>
 
 
-        <button
-            class="modal-button confirm-button"
-            id="createRoomButton"
-            onclick="createRoom()"
+        <input
+            id="roomNameInput"
+            type="text"
+            maxlength="40"
+            placeholder="e.g. Pakistani Friends"
+            autocomplete="off"
         >
-            Create Room
-        </button>
+
+
+        <div class="modal-actions">
+
+
+            <button
+                class="modal-button cancel-button"
+                id="cancelButton"
+                type="button"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                class="modal-button confirm-button"
+                id="createRoomButton"
+                type="button"
+            >
+                Create Room
+            </button>
+
+
+        </div>
 
 
     </div>
@@ -1142,14 +1194,12 @@ TalkRoom — Meet. Talk. Connect.
 
 </div>
 
-
-</div>
 
 <script>
 
-/* ============================================================
+/* =========================================================
    GLOBAL VARIABLES
-============================================================ */
+========================================================= */
 
 let currentUser = null;
 
@@ -1162,9 +1212,9 @@ let roomChannels = [];
 let roomsRealtimeChannel = null;
 
 
-/* ============================================================
+/* =========================================================
    DEFAULT ROOMS
-============================================================ */
+========================================================= */
 
 const defaultRooms = [
 
@@ -1177,9 +1227,7 @@ const defaultRooms = [
         icon: "💬",
 
         search:
-            "general chat talking social",
-
-        adult: false
+            "general chat talking social"
     },
 
 
@@ -1192,9 +1240,7 @@ const defaultRooms = [
         icon: "🎮",
 
         search:
-            "gaming games gamers play",
-
-        adult: false
+            "gaming games gamers play"
     },
 
 
@@ -1207,9 +1253,7 @@ const defaultRooms = [
         icon: "📚",
 
         search:
-            "study education students school",
-
-        adult: false
+            "study education students school"
     },
 
 
@@ -1222,9 +1266,7 @@ const defaultRooms = [
         icon: "🎵",
 
         search:
-            "music songs artists",
-
-        adult: false
+            "music songs artists"
     },
 
 
@@ -1237,9 +1279,7 @@ const defaultRooms = [
         icon: "🎬",
 
         search:
-            "movies films cinema tv",
-
-        adult: false
+            "movies films cinema tv"
     },
 
 
@@ -1252,9 +1292,7 @@ const defaultRooms = [
         icon: "⚽",
 
         search:
-            "sports football cricket basketball",
-
-        adult: false
+            "sports football cricket basketball"
     },
 
 
@@ -1275,51 +1313,60 @@ const defaultRooms = [
 ];
 
 
-/* ============================================================
+/* =========================================================
    ELEMENTS
-============================================================ */
+========================================================= */
 
 const roomsElement =
     document.getElementById("rooms");
 
+
 const emptyElement =
     document.getElementById("empty");
+
 
 const roomCountElement =
     document.getElementById("roomCount");
 
+
 const searchInput =
     document.getElementById("searchInput");
+
 
 const createModal =
     document.getElementById("createModal");
 
+
 const roomNameInput =
     document.getElementById("roomNameInput");
+
 
 const createRoomButton =
     document.getElementById("createRoomButton");
 
-const createRoomHeaderButton =
+
+const cancelButton =
+    document.getElementById("cancelButton");
+
+
+const createRoomOpenButton =
     document.getElementById(
-        "createRoomHeaderButton"
+        "createRoomOpenButton"
     );
 
 
-/* ============================================================
-   MESSAGES
-============================================================ */
+/* =========================================================
+   ERROR FUNCTIONS
+========================================================= */
 
-function showError(message) {
+function showError(text) {
 
     const error =
         document.getElementById("error");
 
-    error.textContent =
-        message;
+    error.textContent = text;
 
-    error.style.display =
-        "block";
+    error.style.display = "block";
 
 }
 
@@ -1329,164 +1376,115 @@ function hideError() {
     const error =
         document.getElementById("error");
 
-    error.style.display =
-        "none";
+    error.style.display = "none";
 
 }
 
 
-function showSuccess(message) {
-
-    const success =
-        document.getElementById("success");
-
-    success.textContent =
-        message;
-
-    success.style.display =
-        "block";
-
-}
-
-
-function hideSuccess() {
-
-    const success =
-        document.getElementById("success");
-
-    success.style.display =
-        "none";
-
-}
-
-
-/* ============================================================
-   PREMIUM CHECK
-============================================================ */
-
-function isPremiumUser() {
-
-    if (!currentUser || !currentProfile) {
-
-        return false;
-
-    }
-
-
-    if (
-        currentProfile.is_premium !== true
-    ) {
-
-        return false;
-
-    }
-
-
-    if (
-        currentProfile.premium_until
-    ) {
-
-        const expiry =
-            new Date(
-                currentProfile.premium_until
-            );
-
-        if (
-            expiry <= new Date()
-        ) {
-
-            return false;
-
-        }
-
-    }
-
-
-    return true;
-
-}
-
-
-/* ============================================================
-   UPDATE HEADER
-============================================================ */
-
-function updateCreateButton() {
-
-    if (!createRoomHeaderButton) {
-
-        return;
-
-    }
-
-
-    if (!currentUser) {
-
-        createRoomHeaderButton.textContent =
-            "🔐 Login to Create";
-
-        return;
-
-    }
-
-
-    if (isPremiumUser()) {
-
-        createRoomHeaderButton.textContent =
-            "+ Create Room";
-
-        return;
-
-    }
-
-
-    createRoomHeaderButton.textContent =
-        "⭐ Premium";
-}
-
-
-/* ============================================================
+/* =========================================================
    LOAD USER
-============================================================ */
+========================================================= */
 
 async function loadUser() {
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getUser();
 
 
-    /*
-        Guests can view rooms.
-        They cannot use protected features.
-    */
+        /* =========================
+           GUEST
+        ========================= */
 
-    if (
-        error ||
-        !data ||
-        !data.user
-    ) {
+        if (
+            error ||
+            !data ||
+            !data.user
+        ) {
 
-        currentUser = null;
+            currentUser = null;
 
-        currentProfile = null;
+            currentProfile = null;
 
 
-        const accountName =
             document.getElementById(
                 "accountName"
-            );
-
-        if (accountName) {
-
-            accountName.textContent =
+            ).textContent =
                 "Guest";
 
+
+            document.getElementById(
+                "accountAvatar"
+            ).textContent =
+                "G";
+
+
+            return;
+
         }
+
+
+        /* =========================
+           LOGGED IN
+        ========================= */
+
+        currentUser =
+            data.user;
+
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "id,username,avatar_url,is_premium,premium_until,is_admin,is_moderator,role"
+                )
+                .eq(
+                    "id",
+                    currentUser.id
+                )
+                .maybeSingle();
+
+
+        if (profileError) {
+
+            console.error(
+                "Profile error:",
+                profileError
+            );
+
+            currentProfile = null;
+
+        } else {
+
+            currentProfile =
+                profile;
+
+        }
+
+
+        const username =
+            currentProfile &&
+            currentProfile.username
+                ? currentProfile.username
+                : (
+                    currentUser.user_metadata &&
+                    currentUser.user_metadata.username
+                        ? currentUser.user_metadata.username
+                        : "User"
+                );
+
+
+        document.getElementById(
+            "accountName"
+        ).textContent =
+            username;
 
 
         const avatarElement =
@@ -1494,121 +1492,33 @@ async function loadUser() {
                 "accountAvatar"
             );
 
-        if (avatarElement) {
 
-            avatarElement.textContent =
-                "G";
-
-        }
-
-
-        updateCreateButton();
-
-        return true;
-
-    }
-
-
-    currentUser =
-        data.user;
-
-
-    const {
-        data: profile,
-        error: profileError
-    } =
-        await supabaseClient
-            .from("profiles")
-            .select(
-                "id,username,avatar_url,is_premium,premium_until,is_admin,is_moderator,role"
-            )
-            .eq(
-                "id",
-                currentUser.id
-            )
-            .maybeSingle();
-
-
-    /*
-        Profile may not exist yet.
-        Do NOT break the rooms page.
-    */
-
-    if (
-        profileError
-    ) {
-
-        console.error(
-            "Profile loading error:",
-            profileError
-        );
-
-        currentProfile = null;
-
-    } else {
-
-        currentProfile =
-            profile;
-
-    }
-
-
-    const name =
-        (
+        const premiumActive =
             currentProfile &&
-            currentProfile.username
-        )
-        ||
-        currentUser.user_metadata?.username
-        ||
-        "User";
-
-
-    const accountName =
-        document.getElementById(
-            "accountName"
-        );
-
-    if (accountName) {
-
-        accountName.textContent =
-            name;
-
-    }
-
-
-    const avatarElement =
-        document.getElementById(
-            "accountAvatar"
-        );
-
-
-    if (avatarElement) {
-
-        const avatarUrl =
-            currentProfile &&
-            currentProfile.avatar_url;
-
-
-        const premium =
-            isPremiumUser();
+            currentProfile.is_premium === true &&
+            (
+                !currentProfile.premium_until ||
+                new Date(
+                    currentProfile.premium_until
+                ) > new Date()
+            );
 
 
         if (
-            premium &&
-            avatarUrl
+            premiumActive &&
+            currentProfile.avatar_url
         ) {
 
             const img =
-                document.createElement(
-                    "img"
-                );
+                document.createElement("img");
+
 
             img.src =
-                avatarUrl;
+                currentProfile.avatar_url;
+
 
             img.alt =
-                name;
+                username;
 
 
             img.onerror =
@@ -1618,7 +1528,7 @@ async function loadUser() {
                         "";
 
                     avatarElement.textContent =
-                        name
+                        username
                             .charAt(0)
                             .toUpperCase();
 
@@ -1628,6 +1538,7 @@ async function loadUser() {
             avatarElement.innerHTML =
                 "";
 
+
             avatarElement.appendChild(
                 img
             );
@@ -1635,25 +1546,45 @@ async function loadUser() {
         } else {
 
             avatarElement.textContent =
-                name
+                username
                     .charAt(0)
                     .toUpperCase();
 
         }
 
+
+    } catch (error) {
+
+        console.error(
+            "User loading error:",
+            error
+        );
+
+
+        currentUser = null;
+
+        currentProfile = null;
+
+
+        document.getElementById(
+            "accountName"
+        ).textContent =
+            "Guest";
+
+
+        document.getElementById(
+            "accountAvatar"
+        ).textContent =
+            "G";
+
     }
-
-
-    updateCreateButton();
-
-    return true;
 
 }
 
 
-/* ============================================================
+/* =========================================================
    LOAD DATABASE ROOMS
-============================================================ */
+========================================================= */
 
 async function loadDatabaseRooms() {
 
@@ -1681,14 +1612,17 @@ async function loadDatabaseRooms() {
             error
         );
 
-        showError(
-            "Could not load community rooms: " +
-            error.message
-        );
 
         databaseRooms = [];
 
-        return;
+
+        showError(
+            "Could not load community rooms. " +
+            "Please refresh the page."
+        );
+
+
+        return false;
 
     }
 
@@ -1696,12 +1630,15 @@ async function loadDatabaseRooms() {
     databaseRooms =
         data || [];
 
+
+    return true;
+
 }
 
 
-/* ============================================================
-   COMBINE DEFAULT + DATABASE ROOMS
-============================================================ */
+/* =========================================================
+   GET ALL ROOMS
+========================================================= */
 
 function getAllRooms() {
 
@@ -1710,6 +1647,10 @@ function getAllRooms() {
     const names =
         new Set();
 
+
+    /* =========================
+       DEFAULT ROOMS
+    ========================= */
 
     defaultRooms.forEach(
         function(room) {
@@ -1730,14 +1671,11 @@ function getAllRooms() {
 
                     ...room,
 
-                    databaseRoom:
-                        false,
+                    databaseRoom: false,
 
-                    owner_id:
-                        null,
+                    owner_id: null,
 
-                    id:
-                        null
+                    id: null
 
                 });
 
@@ -1746,6 +1684,10 @@ function getAllRooms() {
         }
     );
 
+
+    /* =========================
+       DATABASE ROOMS
+    ========================= */
 
     databaseRooms.forEach(
         function(room) {
@@ -1804,9 +1746,9 @@ function getAllRooms() {
 }
 
 
-/* ============================================================
+/* =========================================================
    RENDER ROOMS
-============================================================ */
+========================================================= */
 
 function renderRooms() {
 
@@ -1855,10 +1797,12 @@ function renderRooms() {
             visible++;
 
 
+            /* =========================
+               CARD
+            ========================= */
+
             const card =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             card.className =
@@ -1874,16 +1818,12 @@ function renderRooms() {
                 room.room_name;
 
 
-            /*
-                IMPORTANT:
-                Do not join immediately
-                from the card click.
-            */
-
             card.onclick =
                 function() {
 
-                    if (room.adult) {
+                    if (
+                        room.adult
+                    ) {
 
                         joinAdultRoom();
 
@@ -1898,81 +1838,89 @@ function renderRooms() {
                 };
 
 
-            /* ICON */
+            /* =========================
+               ICON
+            ========================= */
 
             const icon =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             icon.className =
                 "room-icon";
+
 
             icon.textContent =
                 room.icon;
 
 
-            /* NAME */
+            /* =========================
+               NAME
+            ========================= */
 
             const name =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             name.className =
                 "room-name";
+
 
             name.textContent =
                 room.room_name;
 
 
-            /* DESCRIPTION */
+            /* =========================
+               DESCRIPTION
+            ========================= */
 
             const description =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             description.className =
                 "room-description";
+
 
             description.textContent =
                 room.description;
 
 
-            /* BOTTOM */
+            /* =========================
+               BOTTOM
+            ========================= */
 
             const bottom =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             bottom.className =
                 "room-bottom";
 
 
             const status =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             status.className =
                 "room-status";
 
+
             status.dataset.roomName =
                 room.room_name;
+
 
             status.textContent =
                 "● 0 online";
 
 
             const join =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             join.className =
                 "join";
+
 
             join.textContent =
                 room.adult
@@ -1984,6 +1932,7 @@ function renderRooms() {
                 status
             );
 
+
             bottom.appendChild(
                 join
             );
@@ -1993,20 +1942,25 @@ function renderRooms() {
                 icon
             );
 
+
             card.appendChild(
                 name
             );
 
+
             card.appendChild(
                 description
             );
+
 
             card.appendChild(
                 bottom
             );
 
 
-            /* OWNER */
+            /* =========================
+               OWNER
+            ========================= */
 
             if (
                 room.databaseRoom &&
@@ -2014,17 +1968,15 @@ function renderRooms() {
             ) {
 
                 const owner =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
+
 
                 owner.className =
                     "owner-label";
 
 
-                /*
-                    FIX:
-                    currentUser can be null.
+                /* IMPORTANT:
+                   Check currentUser safely
                 */
 
                 if (
@@ -2051,10 +2003,15 @@ function renderRooms() {
                         "Delete";
 
 
+                    deleteButton.type =
+                        "button";
+
+
                     deleteButton.onclick =
                         function(event) {
 
                             event.stopPropagation();
+
 
                             deleteRoom(
                                 room
@@ -2082,17 +2039,23 @@ function renderRooms() {
             }
 
 
-            /* 18+ */
+            /* =========================
+               18+
+            ========================= */
 
-            if (room.adult) {
+            if (
+                room.adult
+            ) {
 
                 const ageBadge =
                     document.createElement(
                         "div"
                     );
 
+
                 ageBadge.className =
                     "age-badge";
+
 
                 ageBadge.textContent =
                     "18+";
@@ -2133,40 +2096,60 @@ function renderRooms() {
 }
 
 
-/* ============================================================
-   OPEN CREATE ROOM
-============================================================ */
+/* =========================================================
+   CREATE MODAL
+========================================================= */
 
 function openCreateRoom() {
 
     hideError();
 
-    hideSuccess();
 
-
-    /*
-        Guest
-    */
+    /* =========================
+       LOGIN CHECK
+    ========================= */
 
     if (!currentUser) {
 
-        window.location.href =
-            "login.html";
+        const goLogin =
+            confirm(
+                "You must be logged in to create a room.\n\nGo to the login page?"
+            );
+
+
+        if (goLogin) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
 
         return;
 
     }
 
 
-    /*
-        Logged in but not Premium
-    */
+    /* =========================
+       PREMIUM CHECK
+    ========================= */
 
-    if (!isPremiumUser()) {
+    const premiumActive =
+        currentProfile &&
+        currentProfile.is_premium === true &&
+        (
+            !currentProfile.premium_until ||
+            new Date(
+                currentProfile.premium_until
+            ) > new Date()
+        );
+
+
+    if (!premiumActive) {
 
         const goPremium =
             confirm(
-                "Creating your own chat room is a Premium feature.\n\nWould you like to view Premium plans?"
+                "Creating your own room is a Premium feature.\n\nGo to Premium?"
             );
 
 
@@ -2176,6 +2159,7 @@ function openCreateRoom() {
                 "premium.html";
 
         }
+
 
         return;
 
@@ -2203,9 +2187,9 @@ function openCreateRoom() {
 }
 
 
-/* ============================================================
-   CLOSE CREATE ROOM
-============================================================ */
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
 
 function closeCreateRoom() {
 
@@ -2216,9 +2200,21 @@ function closeCreateRoom() {
 }
 
 
-/* ============================================================
-   MODAL CLICK
-============================================================ */
+/* =========================================================
+   CREATE ROOM BUTTON
+========================================================= */
+
+createRoomOpenButton.addEventListener(
+    "click",
+    openCreateRoom
+);
+
+
+cancelButton.addEventListener(
+    "click",
+    closeCreateRoom
+);
+
 
 createModal.addEventListener(
     "click",
@@ -2237,39 +2233,47 @@ createModal.addEventListener(
 );
 
 
-/* ============================================================
+/* =========================================================
    CREATE ROOM
-============================================================ */
+========================================================= */
 
 async function createRoom() {
 
-    hideError();
-
-
-    /*
-        Login required
-    */
+    /* =========================
+       LOGIN
+    ========================= */
 
     if (!currentUser) {
 
-        window.location.href =
-            "login.html";
+        showError(
+            "You must be logged in to create a room."
+        );
 
         return;
 
     }
 
 
-    /*
-        Premium required
-    */
+    /* =========================
+       PREMIUM
+    ========================= */
 
-    if (!isPremiumUser()) {
+    const premiumActive =
+        currentProfile &&
+        currentProfile.is_premium === true &&
+        (
+            !currentProfile.premium_until ||
+            new Date(
+                currentProfile.premium_until
+            ) > new Date()
+        );
 
-        closeCreateRoom();
 
-        window.location.href =
-            "premium.html";
+    if (!premiumActive) {
+
+        showError(
+            "Premium is required to create a room."
+        );
 
         return;
 
@@ -2280,6 +2284,10 @@ async function createRoom() {
         roomNameInput.value
             .trim();
 
+
+    /* =========================
+       VALIDATION
+    ========================= */
 
     if (!name) {
 
@@ -2312,7 +2320,7 @@ async function createRoom() {
     ) {
 
         alert(
-            "Room name is too long."
+            "Room name cannot exceed 40 characters."
         );
 
         return;
@@ -2320,9 +2328,7 @@ async function createRoom() {
     }
 
 
-    /*
-        Clean spaces
-    */
+    /* Clean spaces */
 
     name =
         name.replace(
@@ -2331,9 +2337,9 @@ async function createRoom() {
         );
 
 
-    /*
-        Prevent reserved 18+ room
-    */
+    /* =========================
+       RESERVED
+    ========================= */
 
     if (
         name.toLowerCase() ===
@@ -2341,7 +2347,7 @@ async function createRoom() {
     ) {
 
         alert(
-            "This room name is reserved."
+            "The 18+ room name is reserved."
         );
 
         return;
@@ -2349,9 +2355,9 @@ async function createRoom() {
     }
 
 
-    /*
-        Prevent duplicate
-    */
+    /* =========================
+       DUPLICATE
+    ========================= */
 
     const existing =
         getAllRooms()
@@ -2379,132 +2385,139 @@ async function createRoom() {
     }
 
 
+    /* =========================
+       BUTTON
+    ========================= */
+
     createRoomButton.disabled =
         true;
+
 
     createRoomButton.textContent =
         "Creating...";
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("rooms")
-            .insert({
-
-                room_name:
-                    name,
-
-                owner_id:
-                    currentUser.id
-
-            })
-            .select(
-                "id,room_name,owner_id"
-            )
-            .single();
+    hideError();
 
 
-    createRoomButton.disabled =
-        false;
+    try {
 
-    createRoomButton.textContent =
-        "Create Room";
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("rooms")
+                .insert({
+
+                    room_name:
+                        name,
+
+                    owner_id:
+                        currentUser.id
+
+                })
+                .select(
+                    "id,room_name,owner_id"
+                )
+                .single();
 
 
-    if (error) {
+        if (error) {
+
+            console.error(
+                "Create room error:",
+                error
+            );
+
+
+            if (
+                error.code ===
+                "23505"
+            ) {
+
+                alert(
+                    "A room with this name already exists."
+                );
+
+            } else {
+
+                showError(
+                    "Could not create room: " +
+                    error.message
+                );
+
+            }
+
+
+            return;
+
+        }
+
+
+        if (data) {
+
+            databaseRooms.push(
+                data
+            );
+
+        }
+
+
+        closeCreateRoom();
+
+
+        renderRooms();
+
+
+        /* Open newly created room */
+
+        setTimeout(
+            function() {
+
+                joinRoom(
+                    name
+                );
+
+            },
+            250
+        );
+
+
+    } catch (error) {
 
         console.error(
-            "Create room error:",
             error
         );
 
 
-        if (
-            error.code ===
-            "23505"
-        ) {
-
-            alert(
-                "A room with this name already exists."
-            );
-
-        } else {
-
-            showError(
-                "Could not create room: " +
-                error.message
-            );
-
-        }
-
-        return;
-
-    }
-
-
-    if (data) {
-
-        databaseRooms.push(
-            data
+        showError(
+            "Something went wrong while creating the room."
         );
 
+
+    } finally {
+
+        createRoomButton.disabled =
+            false;
+
+
+        createRoomButton.textContent =
+            "Create Room";
+
     }
-
-
-    closeCreateRoom();
-
-    renderRooms();
-
-
-    showSuccess(
-        "Room created successfully! Opening your room..."
-    );
-
-
-    setTimeout(
-        function() {
-
-            joinRoom(
-                name
-            );
-
-        },
-        700
-    );
 
 }
 
 
-/* ============================================================
+/* =========================================================
    JOIN ROOM
-============================================================ */
+========================================================= */
 
 function joinRoom(roomName) {
 
-    /*
-        Guests cannot enter chat.
-    */
-
-    if (!currentUser) {
-
-        const login =
-            confirm(
-                "You need to log in before joining a chat room.\n\nGo to Login?"
-            );
-
-
-        if (login) {
-
-            window.location.href =
-                "login.html";
-
-        }
-
+    if (!roomName) {
         return;
-
     }
 
 
@@ -2520,46 +2533,20 @@ function joinRoom(roomName) {
 }
 
 
-/* ============================================================
+/* =========================================================
    18+ ROOM
-============================================================ */
+========================================================= */
 
 function joinAdultRoom() {
 
-    /*
-        Login first
-    */
-
-    if (!currentUser) {
-
-        const login =
-            confirm(
-                "You need to log in before entering the 18+ room.\n\nGo to Login?"
-            );
-
-
-        if (login) {
-
-            window.location.href =
-                "login.html";
-
-        }
-
-        return;
-
-    }
-
-
     const confirmed =
         confirm(
-            "This room is restricted to users aged 18 or older.\n\nBy continuing, you confirm that you are 18 or older."
+            "This room is restricted to users aged 18 or older.\n\nAre you 18 or older and want to continue?"
         );
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
@@ -2575,23 +2562,29 @@ function joinAdultRoom() {
 }
 
 
-/* ============================================================
+/* =========================================================
    DELETE ROOM
-============================================================ */
+========================================================= */
 
 async function deleteRoom(room) {
 
     if (
-        !room ||
-        !room.id
+        !currentUser
     ) {
+
+        showError(
+            "You must be logged in."
+        );
 
         return;
 
     }
 
 
-    if (!currentUser) {
+    if (
+        !room ||
+        !room.id
+    ) {
 
         return;
 
@@ -2621,73 +2614,82 @@ async function deleteRoom(room) {
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("rooms")
-            .delete()
-            .eq(
-                "id",
-                room.id
-            )
-            .eq(
-                "owner_id",
-                currentUser.id
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("rooms")
+                .delete()
+                .eq(
+                    "id",
+                    room.id
+                )
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Delete room error:",
+                error
             );
 
 
-    if (error) {
+            showError(
+                "Could not delete room: " +
+                error.message
+            );
+
+
+            return;
+
+        }
+
+
+        databaseRooms =
+            databaseRooms.filter(
+                function(item) {
+
+                    return (
+                        item.id !==
+                        room.id
+                    );
+
+                }
+            );
+
+
+        renderRooms();
+
+
+    } catch (error) {
 
         console.error(
-            "Delete room error:",
             error
         );
 
 
         showError(
-            "Could not delete room: " +
-            error.message
+            "Something went wrong while deleting the room."
         );
-
-
-        return;
 
     }
-
-
-    databaseRooms =
-        databaseRooms.filter(
-            function(item) {
-
-                return (
-                    item.id !==
-                    room.id
-                );
-
-            }
-        );
-
-
-    renderRooms();
-
-
-    showSuccess(
-        "Room deleted successfully."
-    );
 
 }
 
 
-/* ============================================================
+/* =========================================================
    SEARCH
-============================================================ */
+========================================================= */
 
 searchInput.addEventListener(
     "input",
@@ -2699,23 +2701,31 @@ searchInput.addEventListener(
 );
 
 
-/* ============================================================
+/* =========================================================
    ROOM PRESENCE
-============================================================ */
+========================================================= */
 
 function startRoomPresence() {
 
-    /*
-        Remove old channels
-    */
+    /* Remove old channels */
 
     roomChannels.forEach(
         function(channel) {
 
-            supabaseClient
-                .removeChannel(
-                    channel
+            try {
+
+                supabaseClient
+                    .removeChannel(
+                        channel
+                    );
+
+            } catch (error) {
+
+                console.error(
+                    error
                 );
+
+            }
 
         }
     );
@@ -2743,9 +2753,7 @@ function startRoomPresence() {
 
 
             if (!counter) {
-
                 return;
-
             }
 
 
@@ -2765,8 +2773,7 @@ function startRoomPresence() {
                 .on(
                     "presence",
                     {
-                        event:
-                            "sync"
+                        event: "sync"
                     },
                     function() {
 
@@ -2777,7 +2784,27 @@ function startRoomPresence() {
 
                     }
                 )
-                .subscribe();
+                .subscribe(
+                    async function(status) {
+
+                        if (
+                            status ===
+                            "SUBSCRIBED"
+                        ) {
+
+                            /*
+                               We only use presence
+                               for counting users.
+
+                               Actual presence inside
+                               chat.html should track
+                               the logged-in user.
+                            */
+
+                        }
+
+                    }
+                );
 
         }
     );
@@ -2785,16 +2812,19 @@ function startRoomPresence() {
 }
 
 
-/* ============================================================
-   UPDATE PRESENCE COUNT
-============================================================ */
+/* =========================================================
+   UPDATE ROOM COUNT
+========================================================= */
 
 function updateRoomCount(
     channel,
     counter
 ) {
 
-    if (!counter) {
+    if (
+        !channel ||
+        !counter
+    ) {
 
         return;
 
@@ -2805,7 +2835,8 @@ function updateRoomCount(
         channel.presenceState();
 
 
-    const users = {};
+    const users =
+        {};
 
 
     Object
@@ -2843,22 +2874,46 @@ function updateRoomCount(
 }
 
 
-/* ============================================================
+/* =========================================================
    REALTIME ROOM CREATION
-============================================================ */
+========================================================= */
 
 function setupRoomRealtime() {
 
     /*
-        Do not require currentUser.
-        Guests should also see newly
-        created public rooms.
+       IMPORTANT:
+       Do NOT use currentUser.id here.
+
+       Guests can also view the rooms page.
     */
+
+
+    if (
+        roomsRealtimeChannel
+    ) {
+
+        try {
+
+            supabaseClient
+                .removeChannel(
+                    roomsRealtimeChannel
+                );
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
 
     roomsRealtimeChannel =
         supabaseClient
             .channel(
-                "rooms-list-public"
+                "talkroom-rooms-list"
             );
 
 
@@ -2883,9 +2938,9 @@ function setupRoomRealtime() {
 }
 
 
-/* ============================================================
-   ENTER / ESCAPE
-============================================================ */
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
 roomNameInput.addEventListener(
     "keydown",
@@ -2916,70 +2971,38 @@ roomNameInput.addEventListener(
 );
 
 
-/* ============================================================
-   AUTH STATE CHANGE
-============================================================ */
+/* =========================================================
+   ESCAPE MODAL
+========================================================= */
 
-supabaseClient.auth.onAuthStateChange(
-    async function(
-        event,
-        session
-    ) {
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-        /*
-            Reload user information after
-            login/logout.
-        */
+        if (
+            event.key ===
+            "Escape"
+        ) {
 
-        if (session) {
+            if (
+                createModal.classList.contains(
+                    "show"
+                )
+            ) {
 
-            await loadUser();
-
-        } else {
-
-            currentUser = null;
-
-            currentProfile = null;
-
-            updateCreateButton();
-
-            const accountName =
-                document.getElementById(
-                    "accountName"
-                );
-
-            if (accountName) {
-
-                accountName.textContent =
-                    "Guest";
-
-            }
-
-
-            const avatar =
-                document.getElementById(
-                    "accountAvatar"
-                );
-
-            if (avatar) {
-
-                avatar.textContent =
-                    "G";
+                closeCreateRoom();
 
             }
 
         }
 
-
-        renderRooms();
-
     }
 );
 
 
-/* ============================================================
+/* =========================================================
    CLEANUP
-============================================================ */
+========================================================= */
 
 window.addEventListener(
     "beforeunload",
@@ -2988,10 +3011,14 @@ window.addEventListener(
         roomChannels.forEach(
             function(channel) {
 
-                supabaseClient
-                    .removeChannel(
-                        channel
-                    );
+                try {
+
+                    supabaseClient
+                        .removeChannel(
+                            channel
+                        );
+
+                } catch (error) {}
 
             }
         );
@@ -3001,10 +3028,14 @@ window.addEventListener(
             roomsRealtimeChannel
         ) {
 
-            supabaseClient
-                .removeChannel(
-                    roomsRealtimeChannel
-                );
+            try {
+
+                supabaseClient
+                    .removeChannel(
+                        roomsRealtimeChannel
+                    );
+
+            } catch (error) {}
 
         }
 
@@ -3012,38 +3043,66 @@ window.addEventListener(
 );
 
 
-/* ============================================================
+/* =========================================================
    START
-============================================================ */
+========================================================= */
 
 async function start() {
 
     hideError();
 
-    hideSuccess();
 
+    /*
+       Load user first.
+       Guests are allowed.
+    */
+
+    await loadUser();
+
+
+    /*
+       Load rooms.
+    */
 
     const loaded =
-        await loadUser();
+        await loadDatabaseRooms();
 
 
     if (!loaded) {
+
+        /*
+           Still render default rooms
+           even if database fails.
+        */
+
+        renderRooms();
+
+        setupRoomRealtime();
 
         return;
 
     }
 
 
-    await loadDatabaseRooms();
-
+    /*
+       Render everything.
+    */
 
     renderRooms();
 
+
+    /*
+       Start realtime database listener.
+    */
 
     setupRoomRealtime();
 
 }
 
+
+/* =========================================================
+   START APP
+========================================================= */
 
 start();
 
@@ -3052,3 +3111,4 @@ start();
 </body>
 
 </html>
+
