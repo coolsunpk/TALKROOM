@@ -286,40 +286,7 @@
                     "Creating account...";
 
 
-                try {
-
-                    /*
-                        Check if username already exists
-                    */
-
-                    const {
-                        data: existingProfile,
-                        error: usernameCheckError
-                    } =
-                        await supabaseClient
-                            .from("profiles")
-                            .select("id")
-                            .eq(
-                                "username",
-                                cleanUsername
-                            )
-                            .maybeSingle();
-
-
-                    if (usernameCheckError) {
-
-                        throw usernameCheckError;
-
-                    }
-
-
-                    if (existingProfile) {
-
-                        throw new Error(
-                            "That username is already taken."
-                        );
-
-                    }
+            
 
 
                     /*
